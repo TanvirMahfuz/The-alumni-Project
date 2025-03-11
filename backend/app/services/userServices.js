@@ -11,6 +11,11 @@ const findOneUser = async (params) => {
   if (!newUser) return null;
   return newUser;
 };
+const findOneUserById = async (id) => {
+  const newUser = await User.findById(id);
+  if (!newUser) return null;
+  return newUser;
+};
 const findAllUser = async () => {
   const newUser = await User.find();
   if (!newUser) return null;
@@ -26,4 +31,11 @@ const deleteUser = async (params) => {
   if (!newUser) return null;
   return newUser;
 };
-export {createUser, findOneUser, findAllUser, updateUser, deleteUser};
+export {
+  createUser,
+  findOneUser,
+  findAllUser,
+  updateUser,
+  deleteUser,
+  findOneUserById,
+};

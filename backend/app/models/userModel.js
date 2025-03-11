@@ -21,26 +21,24 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "0",
     },
-    contacts: [
-      {
-        github: {
-          type: String,
-          default: "0",
-        },
-        linkedin: {
-          type: String,
-          default: "0",
-        },
-        facebook: {
-          type: String,
-          default: "0",
-        },
-        portfolio: {
-          type: String,
-          default: "0",
-        },
+    contacts: {
+      github: {
+        type: String,
+        default: "0",
       },
-    ],
+      linkedin: {
+        type: String,
+        default: "0",
+      },
+      facebook: {
+        type: String,
+        default: "0",
+      },
+      portfolio: {
+        type: String,
+        default: "0",
+      },
+    },
     isAdmin: {
       type: Boolean,
       default: false,

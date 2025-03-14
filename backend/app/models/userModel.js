@@ -6,6 +6,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    session:{
+      type:String,
+      default:""
+    },
     email: {
       type: String,
       required: true,
@@ -16,48 +20,48 @@ const userSchema = new mongoose.Schema(
     },
     image: {
       type: String,
-      default: "0",
+      default: "",
     },
     bio: {
       type: String,
-      default: "0",
+      default: "",
     },
     education: [
       {
         degree: {
           type: String,
-          default: "0",
+          default: "",
         },
         institute: {
           type: String,
-          default: "0",
+          default: "",
         },
         startDate: {
           type: String,
-          default: "0",
+          default: "",
         },
         endDate: {
           type: String,
-          default: "0",
+          default: "",
         },
       },
     ],
     contacts: {
       github: {
         type: String,
-        default: "0",
+        default: "",
       },
       linkedin: {
         type: String,
-        default: "0",
+        default: "",
       },
       facebook: {
         type: String,
-        default: "0",
+        default: "",
       },
       portfolio: {
         type: String,
-        default: "0",
+        default: "",
       },
     },
     isAdmin: {
@@ -67,46 +71,46 @@ const userSchema = new mongoose.Schema(
     currentPost: {
       title: {
         type: String,
-        default: "0",
+        default: "",
       },
       company: {
         type: String,
-        default: "0",
+        default: "",
       },
       startDate: {
         type: String,
-        default: "0",
+        default: "",
       },
       endDate: {
         type: String,
-        default: "0",
+        default: "",
       },
       description: {
         type: String,
-        default: "0",
+        default: "",
       },
     },
     jobExperience: [
       {
         title: {
           type: String,
-          default: "0",
+          default: "",
         },
         company: {
           type: String,
-          default: "0",
+          default: "",
         },
         startDate: {
           type: String,
-          default: "0",
+          default: "",
         },
         endDate: {
           type: String,
-          default: "0",
+          default: "",
         },
         description: {
           type: String,
-          default: "0",
+          default: "",
         },
       },
     ],
@@ -118,11 +122,11 @@ const userSchema = new mongoose.Schema(
         },
         techStack: {
           type: String,
-          default: "0",
+          default: "",
         },
         description: {
           type: String,
-          default: "0",
+          default: "",
         },
       },
     ],
@@ -130,41 +134,41 @@ const userSchema = new mongoose.Schema(
       {
         title: {
           type: String,
-          default: "0",
+          default: "",
         },
         image: {
           type: String,
-          default: "0",
+          default: "",
         },
         level: {
           type: Number,
-          default: "0",
+          default: "",
         },
       },
     ],
     futureInterests: [
       {
         type: String,
-        default: "0",
+        default: "",
       },
     ],
     participatedIn: [
       {
         title: {
           type: String,
-          default: "0",
+          default: "",
         },
         institute: {
           type: String,
-          default: "0",
+          default: "",
         },
         startDate: {
           type: String,
-          default: "0",
+          default: "",
         },
         endDate: {
           type: String,
-          default: "0",
+          default: "",
         },
       },
     ],
@@ -176,21 +180,21 @@ const userSchema = new mongoose.Schema(
       {
         projectName: {
           type: String,
-          default: "0",
+          default: "",
         },
         projectDescription: {
           type: String,
-          default: "0",
+          default: "",
         },
         projectLink: {
           type: String,
-          default: "0",
+          default: "",
         },
       },
     ],
     resume: {
       type: String,
-      default: "0",
+      default: "",
     },
     posts: [
       {

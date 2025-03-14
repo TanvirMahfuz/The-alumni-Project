@@ -5,8 +5,8 @@ function Form3({ user, setUser }) {
   const handleCurrentJobChange = (event) => {
     setUser({
       ...user,
-      currentJob: {
-        ...user.currentJob,
+      currentPost: {
+        ...user.currentPost,
         [event.target.name]: event.target.value,
       },
     });
@@ -57,14 +57,14 @@ function Form3({ user, setUser }) {
           type="text"
           label="Job Title"
           name="title"
-          value={user.currentlyWorkingIn.title}
+          value={user.currentPost.title}
           onChange={handleCurrentJobChange}
         />
         <Input
           type="text"
           label="Company"
           name="company"
-          value={user.currentlyWorkingIn.company}
+          value={user.currentPost.company}
           onChange={handleCurrentJobChange}
         />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -72,7 +72,7 @@ function Form3({ user, setUser }) {
             type="text"
             label="Start Year"
             name="startDate"
-            value={user.currentlyWorkingIn.startDate}
+            value={user.currentPost.startDate}
             onChange={handleCurrentJobChange}
             className="col-span-1"
           />
@@ -80,7 +80,7 @@ function Form3({ user, setUser }) {
             type="text"
             label="End Year"
             name="endDate"
-            value={user.currentlyWorkingIn.endDate}
+            value={user.currentPost.endDate}
             onChange={handleCurrentJobChange}
             className="col-span-1"
           />
@@ -88,7 +88,7 @@ function Form3({ user, setUser }) {
         <Textarea
           label="Job Description"
           name="description"
-          value={user.currentlyWorkingIn.description}
+          value={user.currentPost.description}
           onChange={handleCurrentJobChange}
         />
       </div>
@@ -103,8 +103,7 @@ function Form3({ user, setUser }) {
           {user.jobExperience.length > 1 && (
             <button
               onClick={() => handleRemoveExperience(index)}
-              className="absolute top-0 right-2 text-red-600 text-lg font-bold z-20"
-            >
+              className="absolute top-0 right-2 text-red-600 text-lg font-bold z-20">
               ✖
             </button>
           )}
@@ -153,8 +152,7 @@ function Form3({ user, setUser }) {
       {/* Add Job Experience Button */}
       <div
         className="h-10 w-10 rounded-full bg-gray-900 flex justify-center items-center text-2xl text-white p-6 cursor-pointer"
-        onClick={handleAddExperience}
-      >
+        onClick={handleAddExperience}>
         <i className="bi bi-clipboard-plus-fill"></i>
       </div>
     </div>

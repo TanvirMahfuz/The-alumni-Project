@@ -154,7 +154,7 @@ function Demo() {
             ))}
           </div>
           <div className="col-span-3 hidden xl:block ">
-            <div className="m-4 p-4 pb-0 mt-6 h-screen rounded-3xl bg-gray-50 shadow-md">
+            <div className="m-4 p-4 pb-0 mt-6 h-screen rounded-3xl bg-gray-50 shadow-md overflow-auto">
               {users ? (
                 <div>
                   <Typography className="mt-4 ml-4 text-2xl font-semibold">

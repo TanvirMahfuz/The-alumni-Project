@@ -91,6 +91,7 @@ function Form1({ user, setUser, file, setFile }) {
           type="password"
           label="Confirm Password"
           name="confirmPassword"
+          value={user.confirmPassword}
           onChange={handleInputChange}
           className="w-full bg-amber-100"
           required

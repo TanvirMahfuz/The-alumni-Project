@@ -9,6 +9,7 @@ import Form5 from "./RegForm/Form5";
 import Form6 from "./RegForm/Form6";
 import axios from "axios";
 import { toFormdata } from "../assets/toFormdata.js";
+import { useNavigate } from "react-router-dom";
 export default function RegistrationForm({ activeStep }) {
   let [user, setUser] = useState({
     name: "",
@@ -61,7 +62,7 @@ export default function RegistrationForm({ activeStep }) {
         level: 0,
       },
     ],
-    futureInterests: [],
+    futureInterests: [""],
     participatedIn: [
       {
         title: "",
@@ -81,6 +82,7 @@ export default function RegistrationForm({ activeStep }) {
     resume: "",
   });
   const [file, setFile] = useState(null);
+  const navigate = useNavigate()
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     if (user.name === "" || user.email === "" || user.password === ""  || user.confirmPassword === "" 
@@ -93,13 +95,16 @@ export default function RegistrationForm({ activeStep }) {
     const data = Object.fromEntries(formData);
     console.log("the form data: ",data);
     axios.post("/api/api/v1/user/register", formData, {
-  headers: {
-    "Content-Type": "multipart/form-data",
-  },
-}).then((res) => {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    }).then((res) => {
       console.log(res);
-    }).catch (err => console.log(err.message));
-
+        alert("Registration successful!");
+        navigate("/log-in");
+    })
+    .catch (err => console.log(err.message));
+    
   };
   return (
     <div className="max-w-4xl mx-auto lg:p-6">

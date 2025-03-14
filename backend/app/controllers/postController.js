@@ -8,11 +8,11 @@ import {
   likePost,
   commentOnPost,
 } from "../services/postServices.js";
-import {findOneUserById} from "../services/userServices.js";
+import {findOneUserById,addNewPost} from "../services/userServices.js";
 import uploadFileToCloudinary from "../utility/cloudinary.config.js";
 const createPostController = async (req, res) => {
   try {
-    const data = req.body;
+    let data = req.body;
     data.author = req.user._id;
     console.log(data);
     if (req.files) {
@@ -44,6 +44,13 @@ const createPostController = async (req, res) => {
     if (!post) {
       return res.status(400).json({
         message: "Post creation failed",
+      });
+    }
+   
+    const user = await addNewPost(post._id, data.author );
+    if (!user) {
+      return res.status(400).json({
+        message: "Post created but user not updated",
       });
     }
     return res.status(200).json({

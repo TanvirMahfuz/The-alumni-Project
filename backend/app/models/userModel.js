@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -21,6 +22,26 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "0",
     },
+    education: [
+      {
+        degree: {
+          type: String,
+          default: "0",
+        },
+        institute: {
+          type: String,
+          default: "0",
+        },
+        startDate: {
+          type: String,
+          default: "0",
+        },
+        endDate: {
+          type: String,
+          default: "0",
+        },
+      },
+    ],
     contacts: {
       github: {
         type: String,
@@ -44,8 +65,26 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
     currentPost: {
-      type: String,
-      default: "student",
+      title: {
+        type: String,
+        default: "0",
+      },
+      company: {
+        type: String,
+        default: "0",
+      },
+      startDate: {
+        type: String,
+        default: "0",
+      },
+      endDate: {
+        type: String,
+        default: "0",
+      },
+      description: {
+        type: String,
+        default: "0",
+      },
     },
     jobExperience: [
       {
@@ -57,24 +96,78 @@ const userSchema = new mongoose.Schema(
           type: String,
           default: "0",
         },
-        years: {
-          type: Number,
-          default: 0,
+        startDate: {
+          type: String,
+          default: "0",
+        },
+        endDate: {
+          type: String,
+          default: "0",
+        },
+        description: {
+          type: String,
+          default: "0",
         },
       },
     ],
-    haveWorkedIn: {
-      type: String,
-      default: "0",
-    },
-    currentlyWorkingIn: {
-      type: String,
-      default: "0",
-    },
-    futureInterests: {
-      type: String,
-      default: "0",
-    },
+    currentlyWorkingIn: [
+      {
+        title: {
+          type: String,
+          default: "none",
+        },
+        techStack: {
+          type: String,
+          default: "0",
+        },
+        description: {
+          type: String,
+          default: "0",
+        },
+      },
+    ],
+    skills: [
+      {
+        title: {
+          type: String,
+          default: "0",
+        },
+        image: {
+          type: String,
+          default: "0",
+        },
+        level: {
+          type: Number,
+          default: "0",
+        },
+      },
+    ],
+    futureInterests: [
+      {
+        type: String,
+        default: "0",
+      },
+    ],
+    participatedIn: [
+      {
+        title: {
+          type: String,
+          default: "0",
+        },
+        institute: {
+          type: String,
+          default: "0",
+        },
+        startDate: {
+          type: String,
+          default: "0",
+        },
+        endDate: {
+          type: String,
+          default: "0",
+        },
+      },
+    ],
     availableForWork: {
       type: Boolean,
       default: false,
@@ -99,6 +192,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "0",
     },
+    posts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post",
+      },
+    ]
   },
   {timestamps: true}
 );

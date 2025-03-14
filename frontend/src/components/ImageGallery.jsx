@@ -15,12 +15,12 @@ export function ImageGallery({imageList}) {
     <div className="grid gap-4 rounded-tl-3xl rounded-tr-3xl">
       <div>
         <img
-          className="h-auto bg-gray-100 w-full p-4 mb-0 max-w-full rounded-3xl object-contain object-center md:h-[480px]"
+          className="h-auto bg-gray-900 w-full p-4 mb-0 max-w-full rounded-xl object-contain object-center md:h-[480px]"
           src={active}
           alt=""
         />
       </div>
-      <div className="flex justify-start gap-3 bg-gray-200 p-3 rounded-2xl overflow-auto shadow-3xl">
+      {imageList.length >1 && (<div className="flex justify-start gap-3 bg-gray-900 p-3 rounded-2xl overflow-x-auto shadow-3xl">
         {imageList.map(({imagelink}, index) => (
           <div key={index}>
             <img
@@ -31,7 +31,8 @@ export function ImageGallery({imageList}) {
             />
           </div>
         ))}
-      </div>
+      </div>)}
+      
     </div>
   );
 }

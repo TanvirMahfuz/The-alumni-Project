@@ -26,6 +26,14 @@ const updateUser = async (params, user) => {
   if (!newUser) return null;
   return newUser;
 };
+const addNewPost = async (postId, userId) => {
+  console.log(postId, userId);
+  const newUser = await User.findByIdAndUpdate(userId, {
+    $push: { posts: postId },
+  });
+  if (!newUser) return null;
+  return newUser;
+};
 const deleteUser = async (params) => {
   const newUser = await User.findOneAndDelete(params);
   if (!newUser) return null;
@@ -38,4 +46,5 @@ export {
   updateUser,
   deleteUser,
   findOneUserById,
+  addNewPost,
 };

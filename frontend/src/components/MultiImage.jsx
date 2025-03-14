@@ -137,6 +137,9 @@ function CreatePost() {
                 Submit Post
               </Button>
             )}
+            {/* <Button onClick={handleSubmit} className="w-1/3" disabled={loading}>
+              {loading ? "Submitting..." : "Submit Post"}
+            </Button> */}
           </CardBody>
         </Card>
       </div>

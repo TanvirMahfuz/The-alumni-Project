@@ -3,4 +3,5 @@
 
 body {
   background-color: #f4f4f4;
+  transition: all 0.5s ease-in-out;
 }

@@ -21,10 +21,10 @@ app.use((req, res, next) => {
 // Use router for the /api/v1 path
 app.use("/api/v1", userRouter); // Ensure this is applied correctly
 
-// Basic route to check server
-app.get("/demo", (req, res) => {
-  res.json({msg: "Hello World!"});
-});
+// // Basic route to check server
+// app.get("/demo", (req, res) => {
+//   res.json({msg: "Hello World!"});
+// });
 import upload from "./middlewares/multer.middleware.js";
 app.post("/demo", upload.single("image"), (req, res) => {
   console.log(req.file);

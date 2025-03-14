@@ -9,7 +9,7 @@ userRouter.post(
   upload.single("profileImage"),
   userController.registerUser
 );
-
+userRouter.get("/currentUser", isLoggedIn, async (req, res) => res.status(200).json({data:req.user}));
 userRouter.post("/login", userUtility.login);
 
 userRouter.get("/info", isLoggedIn, userController.getOneUser);

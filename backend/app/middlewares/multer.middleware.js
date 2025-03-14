@@ -22,6 +22,8 @@ const upload = multer({
   storage: storage,
   limits: {fileSize: 10 * 1024 * 1024},
   fileFilter: (req, file, cb) => {
+    console.log("multer invoked",file);
+    console.log(file.originalname);
     uploadDir = uploadDir.replace("%20", " ");
     console.log(uploadDir, "-----", file.originalname);
     const filetypes = /jpeg|jpg|png/;

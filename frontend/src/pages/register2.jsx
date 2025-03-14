@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@material-tailwind/react";
 import { ProgressSteps } from "../components/ProgressSteps.jsx";
 import RegistrationForm from "../components/RegistrationForm.jsx";
+import Layout from "../laytout/layout.jsx";
 
 function Demo2() {
   const [activeStep, setActiveStep] = useState(0);
@@ -15,6 +16,7 @@ function Demo2() {
 
   return (
     <>
+    <Layout>
       <div className="max-w-screen w-full mx-auto px-4 pt-8 flex flex-col items-center justify-center">
         <div className="w-10/12 mx-10">
           <ProgressSteps
@@ -64,6 +66,7 @@ function Demo2() {
           </div>
         </div>
       </div>
+      </Layout>
     </>
   );
 }

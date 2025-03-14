@@ -7,11 +7,8 @@ import {
   Button,
 } from "@material-tailwind/react";
 
-export function CardDefault({props}) {
-  const {postSelected, setPostSelected, item} = props;
-  const handleClick = (val) => {
-    setPostSelected(val);
-  };
+export function CardDefault({user}) {
+  console.log("from default card ",user);
 
   return (
     <>
@@ -20,19 +17,16 @@ export function CardDefault({props}) {
           color="blue-gray"
           className="relative h-56 flex items-center justify-center "
         >
-          <img src={item.author.image} alt="card-image" className="h-full" />
+          <img src={(user.image)?user.image:""} alt="card-image" className="h-full" />
         </CardHeader>
         <CardBody className="">
           <Typography variant="h5" color="blue-gray" className="mb-2">
-            {item.author.name}
+            {(user.name)?user.name:''}
           </Typography>
-          <Typography className="overflow-clip">{item.description}</Typography>
+          <Typography className="overflow-clip">{(user.bio)?user.bio:""}</Typography>
         </CardBody>
         <CardFooter className="pt-0">
           <Button
-            onClick={() => {
-              handleClick(item);
-            }}
             className="flex items-center gap-2 "
           >
             Read More{" "}

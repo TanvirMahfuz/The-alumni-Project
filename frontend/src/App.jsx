@@ -1,5 +1,5 @@
-import {useState} from "react";
-import {BrowserRouter, HashRouter, Routes, Route} from "react-router-dom";
+import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Profile from "./pages/profile.jsx";
 import StudentList from "./pages/studentList.jsx";
 import Home from "./pages/Home.jsx";
@@ -8,6 +8,8 @@ import Register from "./pages/register2.jsx";
 import Demo from "./pages/demo.jsx";
 import CreatePost from "./pages/CreatePost.jsx";
 import Demo2 from "./pages/register2.jsx";
+import { Link } from "react-router-dom"; // Import Link
+
 function App() {
   const [count, setCount] = useState(0);
 

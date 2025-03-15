@@ -6,7 +6,7 @@ import { commentIcon, likeButton } from "../assets/images";
 import { Typography } from "@material-tailwind/react";
 export function PostCard({ item: initialItem }) {
   const [item, setItem] = useState(initialItem);
-
+  console.log("post card item",item);
   useEffect(() => {
     const fetchComments = async () => {
       try {

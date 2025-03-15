@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "../laytout/layout";
 import { PostCard } from "../components/PostCard.jsx";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { Textarea, Typography, Button } from "@material-tailwind/react";
 import { profilePlaceHolder, skillsIcon } from "../assets/images.jsx";
 import { CreatePost2 } from "../components/CreatePost2.jsx";
@@ -92,9 +93,17 @@ function Demo() {
                     />
                   </div>
                 )}
-                <Button className="w-full bg-gray-900 transform translate-y-[-10px]">
-                  My Profile
-                </Button>
+
+                  <Typography className="font-semibold w-full bg-gray-900 transform translate-y-[-10px] text-white py-2 rounded-3xl">
+                    <Link
+                      className="w-full flex justify-center items-center"
+                      to={`/profile?id=${
+                        currentUser?._id ? currentUser._id : ""
+                      }`}>
+                      My Profile
+                    </Link>
+                  </Typography>
+
               </div>
               {/* Skills */}
               <div className="p-4 mt-6">
@@ -118,13 +127,13 @@ function Demo() {
                 )}
               </div>
               {/* Education */}
-              <div className="p-4 mb-4">
+              <div className="p-4 mb-4 ">
                 {currentUser ? (
-                  <div>
+                  <div className="">
                     <Typography className="text-2xl font-semibold">
                       Education
                     </Typography>
-                    <div className="flex flex-wrap mt-4 bg-gray-300">
+                    <div className="flex flex-wrap mt-4 bg-gray-300 p-4 rounded-2xl">
                       {currentUser.education.map((education, index) => (
                         <div className="border-l-2 pl-2">
                           <Typography variant="h4" className="leading-tight">
@@ -179,7 +188,9 @@ function Demo() {
                           </div>
                           <div className="col-span-3 pl-2">
                             <Typography className="text-2xl font-semibold">
-                              {user.name}
+                              <Link to={`/profile?id=${user._id}`}>
+                                {user.name}
+                              </Link>
                             </Typography>
                             <Typography className="text-md font-normal text-gray-700 ">
                               {user.bio}

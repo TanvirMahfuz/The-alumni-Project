@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 
@@ -21,10 +22,10 @@ export const getAllPosts = async () => {
     return null;
   }
 };
-export const getPostById = async (data) => {
+export const getPostById = async (id) => {
   try {
     console.log(data);
-    const post = await Post.findById(data.id);
+    const post = await Post.findById(id);
     return post;
   } catch (error) {
     console.log(error.message);
@@ -35,6 +36,20 @@ export const getOnePost = async (id) => {
   try {
     const post = await Post.findOne({_id: id});
     return post;
+  } catch (error) {
+    console.log(error.message);
+    return null;
+  }
+};
+export const getMultiplePosts = async (data) => {
+  try {
+    let allPosts = [];
+    for (let i = 0; i < data.length; i++) {
+      // const id = mongoose.Types.ObjectId(data[i]);
+      const post = await Post.findById(data[i]);
+      allPosts.push(post);
+    }
+    return allPosts;
   } catch (error) {
     console.log(error.message);
     return null;

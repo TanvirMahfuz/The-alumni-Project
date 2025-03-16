@@ -77,8 +77,7 @@ function Demo() {
                           {currentUser.name}
                         </Typography>
                         <Typography className="text-lg text-center text-gray-700 font-normal">
-                          {currentUser.bio}bg-amber-50 flex flex-col
-                          items-center justify-center{" "}
+                          {currentUser.bio}
                         </Typography>
                       </div>
                     )}
@@ -152,12 +151,12 @@ function Demo() {
               </div>
             </div>
           </div>
-          <div className="h-screen col-span-12 lg:col-span-8 xl:col-span-6 overflow-auto p-2 px-0 mt-4 flex flex-col items-center">
+          <div className="h-screen col-span-12 lg:col-span-8 xl:col-span-6 gap-2 overflow-auto p-2 px-0 mt-4 flex flex-col items-center">
             {/* Post */}
             <CreatePost2 currentUser={currentUser} />
             {/* posts */}
             {array.map((element) => (
-              <div key={element._id} className="w-full mt-2">
+              <div key={element._id} className="w-full">
                 <PostCard item={element} />
               </div>
             ))}

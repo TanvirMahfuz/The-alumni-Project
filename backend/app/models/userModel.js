@@ -6,9 +6,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    session:{
-      type:String,
-      default:""
+    session: {
+      type: String,
+      default: "",
     },
     email: {
       type: String,
@@ -130,6 +130,22 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
+    haveWorkedIn: [
+      {
+        title: {
+          type: String,
+          default: "none",
+        },
+        techStack: {
+          type: String,
+          default: "",
+        },
+        description: {
+          type: String,
+          default: "",
+        },
+      },
+    ],
     skills: [
       {
         title: {
@@ -146,12 +162,10 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
-    futureInterests: [
-      {
-        type: String,
-        default: "",
-      },
-    ],
+    futureInterests: {
+      type: [String],
+      default: [],
+    },
     participatedIn: [
       {
         title: {
@@ -201,9 +215,9 @@ const userSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",
       },
-    ]
+    ],
   },
-  {timestamps: true}
+  { timestamps: true }
 );
 
 const User = mongoose.model("User", userSchema);

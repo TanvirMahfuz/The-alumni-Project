@@ -73,7 +73,7 @@ export function CreatePost2({ currentUser }) {
   };
 
   return (
-    <div className="mx-8 py-4 flex flex-col items-center justify-center bg-white rounded-4xl shadow-md">
+    <div className="mx-8 my-4 py-4 flex flex-col items-center justify-center bg-white rounded-4xl shadow-md">
       {/* Top Section */}
       <div className="grid grid-cols-12 w-full px-8 py-2">
         <div className="col-span-2 flex items-center justify-center">

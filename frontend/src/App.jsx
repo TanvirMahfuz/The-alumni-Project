@@ -8,6 +8,7 @@ import Register from "./pages/register2.jsx";
 import Demo from "./pages/demo.jsx";
 import CreatePost from "./pages/CreatePost.jsx";
 import Demo2 from "./pages/register2.jsx";
+import SearchResult from "./pages/SearchResult.jsx";
 import { Link } from "react-router-dom"; // Import Link
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/demo2" element={<Demo2 />}></Route>
         <Route path="/create-post" element={<CreatePost />}></Route>
         <Route path="/student-list" element={<StudentList />}></Route>
+        <Route path="/search" element={<SearchResult />}></Route>
       </Routes>
     </BrowserRouter>
   );

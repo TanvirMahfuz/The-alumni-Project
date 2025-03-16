@@ -24,7 +24,7 @@ export function PostCard({ item: initialItem }) {
   }, [item._id]);
 
   return (
-    <div className="w-full p-8 flex items-center justify-center">
+    <div className="w-full px-8 py-4 flex items-center justify-center">
       <div className="w-full p-8 pt-3 bg-white rounded-3xl shadow-md">
         {/* User Info */}
         <div className="flex items-center mb-4">

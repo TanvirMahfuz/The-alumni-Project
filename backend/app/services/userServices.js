@@ -7,6 +7,7 @@ const createUser = async (user) => {
   return returnedUser;
 };
 const findOneUser = async (params) => {
+  
   const newUser = await User.findOne(params);
   if (!newUser) return null;
   return newUser;
@@ -38,6 +39,17 @@ const deleteUser = async (params) => {
   const newUser = await User.findOneAndDelete(params);
   if (!newUser) return null;
   return newUser;
+};
+
+const getUserPostsById = async (posts) => {
+  let allPosts = [];
+  for (let i = 0; i < posts.length; i++) {
+    const post = await (posts[i]);
+    allPosts.push(post);
+  }
+  return res.status(200).json({
+    posts: "user.posts",
+  });
 };
 export {
   createUser,

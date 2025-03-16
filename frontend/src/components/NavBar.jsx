@@ -1,113 +1,102 @@
 import axios from "axios";
-import {useState} from "react";
+import { useNavigate,Link } from "react-router-dom";
+import { useState } from "react";
 
+import {
+  Typography,
+  Input,
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
+  Button,
+} from "@material-tailwind/react";
 const NavBar = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+  const options = ["name", "email", "company"]
+  const [option, setOption] = useState("name");
+  const [search, setSearch] = useState("");
+  const handleChange = (e) => {
+    setSearch(e.target.value);
   };
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-  const Logout = () => {
-    axios
-      .get("/api/api/v1/user/logout")
-      .then((res) => {
-        console.log(res);
-        if (res.status === 200) {
-          window.location.href = "/log-in";
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  const navigate = useNavigate();
+  function handleSearch(e){
+    navigate(`/search?value=${search}&option=${option}`);
+  }
   return (
-    <nav className="w-full flex flex-col md:flex-row justify-between text-white bg-gray-900 px-5 py-2">
-      <div className="left flex items-center">
-        <a href="/home">
-          <h1 className="text-2xl">HOME</h1>
-        </a>
-      </div>
+    <div className="grid grid-cols-12 gap-4 justify-center items-center py-4 px-2 md:px-8 xl:px-16  shadow-md text-white bg-gray-900 ">
+      <Link to="/home">
+        <div className="col-span-2 lg:col-span-1 flex justify-center items-center md:text-2xl">
+          <i class="bi bi-house-fill"></i>Home
+        </div>
+      </Link>
 
-      {/* Center section for larger screens */}
-      <div className="center hidden md:flex">
-        <div className="flex gap-2">
-          <form action="">
-            <input
-              type="text"
-              placeholder="name"
-              className="m-2 px-2 py-0.5 border border-gray-400 rounded-md w-2xs"
+      <div className="px-4 md:px-8 xl:px-16 col-span-10 lg:col-span-5 flex justify-end items-center gap-8 ">
+        <Link to="/student-list">
+          <Typography className="text-xl md:text-2xl">
+            <i class="bi bi-people-fill"></i>
+          </Typography>
+        </Link>
+
+        <Typography className="text-xl md:text-2xl">
+          <i class="bi bi-chat-dots-fill"></i>
+        </Typography>
+
+        <Typography className="text-xl md:text-2xl">
+          <i class="bi bi-file-earmark-break-fill"></i>
+        </Typography>
+        <Link to="/log-out">
+          <Typography className="text-xl md:text-2xl">
+            <i class="bi bi-box-arrow-right"></i>
+          </Typography>
+        </Link>
+      </div>
+      <div className=" col-span-12 lg:pl-8 xl:pl-16 lg:col-span-6 flex justify-center items-center px-4 ">
+        <div className="relative flex w-full">
+          <Menu placement="bottom-start">
+            <MenuHandler>
+              <Button
+                ripple={false}
+                variant="text"
+                color="blue-gray"
+                className="flex h-10 items-center gap-2 rounded-r-none border border-r-0 border-blue-gray-200 bg-blue-gray-500/10 pl-3">
+                {option}
+              </Button>
+            </MenuHandler>
+            <MenuList className="max-h-[20rem] max-w-[18rem]">
+              {options.map((item, index) => {
+                return (
+                  <MenuItem
+                    key={index}
+                    value={item}
+                    className="flex items-center gap-2"
+                    onClick={() => setOption(item)}>
+                    {item}
+                  </MenuItem>
+                );
+              })}
+            </MenuList>
+          </Menu>
+          <div className="w-full flex gap-4">
+            <Input
+              type="tel"
+              placeholder={option}
+              className="rounded-l-none !bg-gray-200 !border-t-blue-gray-200 focus:!border-blue-gray-200 text-blue-gray-200"
+              labelProps={{
+                className: "before:content-none after:content-none",
+              }}
+              containerProps={{
+                className: "min-w-0",
+              }}
+              onChange={handleChange}
             />
-            <button
-              type="submit"
-              className="border-2 border-gray-400 px-2 py-0.5 rounded-md"
-            >
-              Search
+            <button className="" onClick={handleSearch}>
+              {" "}
+              <i class="bi bi-search"></i>
             </button>
-          </form>
+          </div>
         </div>
       </div>
-
-      {/* Right section for larger screens */}
-      <div className="right hidden md:flex items-center">
-        <ul className="flex space-x-6">
-          <li>
-            <a href="/profile">Profile</a>
-          </li>
-          <li>
-            <a href="/resume">Resume</a>
-          </li>
-          <li>
-            <a href="#" onClick={Logout}>
-              Log out
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      {/* Collapsible button for mobile/tablet screens */}
-      <div className="md:hidden absolute right-4 ">
-        <button onClick={toggleMobileMenu} className="text-white">
-          {isMobileMenuOpen ? "Close" : "Menu"}
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden w-full bg-gray-900 px-5 py-2 mt-2">
-          <ul className="space-y-4 text-center">
-            <li>
-              <a href="/profile">Profile</a>
-            </li>
-            <li>
-              <a href="/resume">Resume</a>
-            </li>
-            <li>
-              <a href="/log-out">Log out</a>
-            </li>
-            <li>
-              <form action="" className="flex justify-center gap-2">
-                <input
-                  type="text"
-                  placeholder="name"
-                  className="m-2 px-2 py-0.5 border border-gray-400 rounded-md w-2xs"
-                />
-                <button
-                  type="submit"
-                  className="border-2 border-gray-400 px-2 py-0.5 rounded-md"
-                >
-                  Search
-                </button>
-              </form>
-            </li>
-          </ul>
-        </div>
-      )}
-    </nav>
+    </div>
   );
 };
 

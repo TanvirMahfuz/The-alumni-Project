@@ -1,8 +1,10 @@
 import bcrypt from "bcryptjs";
 import * as userServices from "../services/userServices.js";
+import { getMultiplePosts } from "../services/postServices.js";
 import jwt from "jsonwebtoken";
 import uploadFileToCloudinary from "../utility/cloudinary.config.js";
 import {json} from "express";
+import mongoose from "mongoose";
 export const getAllUsers = async (req, res) => {
   try {
     console.log(req.user, "request to see all users");
@@ -18,12 +20,13 @@ export const getAllUsers = async (req, res) => {
   }
 };
 export const getOneUser = async (req, res) => {
+  console.log(req.user, "request to see all users");
   try {
-    const users = await userServices.findOneUser({_id: req.user._id});
-    if (!users) {
+    let user = await userServices.findOneUserById( new mongoose.Types.ObjectId(req.query.id));
+    if (!user) {
       return res.status(404).json({message: "User not found"});
     }
-    return res.status(200).json(users);
+    return res.status(200).json({user,canEdit:user._id.toString() === req.user._id.toString()});
   } catch (error) {
     return res
       .status(500)
@@ -114,3 +117,26 @@ export const updateUser = async (req, res) => {
     .status(200)
     .json({message: "User updated successfully", user: updatedUser});
 };
+export const userPosts = async (req,res)=>{
+  try{
+        const user = await userServices.findOneUserById(
+          new mongoose.Types.ObjectId(req.query.id)
+        );
+        if (!user) {
+          return res.status(404).json({ message: "User not found" });
+        };
+    const posts = await getMultiplePosts(user.posts);
+    console.log(posts);
+        return res
+          .status(200)
+          .json({
+            posts,
+            canEdit: user._id.toString() === req.user._id.toString(),
+          });
+
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Error fetching users", error: error.message });
+  }
+}

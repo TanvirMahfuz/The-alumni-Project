@@ -18,4 +18,6 @@ userRouter.get("/logout", userUtility.logout);
 
 userRouter.get("/allUsers", isLoggedIn, userController.getAllUsers);
 
+userRouter.get("/userPosts", isLoggedIn, userController.userPosts);
+
 export default userRouter;

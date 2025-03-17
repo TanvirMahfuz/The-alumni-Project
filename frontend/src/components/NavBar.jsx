@@ -24,11 +24,11 @@ const NavBar = () => {
   }
   return (
     <div className="grid grid-cols-12 gap-4 justify-center items-center py-4 px-2 md:px-8 xl:px-16  shadow-md text-white bg-gray-900 ">
-      <Link to="/home">
+      
         <div className="col-span-2 lg:col-span-1 flex justify-center items-center md:text-2xl">
-          <i class="bi bi-house-fill"></i>Home
+          <Link to="/home"><i class="bi bi-house-fill"></i>Home</Link>
         </div>
-      </Link>
+      
 
       <div className="px-4 md:px-8 xl:px-16 col-span-10 lg:col-span-5 flex justify-end items-center gap-8 ">
         <Link to="/student-list">
@@ -45,10 +45,11 @@ const NavBar = () => {
           <i class="bi bi-file-earmark-break-fill"></i>
         </Typography>
         <Link to="/log-out">
-          <Typography className="text-xl md:text-2xl">
-            <i class="bi bi-box-arrow-right"></i>
-          </Typography>
+         <Typography className="text-xl md:text-2xl">
+          <i class="bi bi-box-arrow-right"></i>
+        </Typography>
         </Link>
+       
       </div>
       <div className=" col-span-12 lg:pl-8 xl:pl-16 lg:col-span-6 flex justify-center items-center px-4 ">
         <div className="relative flex w-full">

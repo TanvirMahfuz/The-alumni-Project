@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { ImageGallery } from "./ImageGallery";
 import { Comment } from "./Comment";
 import axios from "axios";
-import { commentIcon, likeButton } from "../assets/images";
+import { commentIcon, likeButton, profilePlaceHolder } from "../assets/images";
 import { Typography } from "@material-tailwind/react";
+import { Link } from "react-router-dom";  
 export function PostCard({ item: initialItem }) {
   const [item, setItem] = useState(initialItem);
   console.log("post card item",item);
@@ -31,12 +32,22 @@ export function PostCard({ item: initialItem }) {
           <div key={item._id} className="mb-4">
               <div className="flex items-center space-x-2">
                 <img
-                  src={item.author.image ? item.author.image : "https://placekitten.com/32/32"}
+                  src={item.author.image ? item.author.image : {profilePlaceHolder}}
                   alt="User Avatar"
                   className="w-10 h-10 rounded-full"
                 />
                 <div>
-                  <Typography className="text-xl text-black font-semibold ml-2">{item.author.name}</Typography>
+
+                  <Typography className="text-xl text-black font-semibold ml-2">
+                    <Link
+                      className="w-full flex justify-center items-center"
+                      to={`/profile?id=${item.author?._id ? item.author._id : ""}`}>
+                      {item.author.name ? item.author.name : "Alice in wonderland"}
+                  </Link>
+
+
+
+                  </Typography>
                   <p className="text-gray-500 text-sm"></p>
                 </div>
               </div>

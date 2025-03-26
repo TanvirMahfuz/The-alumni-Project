@@ -45,7 +45,6 @@ export const getMultiplePosts = async (data) => {
   try {
     let allPosts = [];
     for (let i = 0; i < data.length; i++) {
-      // const id = mongoose.Types.ObjectId(data[i]);
       const post = await Post.findById(data[i]);
       allPosts.push(post);
     }

@@ -3,8 +3,9 @@ const postRouter = Router();
 import isLoggedIn from "../middlewares/auth.middleware.js";
 import * as postController from "../controllers/postController.js";
 import upload from "../middlewares/multer.middleware.js";
-postRouter.get("/allPosts", isLoggedIn, postController.getAllPostsController);
-postRouter.get("/post/:id", isLoggedIn, postController.getPostByIdController);
+
+postRouter.get("/", postController.getAllPostsController);
+postRouter.get("/post/:id", postController.getPostByIdController);
 postRouter.post(
   "/createPost",
   isLoggedIn,
@@ -31,7 +32,6 @@ postRouter.post(
 );
 postRouter.get(
   "/comments/:id",
-  isLoggedIn,
   postController.getCommentsController
 );
 export default postRouter;

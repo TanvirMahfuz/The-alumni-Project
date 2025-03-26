@@ -7,11 +7,11 @@ import { Typography } from "@material-tailwind/react";
 import { Link } from "react-router-dom";  
 export function PostCard({ item: initialItem }) {
   const [item, setItem] = useState(initialItem);
-  console.log("post card item",item);
+
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`/api/api/v1/post/comments/${item._id}`);
+        const response = await axios.get(`/server/post/comments/${item._id}`);
         const fetchedComments = response.data?.data?.comments || [];
         setItem((prevItem) => ({ ...prevItem, comments: fetchedComments }));
       } catch (err) {

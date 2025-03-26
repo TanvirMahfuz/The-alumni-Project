@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import axios from "axios";
+
+import {useAuthStore} from "../store/useUserStore";
 import {
   Card,
   CardHeader,
@@ -17,6 +18,7 @@ export function LogInCard() {
     email: "",
     password: "",
   });
+  const {isLoggingIn,logIn} = useAuthStore();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -26,24 +28,21 @@ export function LogInCard() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
-    console.log(formData);
-    axios
-      .post("/api/api/v1/user/login", formData)
-      .then((res) => {
-        console.log("Data submitted successfully");
-        console.log(res);
+    try {
+      const res = await logIn(formData);
+      if(res){
         navigate("/home");
-      })
-      .catch((err) => {
-        console.log("Login failed");
-        console.log(err);
-        navigate("/log-in");
-      });
+      }
+    } catch (error) {
+      console.error(error);
+    } 
+    
   };
 
   return (
+    
     <Card className="w-96">
       <CardHeader
         variant="gradient"

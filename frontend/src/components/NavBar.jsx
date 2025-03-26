@@ -22,6 +22,19 @@ const NavBar = () => {
   function handleSearch(e){
     navigate(`/search?value=${search}&option=${option}`);
   }
+    const Logout = () => {
+      axios
+        .get("/api/api/v1/user/logout")
+        .then((res) => {
+          console.log(res);
+          if (res.status === 200) {
+            window.location.href = "/log-in";
+          }
+        })
+        .catch((err) => {
+          console.log(err.message);
+        });
+    };
   return (
     <div className="grid grid-cols-12 gap-4 justify-center items-center py-4 px-2 md:px-8 xl:px-16  shadow-md text-white bg-gray-900 ">
       
@@ -45,7 +58,7 @@ const NavBar = () => {
           <i class="bi bi-file-earmark-break-fill"></i>
         </Typography>
         <Link to="/log-out">
-         <Typography className="text-xl md:text-2xl">
+         <Typography className="text-xl md:text-2xl" onClick={Logout}>
           <i class="bi bi-box-arrow-right"></i>
         </Typography>
         </Link>

@@ -9,17 +9,17 @@ import Demo from "./pages/demo.jsx";
 import CreatePost from "./pages/CreatePost.jsx";
 import Demo2 from "./pages/register2.jsx";
 import SearchResult from "./pages/SearchResult.jsx";
-import { Link } from "react-router-dom"; // Import Link
+
 
 function App() {
-  const [count, setCount] = useState(0);
+
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/profile" element={<Profile />}></Route>
         <Route path="/home" element={<Home />}></Route>
-        <Route path="/log-in" element={<LogIn />}></Route>
+        <Route path="/auth/log-in" element={<LogIn />}></Route>
         <Route path="/register" element={<Register />}></Route>
         <Route path="/demo" element={<Demo />}></Route>
         <Route path="/demo2" element={<Demo2 />}></Route>

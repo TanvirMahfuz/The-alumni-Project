@@ -17,7 +17,7 @@ function Home() {
   }, [getUsers, getPosts,checkAuth]);
 
   return (
-    <Layout>
+    <>
       <div className="mt-4 h-screen w-screen flex items-center justify-center overflow-auto">
         <div className="grid grid-cols-12 w-full mt-4">
           <div className="col-span-4 p-4 pt-0 mb-4 xl:col-span-3 hidden lg:block overflow-y-auto">
@@ -36,7 +36,7 @@ function Home() {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
 

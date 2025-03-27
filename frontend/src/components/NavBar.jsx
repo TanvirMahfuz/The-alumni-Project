@@ -11,10 +11,11 @@ import {
   MenuItem,
   Button,
 } from "@material-tailwind/react";
-const NavBar = () => {
+function NavBar({user}){
   const options = ["name", "email", "company"]
   const [option, setOption] = useState("name");
   const [search, setSearch] = useState("");
+
   const handleChange = (e) => {
     setSearch(e.target.value);
   };
@@ -24,45 +25,57 @@ const NavBar = () => {
   }
     const Logout = () => {
       axios
-        .get("/api/api/v1/user/logout")
+        .get("/server/auth/log-out")
         .then((res) => {
-          console.log(res);
-          if (res.status === 200) {
-            window.location.href = "/log-in";
-          }
+        navigate("/home");
         })
         .catch((err) => {
           console.log(err.message);
+        navigate("/home");
         });
     };
   return (
     <div className="grid grid-cols-12 gap-4 justify-center items-center py-4 px-2 md:px-8 xl:px-16  shadow-md text-white bg-gray-900 ">
-      
-        <div className="col-span-2 lg:col-span-1 flex justify-center items-center md:text-2xl">
-          <Link to="/home"><i class="bi bi-house-fill"></i>Home</Link>
-        </div>
-      
-
-      <div className="px-4 md:px-8 xl:px-16 col-span-10 lg:col-span-5 flex justify-end items-center gap-8 ">
-        <Link to="/student-list">
-          <Typography className="text-xl md:text-2xl">
-            <i class="bi bi-people-fill"></i>
-          </Typography>
+      <div className="col-span-3 lg:col-span-2 flex justify-center items-center md:text-2xl">
+        <Link to="/home">
+          <i class="bi bi-house-fill"></i> Home
         </Link>
+      </div>
 
-        <Typography className="text-xl md:text-2xl">
-          <i class="bi bi-chat-dots-fill"></i>
-        </Typography>
+      <div className="px-4 md:px-8 xl:px-16 col-span-9 lg:col-span-4 flex justify-end items-center gap-8 ">
+        {user && (
+          <Link to={`/profile?id=${user._id}`}>
+            <Typography className="text-xl md:text-2xl">
+              <i class="bi bi-people-fill"></i>
+            </Typography>
+          </Link>
+        )}
 
+        {user && (
+          <Link to="/chat">
+            <Typography className="text-xl md:text-2xl">
+              <i className="bi bi-chat-dots-fill"></i>
+            </Typography>
+          </Link>
+        )}
         <Typography className="text-xl md:text-2xl">
-          <i class="bi bi-file-earmark-break-fill"></i>
+          <i className="bi bi-file-earmark-break-fill"></i>
         </Typography>
-        <Link to="/log-out">
-         <Typography className="text-xl md:text-2xl" onClick={Logout}>
-          <i class="bi bi-box-arrow-right"></i>
-        </Typography>
-        </Link>
-       
+        {user && (
+          <Link to="/log-out">
+            <Typography className="text-xl md:text-2xl" onClick={Logout}>
+              <i className="bi bi-box-arrow-right"></i>
+            </Typography>
+          </Link>
+        )}
+
+        {!user && (
+          <Link to="/log-in">
+            <Typography className="text-xl md:text-2xl">
+              <i class="bi bi-box-arrow-in-right"></i>
+            </Typography>
+          </Link>
+        )}
       </div>
       <div className=" col-span-12 lg:pl-8 xl:pl-16 lg:col-span-6 flex justify-center items-center px-4 ">
         <div className="relative flex w-full">

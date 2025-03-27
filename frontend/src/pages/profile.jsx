@@ -30,7 +30,7 @@ function Demo() {
   },[id])
 
   return (
-    <Layout>
+    <>
       {console.log("selected User posts ", userPosts)}
 
       <div className="grid grid-cols-12 m-3 max-h-screen overflow-auto">
@@ -49,7 +49,7 @@ function Demo() {
           )}
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
 export default Demo;

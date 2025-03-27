@@ -14,7 +14,7 @@ const onComment = async () => {
   if (!comment.trim()) return;
 
   try {
-    const res = await axios.post("/api/api/v1/post/addComments", {
+    const res = await axios.post("/server/post/addComments", {
       postId: item._id,
       comment: comment,
     });

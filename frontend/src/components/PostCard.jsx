@@ -45,8 +45,6 @@ export function PostCard({ item: initialItem }) {
                       {item.author.name ? item.author.name : "Alice in wonderland"}
                   </Link>
 
-
-
                   </Typography>
                   <p className="text-gray-500 text-sm"></p>
                 </div>

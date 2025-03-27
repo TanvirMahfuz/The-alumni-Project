@@ -46,7 +46,7 @@ function SearchResult() {
     }, [search]);
 
   return (
-    <Layout>
+    <>
       <div className="mt-3 flex flex-col space-y-3 items-center justify-center">
         <div className="flex items-center w-full sm:max-w-100 md:max-w-150">
           <div className="bg-amber-300 h-1 flex-grow"></div>
@@ -116,7 +116,7 @@ function SearchResult() {
           </div>
         ))}
       </div>
-    </Layout>
+    </>
   );
 }
 

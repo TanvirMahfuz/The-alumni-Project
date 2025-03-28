@@ -3,7 +3,7 @@ import axios from "axios";
 
 function InputBox({ setMessages, selectedChat }) {
   const [message, setMessage] = useState("");
-  const messageRef = useRef(null); // useRef for clearing input
+  const messageRef = useRef(null);
 
   const handleChange = (e) => {
     setMessage(e.target.value);
@@ -19,9 +19,9 @@ function InputBox({ setMessages, selectedChat }) {
         text: message,
       });
 
-      setMessages((prevMessages) => [...prevMessages, data]); // Append new message
-      setMessage(""); // Clear state
-      messageRef.current.value = ""; // Clear input field
+      setMessages((prevMessages) => [...prevMessages, data]); 
+      setMessage(""); 
+      messageRef.current.value = "";
     } catch (error) {
       console.error("Error sending message:", error);
     }
@@ -36,7 +36,7 @@ function InputBox({ setMessages, selectedChat }) {
         <textarea
           id="chat"
           rows="1"
-          className="block mx-4 p-2.5 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          className="block mx-4 p-2.5 w-full text-sm bg-white focus:outline-none rounded-2xl resize-none"
           placeholder="Your message..."
           ref={messageRef} // Attach ref
           onChange={handleChange}></textarea>

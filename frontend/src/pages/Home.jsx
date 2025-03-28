@@ -7,17 +7,25 @@ import HomePageUserContainer from "../components/HomePageUserContainer.jsx";
 import axios from "axios";
 import { useGeneralStore } from "../store/useGeneralStore.js";
 import { useAuthStore } from "../store/useUserStore.js";
+
 function Home() {
-  const { allUsers, getUsers, allPosts, getPosts } = useGeneralStore();
-  const { authUser, checkAuth } = useAuthStore();
+  const { allUsers, getUsers, allPosts, getPosts  } =
+    useGeneralStore();
+  const { authUser, checkAuth, connectSocket, socket, disconnectSocket } =
+    useAuthStore();
   useEffect(() => {
     getUsers();
     getPosts();
-    checkAuth()
-  }, [getUsers, getPosts,checkAuth]);
+    checkAuth();
+    connectSocket();
 
+  }, [getUsers, getPosts, checkAuth, ]);
+  useEffect(() => {
+    connectSocket();
+  }, [authUser]);
   return (
     <>
+      {socket && console.log("socket", authUser)}
       <div className="mt-4 h-screen w-screen flex items-center justify-center overflow-auto">
         <div className="grid grid-cols-12 w-full mt-4">
           <div className="col-span-4 p-4 pt-0 mb-4 xl:col-span-3 hidden lg:block overflow-y-auto">

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useState } from "react";
 
 import {
@@ -11,8 +11,9 @@ import {
   MenuItem,
   Button,
 } from "@material-tailwind/react";
-function NavBar({user}){
-  const options = ["name", "email", "company"]
+
+function NavBar({ user }) {
+  const options = ["name", "email", "company"];
   const [option, setOption] = useState("name");
   const [search, setSearch] = useState("");
 
@@ -20,25 +21,25 @@ function NavBar({user}){
     setSearch(e.target.value);
   };
   const navigate = useNavigate();
-  function handleSearch(e){
+  function handleSearch(e) {
     navigate(`/search?value=${search}&option=${option}`);
   }
-    const Logout = () => {
-      axios
-        .get("/server/auth/log-out")
-        .then((res) => {
+  const Logout = () => {
+    axios
+      .get("/server/auth/log-out")
+      .then((res) => {
         navigate("/home");
-        })
-        .catch((err) => {
-          console.log(err.message);
+      })
+      .catch((err) => {
+        console.log(err.message);
         navigate("/home");
-        });
-    };
+      });
+  };
   return (
     <div className="grid grid-cols-12 gap-4 justify-center items-center py-4 px-2 md:px-8 xl:px-16  shadow-md text-white bg-gray-900 ">
       <div className="col-span-3 lg:col-span-2 flex justify-center items-center md:text-2xl">
         <Link to="/home">
-          <i class="bi bi-house-fill"></i> Home
+          <i className="bi bi-house-fill"></i> Home
         </Link>
       </div>
 
@@ -46,7 +47,7 @@ function NavBar({user}){
         {user && (
           <Link to={`/profile?id=${user._id}`}>
             <Typography className="text-xl md:text-2xl">
-              <i class="bi bi-people-fill"></i>
+              <i className="bi bi-people-fill"></i>
             </Typography>
           </Link>
         )}
@@ -72,7 +73,7 @@ function NavBar({user}){
         {!user && (
           <Link to="/log-in">
             <Typography className="text-xl md:text-2xl">
-              <i class="bi bi-box-arrow-in-right"></i>
+              <i className="bi bi-box-arrow-in-right"></i>
             </Typography>
           </Link>
         )}
@@ -117,14 +118,13 @@ function NavBar({user}){
               onChange={handleChange}
             />
             <button className="" onClick={handleSearch}>
-              {" "}
-              <i class="bi bi-search"></i>
+              <i className="bi bi-search"></i>
             </button>
           </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default NavBar;

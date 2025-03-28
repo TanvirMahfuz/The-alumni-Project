@@ -84,7 +84,7 @@ function HomePageSideProfile({ currentUser }) {
             </Typography>
             <div className="flex flex-wrap mt-4 bg-gray-300 p-4 rounded-2xl">
               {currentUser.education.map((education, index) => (
-                <div className="border-l-2 pl-2">
+                <div key={index} className="border-l-2 pl-2">
                   <Typography variant="h4" className="leading-tight">
                     {education.degree}
                   </Typography>

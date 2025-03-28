@@ -9,11 +9,11 @@ import Demo from "./pages/demo.jsx";
 import Demo2 from "./pages/register2.jsx";
 import SearchResult from "./pages/SearchResult.jsx";
 import Chat from "./pages/Chat.jsx";
-import NavBar from "./components/NavBar.jsx";
+import NavBar from "./components/navBar.jsx";
 import { useAuthStore } from "./store/useUserStore.js";
 
 function App() {
-  const { authUser,checkAuth } = useAuthStore();
+  const { authUser, checkAuth } = useAuthStore();
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);

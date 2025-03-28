@@ -2,25 +2,35 @@ import React from "react";
 import ChatHeader from "./ChatHeader";
 import InputBox from "./InputBox";
 import Texts from "./Texts";
-import axios from "axios";
-function ChatGround({ selectedChat, setSelectedChat }) {
-  const [messages, setMessages] = React.useState([]);
+import { useChatStore } from "../../store/useChatStore.js";
+
+function ChatGround({ onlineUsers }) {
+  const {
+    selectedUser,
+    subscribeToMessages,
+    unSubscribeFromMessages,
+    messages,
+    getMessages
+  } = useChatStore();
+
   React.useEffect(() => {
-    const getMessages = async () => {
-      const { data } = await axios.get("/server/chat/get-messages/" + selectedChat._id);
-      setMessages(data);
-    };
     getMessages();
-  }, [selectedChat]);
+      subscribeToMessages();
+      return () => unSubscribeFromMessages();
+  }, [selectedUser,subscribeToMessages,unSubscribeFromMessages]);
   return (
     <div className="bg-white h-screen flex flex-col justify-between">
-      <ChatHeader user={selectedChat} />
+      <ChatHeader user={selectedUser} />
       <Texts
         messages={messages}
-        setMessages={setMessages}
-        selectedChat={selectedChat}
+        selectedUser={selectedUser}
+      />          
+      <InputBox
+        setMessages={() => {
+          console.log("need to set message");
+        }}
+        selectedUser={selectedUser}
       />
-      <InputBox setMessages={setMessages} selectedChat={selectedChat} />
     </div>
   );
 }

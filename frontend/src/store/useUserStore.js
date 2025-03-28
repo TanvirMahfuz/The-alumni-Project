@@ -1,14 +1,16 @@
 import { create } from "zustand";
 import axios from "axios";
+import { io } from 'socket.io-client'
 export const useAuthStore = create((set, get) => ({
   authUser: null,
   isSigningUp: false,
   isLoggingIn: false,
   isCheckingAuth: true,
   isUpdatingProfile: false,
-  onlineUsers: [],
+  socket: null,
   userPosts: [],
   isGettingUserPosts: false,
+  onlineUsers:[],
 
   checkAuth: async () => {
     try {
@@ -83,5 +85,24 @@ export const useAuthStore = create((set, get) => ({
       set({ isGettingUserPosts: false });
       console.error("Error fetching posts:", error);
     }
+  },
+  connectSocket: () => {
+    const { authUser } = get();
+    if (!authUser || get().socket?.connected) {
+
+      return;
+    }
+    const socket = io("http://localhost:3000", {
+      query: { userId: authUser._id },
+    });
+    socket.connect();
+    set({ socket: socket });
+    socket.on("getOnlineUsers", (userIds) => {
+      set({ onlineUsers: userIds });
+    });
+  },
+  disconnectSocket: () => {
+    console.log("disconnecting socket");
+    if (get().socket?.connected) get().socket.disconnect();
   },
 }));

@@ -19,12 +19,11 @@ function Demo() {
     edit: false,
   });
   const { selectedUser, setSelectedUser } = useGeneralStore();
-  const { userPosts, getUserPosts } = useAuthStore();
+  const { userPosts, getUserPosts,authUser } = useAuthStore();
   const location = useLocation(); 
   const queryParams = new URLSearchParams(location.search); 
   const id = queryParams.get("id");
-
-  useEffect(()=>{
+  useEffect(()=>{ 
     setSelectedUser(id);
     getUserPosts(id);
   },[id])

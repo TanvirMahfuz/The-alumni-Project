@@ -28,7 +28,6 @@ export const getMessagesByChat = async (req, res) => {
     const senderId = req.user._id;
     const receiverId = req.params.id;
     const messages = await getMessages(senderId, receiverId);
-    console.log(messages);
     
     res.status(200).json(messages);
   } catch (error) {

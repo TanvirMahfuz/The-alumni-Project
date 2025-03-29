@@ -2,7 +2,6 @@ import { Server } from "socket.io";
 import http from "http";
 import app from "../app.js";
 
-const userSocketMap = {};
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
@@ -10,15 +9,22 @@ const io = new Server(server, {
   },
 });
 
+const userSocketMap = {};
+export function getReceiverSocketId(userId) {
+  return userSocketMap[userId];
+}
+
+
 try {
   io.on("connection", (socket) => {
     const socketId = socket.id;
     const userId = socket.handshake.query.userId;
-    userSocketMap[userId] = socketId;
+    if (userId) {
+      userSocketMap[userId] = socket.id;
+      console.log(userSocketMap);
+    }
 
     socket.emit("getOnlineUsers", Object.keys(userSocketMap));
-    console.log("Updated userSocketMap (connection):", userSocketMap);
-
 
     socket.on("disconnect", () => {
       delete userSocketMap[userId]; 

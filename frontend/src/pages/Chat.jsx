@@ -8,10 +8,8 @@ import { useChatStore } from "../store/useChatStore";
 
 function Chat() {
   const {selectedUser,setSelectedUser,removeUser} = useChatStore()
-  const { authUser, onlineUsers ,connectSocket,socket } = useAuthStore();
-  useEffect(()=>{
-    connectSocket()
-  },[authUser])
+  const { onlineUsers} = useAuthStore();
+
   
   return (
     <div className="grid grid-cols-12 bg-gray-100 max-h-screen">

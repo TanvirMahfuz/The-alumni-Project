@@ -11,18 +11,12 @@ import { useAuthStore } from "../store/useUserStore.js";
 function Home() {
   const { allUsers, getUsers, allPosts, getPosts  } =
     useGeneralStore();
-  const { authUser, checkAuth, connectSocket, socket, disconnectSocket } =
+  const { authUser, socket } =
     useAuthStore();
-  useEffect(() => {
+    useEffect(() => {
     getUsers();
     getPosts();
-    checkAuth();
-    connectSocket();
-
-  }, [getUsers, getPosts, checkAuth, ]);
-  useEffect(() => {
-    connectSocket();
-  }, [authUser]);
+  }, [getUsers, getPosts, ]);
   return (
     <>
       {socket && console.log("socket", authUser)}

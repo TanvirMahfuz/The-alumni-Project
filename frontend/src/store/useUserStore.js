@@ -16,6 +16,7 @@ export const useAuthStore = create((set, get) => ({
     try {
       const res = await axios.get("/server/auth/check");
       set({ authUser: res.data.user });
+      get().connectSocket();
     } catch (error) {
       set({ authUser: null });
       console.log(error.message);
@@ -88,6 +89,8 @@ export const useAuthStore = create((set, get) => ({
   },
   connectSocket: () => {
     const { authUser } = get();
+    console.log("socket already connected:", get().socket?.connected);
+    console.log("socket:", get().socket);
     if (!authUser || get().socket?.connected) {
 
       return;

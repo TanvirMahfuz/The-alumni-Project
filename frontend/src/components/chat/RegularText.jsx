@@ -9,12 +9,11 @@ function RegularText({message}) {
     <div
       className={`m-5 flex ${
         message.senderId === selectedUser._id ? "justify-start" : "justify-end"
-      }`}>
+      }`}
+      >
       <div
         className={`flex items-start gap-2.5 min-w-1/2 ${
-          message.senderId === selectedUser._id
-            ? ""
-            : "flex-row-reverse"
+          message.senderId === selectedUser._id ? "" : "flex-row-reverse"
         }`}>
         <img
           className="w-8 h-8 rounded-full"

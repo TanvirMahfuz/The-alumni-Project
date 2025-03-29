@@ -5,6 +5,7 @@ import Texts from "./Texts";
 import { useChatStore } from "../../store/useChatStore.js";
 
 function ChatGround({ onlineUsers }) {
+
   const {
     selectedUser,
     subscribeToMessages,
@@ -18,19 +19,16 @@ function ChatGround({ onlineUsers }) {
       subscribeToMessages();
       return () => unSubscribeFromMessages();
   }, [selectedUser,subscribeToMessages,unSubscribeFromMessages]);
+      
   return (
     <div className="bg-white h-screen flex flex-col justify-between">
       <ChatHeader user={selectedUser} />
       <Texts
         messages={messages}
         selectedUser={selectedUser}
-      />          
-      <InputBox
-        setMessages={() => {
-          console.log("need to set message");
-        }}
-        selectedUser={selectedUser}
+
       />
+      <InputBox />
     </div>
   );
 }

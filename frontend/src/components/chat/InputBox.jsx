@@ -1,8 +1,10 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
-
-function InputBox({ setMessages, selectedChat }) {
-  const [message, setMessage] = useState("");
+import { useChatStore } from "../../store/useChatStore";
+function InputBox() {
+  const [message, setMessage] = useState
+  ("");
+  const { sendMessage, selectedUser } = useChatStore();
   const messageRef = useRef(null);
 
   const handleChange = (e) => {
@@ -12,14 +14,12 @@ function InputBox({ setMessages, selectedChat }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!message.trim()) return;
-
+    console.log("send to :", selectedUser._id);
     try {
-      const { data } = await axios.post("/server/chat/send-message", {
-        receiverId: selectedChat._id,
+      sendMessage({
+        receiverId: selectedUser._id,
         text: message,
-      });
-
-      setMessages((prevMessages) => [...prevMessages, data]); 
+      })
       setMessage(""); 
       messageRef.current.value = "";
     } catch (error) {

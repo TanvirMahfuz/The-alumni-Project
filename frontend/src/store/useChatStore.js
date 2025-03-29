@@ -41,11 +41,9 @@ export const useChatStore = create((set, get) => ({
   sendMessage: async (messageData) => {
     const { selectedUser, messages } = get();
     try {
-      const res = await axios.post(
-        `/messages/send/${selectedUser._id}`,
-        messageData
-      );
-      set({ messages: [...messages, res.data.data] });
+      const { data } = await axios.post("/server/chat/send-message", messageData);
+      set({ messages: [...messages, data] });
+      console.log("message sent:", data);
     } catch (error) {
       console.error(error.message);
 
@@ -57,6 +55,7 @@ export const useChatStore = create((set, get) => ({
     const socket = useAuthStore.getState().socket;
     console.log("socket connected:", socket.id);
     socket.on("newMessage", (newMessage) => {
+      console.log("new message received:", newMessage);
       if (newMessage.senderId !== selectedUser._id) return;
       set({ messages: [...get().messages, newMessage] });
     });

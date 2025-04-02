@@ -1,8 +1,23 @@
-import React from "react";
+import React,{useState} from "react";
 import { Input,Checkbox } from "@material-tailwind/react";
 import { useUserUpdateStore } from "../../store/useUserUpdateStore.js";
-function Introduction() {
-  const { formData, handleChange } = useUserUpdateStore();
+import { useAuthStore } from "../../store/useUserStore.js";
+
+function Introduction({ formData, setFormData }) {
+  const { authUser } = useAuthStore();
+  const [name, setName] = useState(authUser.name ?? "");
+  const [session, setSession] = useState(authUser.session ?? "");
+  const [email, setEmail] = useState(authUser.email ?? "");
+  const [bio, setBio] = useState(authUser.bio ?? "");
+  const [availableForWork, setAvailableForWork] = useState(
+    authUser.availableForWork ?? false
+  );
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -10,22 +25,31 @@ function Introduction() {
           variant="standard"
           label="Name"
           name="name"
-          value={formData.name}
-          onChange={handleChange}
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+            handleChange(e);
+          }}
         />
         <Input
           variant="standard"
           label="Session"
           name="session"
-          value={formData.session}
-          onChange={handleChange}
+          value={session}
+          onChange={(e) => {
+            setSession(e.target.value);
+            handleChange(e);
+          }}
         />
         <Input
           variant="standard"
           label="Email"
           name="email"
-          value={formData.email}
-          onChange={handleChange}
+          value={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            handleChange(e);
+          }}
         />
       </div>
 
@@ -33,15 +57,20 @@ function Introduction() {
         variant="standard"
         label="Bio"
         name="bio"
-        value={formData.bio}
-        onChange={handleChange}
+        value={bio}
+        onChange={(e) => {
+          setBio(e.target.value);
+          handleChange(e);
+        }}
       />
       <Checkbox
-        defaultChecked
         label="Available for work"
         name="availableForWork"
-        checked={formData.availableForWork}
-        onChange={handleChange}
+        checked={availableForWork}
+        onChange={(e) => {
+          setAvailableForWork(e.target.checked)
+          setFormData({ ...formData, availableForWork: e.target.checked });
+        }}
       />
     </>
   );

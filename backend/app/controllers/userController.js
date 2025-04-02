@@ -1,7 +1,7 @@
 
 import * as userServices from "../services/userServices.js";
 import { getMultiplePosts } from "../services/postServices.js";
-import { updateValidation } from "../utility/updateValidation.js";
+import { validateUserUpdate } from "../utility/updateValidation.js";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -32,10 +32,17 @@ export const getOneUser = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
+  const proid = req.query.id;
+  if (proid !== req.user._id.toString()) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  
+  
   const id = req.user._id
   const body = req.body;
   //validation
-  const params = updateValidation(id,body)
+  const params = validateUserUpdate(id, body);
+
   if (!params) {
     return res.status(400).json({ message: "Invalid request" });
   }

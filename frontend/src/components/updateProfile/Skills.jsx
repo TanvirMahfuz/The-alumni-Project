@@ -1,49 +1,104 @@
 import React from "react";
 import { Input, Button } from "@material-tailwind/react";
-import { useUserUpdateStore } from "../../store/useUserUpdateStore.js";
+import { useAuthStore } from "../../store/useUserStore.js";
 
-function Skills() {
-  const { formData, handleArrayChange, addToArray, removeFromArray } =
-    useUserUpdateStore();
-  if (!Array.isArray(formData.skills)) {
-    formData.skills = [];
-  }
+function Skills({ formData, setFormData }) {
+  const { authUser } = useAuthStore();
+  const [skills, setSkills] = React.useState([]);
+
+  React.useEffect(() => {
+    if (authUser?.skills?.length > 0) {
+      const initialSkills = authUser.skills.map((skill) => ({
+        title: skill.title || "",
+        image: skill.image || "",
+        level: skill.level || 0,
+      }));
+      setSkills(initialSkills);
+      setFormData((prev) => ({
+        ...prev,
+        skills: initialSkills,
+      }));
+    }
+  }, [authUser]);
+
+  const handleSkillChange = (index, field, value) => {
+    const updatedSkills = [...skills];
+    updatedSkills[index][field] = value;
+
+    setSkills(updatedSkills);
+    setFormData((prev) => ({
+      ...prev,
+      skills: updatedSkills,
+    }));
+  };
+
+  const addNewSkill = () => {
+    const newSkill = {
+      title: "",
+      image: "",
+      level: 0,
+    };
+
+    setSkills((prev) => [...prev, newSkill]);
+    setFormData((prev) => ({
+      ...prev,
+      skills: [...prev.skills, newSkill],
+    }));
+  };
+
+  const removeSkill = (index) => {
+    const updatedSkills = skills.filter((_, i) => i !== index);
+
+    setSkills(updatedSkills);
+    setFormData((prev) => ({
+      ...prev,
+      skills: updatedSkills,
+    }));
+  };
 
   return (
-    <>
-      <h3>Skills</h3>
-      <div className="w-full flex flex-wrap gap-2">
-        {formData.skills.map((skill, index) => (
-          <div key={index} className="relative">
-            <div className="border p-2 py-4 border-gray-500 rounded-md space-y-4 flex items-center">
-              <Input
-                type="text"
-                variant="standard"
-                placeholder="Skill Title"
-                value={skill.title}
-                onChange={(e) =>
-                  handleArrayChange("skills", index, "title", e.target.value)
-                }
-              />
-              <button
-                className="absolute text-sm bg-red-500 hover:bg-red-700 text-white rounded-full px-2 py-1 top-0 right-0 z-10"
-                onClick={() => removeFromArray("skills", index)}>
-                X
-              </button>
-            </div>
+    <div className="space-y-4">
+      <h3 className="text-xl font-semibold">Skills</h3>
+
+      <div className="flex flex-wrap gap-3">
+        {skills.map((skill, index) => (
+          <div
+            key={index}
+            className="relative p-3 border border-gray-300 rounded-lg flex items-center gap-2">
+            <Input
+              label="Skill Name"
+              variant="standard"
+              value={skill.title}
+              onChange={(e) =>
+                handleSkillChange(index, "title", e.target.value)
+              }
+              className="w-32"
+            />
+            <Input
+              type="number"
+              label="Level (0-100)"
+              variant="standard"
+              value={skill.level}
+              onChange={(e) =>
+                handleSkillChange(index, "level", e.target.value)
+              }
+              min="0"
+              max="100"
+              className="w-24"
+            />
+            <button
+              className="text-gray-600 hover:text-red-500"
+              onClick={() => removeSkill(index)}>
+              ×
+            </button>
           </div>
         ))}
       </div>
 
-      <Button
-        type="button"
-        className="px-2 py-1"
-        onClick={() =>
-          addToArray("skills", { title: "", image: "", level: 0 })
-        }>
+      <Button onClick={addNewSkill} className="px-2 py-1 bg-gray-900">
         + Add Skill
       </Button>
-    </>
+    </div>
   );
 }
 

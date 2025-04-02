@@ -1,86 +1,109 @@
 import React from "react";
 import { Input, Button } from "@material-tailwind/react";
-import { useUserUpdateStore } from "../../store/useUserUpdateStore.js";
+import { useAuthStore } from "../../store/useUserStore.js";
 
-function WorkedOn() {
-  const { formData, handleArrayChange, addToArray, removeFromArray } =
-    useUserUpdateStore();
+function WorkedOn({ formData, setFormData }) {
+  const { authUser } = useAuthStore();
+  const [workedProjects, setWorkedProjects] = React.useState([]);
+
+  React.useEffect(() => {
+    if (authUser?.haveWorkedIn?.length > 0) {
+      const initialProjects = authUser.haveWorkedIn.map((project) => ({
+        title: project.title || "none",
+        techStack: project.techStack || "",
+        description: project.description || "",
+      }));
+      setWorkedProjects(initialProjects);
+      setFormData((prev) => ({
+        ...prev,
+        haveWorkedIn: initialProjects,
+      }));
+    }
+  }, [authUser]);
+
+  const handleProjectChange = (index, field, value) => {
+    const updatedProjects = [...workedProjects];
+    updatedProjects[index][field] = value;
+
+    setWorkedProjects(updatedProjects);
+    setFormData((prev) => ({
+      ...prev,
+      haveWorkedIn: updatedProjects,
+    }));
+  };
+
+  const addNewProject = () => {
+    const newProject = {
+      title: "none",
+      techStack: "",
+      description: "",
+    };
+
+    setWorkedProjects((prev) => [...prev, newProject]);
+    setFormData((prev) => ({
+      ...prev,
+      haveWorkedIn: [...prev.haveWorkedIn, newProject],
+    }));
+  };
+
+  const removeProject = (index) => {
+    const updatedProjects = workedProjects.filter((_, i) => i !== index);
+
+    setWorkedProjects(updatedProjects);
+    setFormData((prev) => ({
+      ...prev,
+      haveWorkedIn: updatedProjects,
+    }));
+  };
 
   return (
-    <>
-      <h3>Worked On</h3>
-      {formData?.haveWorkedIn && formData.haveWorkedIn.length === 0 ? (
-        <p>Nothing to show</p>
+    <div className="space-y-4">
+      <h3 className="text-xl font-semibold">Worked On</h3>
+
+      {workedProjects.length > 0 ? (
+        workedProjects.map((project, index) => (
+          <div
+            key={index}
+            className="relative p-4 border border-gray-300 rounded-lg space-y-3">
+            <Input
+              label="Project Title"
+              variant="standard"
+              value={project.title}
+              onChange={(e) =>
+                handleProjectChange(index, "title", e.target.value)
+              }
+            />
+            <Input
+              label="Tech Stack"
+              variant="standard"
+              value={project.techStack}
+              onChange={(e) =>
+                handleProjectChange(index, "techStack", e.target.value)
+              }
+            />
+            <Input
+              label="Description"
+              variant="standard"
+              value={project.description}
+              onChange={(e) =>
+                handleProjectChange(index, "description", e.target.value)
+              }
+            />
+            <button
+              className="absolute top-2 right-2 text-gray-600 hover:text-red-500"
+              onClick={() => removeProject(index)}>
+              ×
+            </button>
+          </div>
+        ))
       ) : (
-        <>
-          {formData.haveWorkedIn.map((job, index) => (
-            <div key={index} className="relative mb-4">
-              <div className="border p-2 py-4 border-gray-500 rounded-md space-y-8">
-                <Input
-                  variant="standard"
-                  placeholder="Title"
-                  label="Title"
-                  value={job.title}
-                  onChange={(e) =>
-                    handleArrayChange(
-                      "haveWorkedIn",
-                      index,
-                      "title",
-                      e.target.value
-                    )
-                  }
-                />
-                <Input
-                  variant="standard"
-                  placeholder="Tech Stack"
-                  label="Tech Stack"
-                  value={job.techStack}
-                  onChange={(e) =>
-                    handleArrayChange(
-                      "haveWorkedIn",
-                      index,
-                      "techStack",
-                      e.target.value
-                    )
-                  }
-                />
-                <Input
-                  variant="standard"
-                  placeholder="Description"
-                  label="Description"
-                  value={job.description}
-                  onChange={(e) =>
-                    handleArrayChange(
-                      "haveWorkedIn",
-                      index,
-                      "description",
-                      e.target.value
-                    )
-                  }
-                />
-              </div>
-              <button
-                className="absolute text-sm bg-red-500 hover:bg-red-700 text-white rounded-full px-2 py-1 top-0 right-0 z-10"
-                onClick={() => removeFromArray("haveWorkedIn", index)}>
-                X
-              </button>
-            </div>
-          ))}
-          <Button
-            type="button"
-            className="px-4 py-2 mt-4"
-            onClick={() =>
-              addToArray("haveWorkedIn", {
-                title: "",
-                techStack: "",
-                description: "",
-              })
-            }>
-            + Add
-          </Button>
-        </>
+        <p className="text-gray-500">Nothing to show</p>
       )}
-    </>
+
+      <Button onClick={addNewProject} className="px-2 py-1 bg-gray-900">
+        + Add Project
+      </Button>
+    </div>
   );
 }
 

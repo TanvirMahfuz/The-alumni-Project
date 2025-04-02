@@ -19,7 +19,7 @@ function Demo() {
     edit: false,
   });
   const { selectedUser, setSelectedUser } = useGeneralStore();
-  const { userPosts, getUserPosts,authUser } = useAuthStore();
+  const { userPosts, getUserPosts, authUser } = useAuthStore();
   const location = useLocation(); 
   const queryParams = new URLSearchParams(location.search); 
   const id = queryParams.get("id");
@@ -30,8 +30,6 @@ function Demo() {
 
   return (
     <>
-      {console.log("selected User posts ", userPosts)}
-
       <div className="grid grid-cols-12 m-3 max-h-screen overflow-auto">
         <SideProfile user={selectedUser} />
 
@@ -46,7 +44,7 @@ function Demo() {
               ))}
             </div>
           )}
-          {mode.edit && <UpdateProfile />}
+          {mode.edit && authUser._id === id && <UpdateProfile pro_id={id} />}
         </div>
       </div>
     </>

@@ -1,15 +1,97 @@
 import { create } from "zustand";
 import { useAuthStore } from "./useUserStore.js";
+
+
 export const useUserUpdateStore = create((set, get) => ({
   formData: {},
+  emptyUser:{
+  name: "",
+  session: "",
+  email: "",
+  password: "",
+  image: "",
+  bio: "",
+  education: [
+    {
+      degree: "",
+      institute: "",
+      startDate: "",
+      endDate: "",
+    },
+  ],
+  contacts: {
+    github: "",
+    linkedin: "",
+    facebook: "",
+    portfolio: "",
+  },
+  isAdmin: false,
+  currentPost: [
+    {
+      title: "",
+      company: "",
+      startDate: "",
+      endDate: "",
+      description: "",
+    },
+  ],
+  jobExperience: [
+    {
+      title: "",
+      company: "",
+      startDate: "",
+      endDate: "",
+      description: "",
+    },
+  ],
+  currentlyWorkingIn: [
+    {
+      title: "none",
+      techStack: "",
+      description: "",
+    },
+  ],
+  haveWorkedIn: [
+    {
+      title: "none",
+      techStack: "",
+      description: "",
+    },
+  ],
+  skills: [
+    {
+      title: "",
+      image: "",
+      level: "",
+    },
+  ],
+  futureInterests: [],
+  participatedIn: [
+    {
+      title: "",
+      institute: "",
+      startDate: "",
+      endDate: "",
+    },
+  ],
+  availableForWork: false,
+  projects: [
+    {
+      projectName: "",
+      projectDescription: "",
+      projectLink: "",
+    },
+  ],
+  resume: "",
+  posts: [],
+},
 
   printFormData: () => {
     console.log("Zustand connected");
   },
 
   initializeFormData: () => {
-    const authUser = useAuthStore.getState().authUser || {};
-    set({ formData: authUser });
+    set({ formData: emptyUser });
   },
   setFormData: (data) => {
     set({ formData: data });

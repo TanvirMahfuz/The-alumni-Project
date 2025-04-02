@@ -68,7 +68,7 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    currentPost: {
+    currentPost: [{
       title: {
         type: String,
         default: "",
@@ -89,7 +89,7 @@ const userSchema = new mongoose.Schema(
         type: String,
         default: "",
       },
-    },
+    }],
     jobExperience: [
       {
         title: {
@@ -135,6 +135,7 @@ const userSchema = new mongoose.Schema(
         title: {
           type: String,
           default: "none",
+          unique: true,
         },
         techStack: {
           type: String,
@@ -144,6 +145,7 @@ const userSchema = new mongoose.Schema(
           type: String,
           default: "",
         },
+        
       },
     ],
     skills: [

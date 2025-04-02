@@ -1,6 +1,6 @@
 import Router from "express";
 const postRouter = Router();
-import isLoggedIn from "../middlewares/auth.middleware.js";
+import {isLoggedIn} from "../middlewares/auth.middleware.js";
 import * as postController from "../controllers/postController.js";
 import upload from "../middlewares/multer.middleware.js";
 

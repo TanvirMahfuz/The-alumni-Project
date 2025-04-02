@@ -1,7 +1,7 @@
 
 import * as userServices from "../services/userServices.js";
 import { getMultiplePosts } from "../services/postServices.js";
-
+import { updateValidation } from "../utility/updateValidation.js";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -30,25 +30,26 @@ export const getOneUser = async (req, res) => {
       .json({message: "Error fetching users", error: error.message});
   }
 };
+
 export const updateUser = async (req, res) => {
-  const {id, body} = req.body;
-  const user = await userServices.findOneUser({_id: id});
-  if (!user) {
-    return res.status(404).json({message: "User not found"});
+  const id = req.user._id
+  const body = req.body;
+  //validation
+  const params = updateValidation(id,body)
+  if (!params) {
+    return res.status(400).json({ message: "Invalid request" });
   }
-  const updatedUser = await userServices.updateUser({_id: id}, body, {
-    new: true,
-  });
+
+  const updatedUser = await userServices.updateUser(id, params);
   if (!updatedUser) {
     return res.status(500).json({message: "Error updating user"});
   }
-  console.log(updatedUser);
+
   res
     .status(200)
     .json({message: "User updated successfully", user: updatedUser});
 };
 export const userPosts = async (req,res)=>{
-
   try {
         const id = req.params.id;
         const user = await userServices.findOneUserById(id);

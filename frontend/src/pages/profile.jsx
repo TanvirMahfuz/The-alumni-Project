@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from "react";
 
-import Layout from "../laytout/layout";
 import { SideProfile } from "../components/sideProfile.jsx";
 import { PostCard } from "../components/PostCard.jsx";
 import ProfileMode from "../components/ProfileMode.jsx";
 import ModeSelector from "../components/ModeSelector.jsx";
+import UpdateProfile from "../components/updateProfile.jsx";
 
 import { useLocation } from "react-router-dom";
 
@@ -34,11 +34,11 @@ function Demo() {
 
       <div className="grid grid-cols-12 m-3 max-h-screen overflow-auto">
         <SideProfile user={selectedUser} />
-          
+
         <div className=" mt-6 col-span-12 lg:col-span-8 space-y-5 border-2 rounded-3xl max-h-screen overflow-y-scroll">
-          <ModeSelector mode = {mode} setMode={setMode} />
+          <ModeSelector mode={mode} setMode={setMode} />
           <hr className="mx-4" />
-          {mode.profile && <ProfileMode user = {selectedUser}/>}
+          {mode.profile && <ProfileMode user={selectedUser} />}
           {mode.post && (
             <div className="p-4 px-8 space-y-8">
               {userPosts.map((item, index) => (
@@ -46,6 +46,7 @@ function Demo() {
               ))}
             </div>
           )}
+          {mode.edit && <UpdateProfile />}
         </div>
       </div>
     </>

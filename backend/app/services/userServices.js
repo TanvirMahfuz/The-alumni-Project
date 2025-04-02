@@ -24,8 +24,31 @@ const findAllUser = async () => {
   if (!newUser) return null;
   return newUser;
 };
-const updateUser = async (params, user) => {
-  const newUser = await User.findOneAndUpdate(params, user,{new:true}).select("-password");
+const updateUser = async (id, params) => {
+  const newUser = await User.findByIdAndUpdate(
+    id,
+    params, 
+    { new: true }
+  ).select("-password");
+
+  return newUser;
+};
+const updateUserSingleField = async (params, user) => {
+  const newUser = await User.findByIdAndUpdate(id, params, {
+    new: true,
+  }).select("-password");
+  if (!newUser) return null;
+  return newUser;
+};
+
+const updateUserMultipleFields = async (params, user) => {
+  const newUser = await User.findByIdAndUpdate(
+    id,
+    {
+      $push: { [i]: body[i] },
+    },
+    { new: true }
+  ).select("-password");
   if (!newUser) return null;
   return newUser;
 };

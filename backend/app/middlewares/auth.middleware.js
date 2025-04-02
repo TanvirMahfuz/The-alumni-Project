@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import {findOneUser} from "../services/userServices.js";
-const isLoggedIn = async (req, res, next) => {
+export const isLoggedIn = async (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
     return res.status(401).json({message: "Unauthorized"});
@@ -13,4 +13,11 @@ const isLoggedIn = async (req, res, next) => {
     return res.status(401).json({message: "Unauthorized"});
   }
 };
-export default isLoggedIn;
+
+export const isAdmin = async (req, res, next) => {
+  if (req.user.isAdmin) {
+    next();
+  } else {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+}

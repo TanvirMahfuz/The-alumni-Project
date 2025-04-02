@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import axios from "axios";
 import { io } from 'socket.io-client'
+
+
 export const useAuthStore = create((set, get) => ({
   authUser: null,
   isSigningUp: false,
@@ -63,11 +65,14 @@ export const useAuthStore = create((set, get) => ({
     }
   },
   updateProfile: async (data) => {
+    console.log('updating profile');
     try {
-      const res = await axios.put("/auth/update-profile", data);
+      const res = await axios.put("/server/user/updateUser", data);
       set({ authUser: res.data.user });
+      return true;
     } catch (error) {
-      console.log(error.response?.data?.message);
+      console.log(error);
+      return false
     } finally {
       set({ isUpdatingProfile: false });
     }

@@ -5,7 +5,7 @@ import { Textarea, Typography, Button } from "@material-tailwind/react";
 
 function HomePageSideProfile({ currentUser }) {
   return (
-    <div className=" p-4 mt-6 h-screen rounded-3xl bg-gray-50 shadow-md">
+    <div className=" p-4 mt-6 h-screen rounded-3xl bg-gray-50 shadow-md overflow-auto">
       <div className="bg-white p-4 rounded-xl shadow-lg">
         <div className="flex items-center">
           <img src="src/assets/profile.jpg" alt="" className="rounded-2xl" />

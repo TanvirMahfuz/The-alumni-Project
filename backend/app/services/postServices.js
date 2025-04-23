@@ -5,8 +5,8 @@ import User from "../models/userModel.js";
 export const createPost = async (data) => {
   console.log(data);
   try {
-    const post = await new Post(data);
-    post.save();
+    const post = new Post(data);
+    await post.save();
     return post;
   } catch (error) {
     console.log(error.message);

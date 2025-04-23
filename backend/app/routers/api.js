@@ -4,6 +4,8 @@ import postRouter from "./postRouter.js";
 import searchRouter from "./searchRouter.js";
 import authRouter from "./authRouter.js";
 import chatRouter from "./chatRouter.js";
+import recruitmentRouter from "./recruitmentRouter.js"
+import eventRouter from "./eventRouter.js";
 const defaultRouter = Router();
 defaultRouter.get("/home", (req, res) => {
   res.send("Welcome to the home page");
@@ -13,4 +15,6 @@ defaultRouter.use("/post", postRouter);
 defaultRouter.use("/search", searchRouter);
 defaultRouter.use("/auth", authRouter);
 defaultRouter.use("/chat", chatRouter);
+defaultRouter.use("/recruitment", recruitmentRouter);
+defaultRouter.use("/event", eventRouter);
 export default defaultRouter;

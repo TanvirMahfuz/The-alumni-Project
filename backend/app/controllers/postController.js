@@ -9,58 +9,100 @@ import {
   commentOnPost,
 } from "../services/postServices.js";
 import {findOneUserById,addNewPost} from "../services/userServices.js";
-import uploadFileToCloudinary from "../utility/cloudinary.config.js";
+
+import uploadFileToCloudinary from "../utility/cloudinary64.js";
+
 const createPostController = async (req, res) => {
   try {
-    let data = req.body;
-    data.author = req.user._id;
-    console.log(data);
-    if (req.files) {
-      const images = req.files.map((file) => ({
-        path: file.path,
-        filename: file.filename,
-      }));
-      try {
-        const uploadedFiles = await Promise.all(
-          images.map(async (image) => {
-            const uploadedFile = await uploadFileToCloudinary(
-              image.path,
-              image.filename
-            );
-            return uploadedFile?.secure_url; // This will return secure_url directly
-          })
-        );
-        data.images = uploadedFiles;
-      } catch (error) {
-        console.error("File upload error:", error.message);
-      }
-    }
-    if (data.description.length <= 0 && data.images.length <= 0) {
+    const { description, images } = req.body;
+    const author = req.user._id;
+    console.log(req.body)
+    // Validate input
+    if (!description && (!images || images.length === 0)) {
+      console.log("Validation failed: No description and no images provided");
       return res.status(400).json({
-        message: "Post creation failed",
+        message: "Please provide a description or at least one image",
       });
     }
-    const post = await createPost(data);
+    
+
+    // Prepare post data
+    const postData = {
+      author,
+      description: description || "",
+      images: [],
+    };
+
+    console.log("Post data before validation:", postData);  
+
+    // Upload images to Cloudinary if they exist
+    if (images && images.length > 0) {
+      try {
+        const uploadPromises = images.map(async (image) => {
+          // Assuming image is already in base64 format
+          // If not, you'll need to convert it first
+          if (!image.startsWith("data:")) {
+            console.warn("Image is not in base64 format, skipping");
+            return null;
+          }
+          return await uploadFileToCloudinary(image);
+        });
+
+        const uploadedUrls = await Promise.all(uploadPromises);
+
+        // Filter out any failed uploads (null values)
+        postData.images = uploadedUrls
+          .filter((url) => url?.secure_url)
+          .map((img) => img.secure_url);
+
+        // If we had images but none uploaded successfully
+        if (images.length > 0 && postData.images.length === 0) {
+          return res.status(400).json({
+            message: "Failed to upload any images to Cloudinary",
+          });
+        }
+      } catch (error) {
+        console.error("Image upload process failed:", error);
+        return res.status(500).json({
+          message: "Error processing image uploads",
+        });
+      }
+    }
+
+    // Final validation before creating post
+    if (!postData.description && postData.images.length === 0) {
+      return res.status(400).json({
+        message: "Post creation failed - no valid content provided",
+      });
+    }
+
+    // Create post in database
+    const post = await createPost(postData);
     if (!post) {
       return res.status(400).json({
         message: "Post creation failed",
       });
     }
-   
-    const user = await addNewPost(post._id, data.author );
+
+    // Update user with new post reference
+    const user = await addNewPost(post._id, author);
     if (!user) {
+      // Consider whether to delete the post if user update fails
+      await deletePost(post._id); // You'd need to implement this
       return res.status(400).json({
-        message: "Post created but user not updated",
+        message: "Post creation rolled back due to user update failure",
       });
     }
-    return res.status(200).json({
+
+    return res.status(201).json({
       message: "Post created successfully",
       data: post,
     });
   } catch (error) {
-    console.log(error.message);
+    console.error("Post creation error:", error);
     res.status(500).json({
       message: "Post creation failed",
+      error: error.message,
     });
   }
 };
@@ -187,7 +229,7 @@ const addCommentsController = async (req, res) => {
       });
     }
     return res.status(200).json({
-      message: "Post liked",
+      message: "comment add successfully",
       data: post,
     });
   } catch (error) {

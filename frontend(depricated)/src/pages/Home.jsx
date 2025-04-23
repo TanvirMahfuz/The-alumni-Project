@@ -20,9 +20,9 @@ function Home() {
   return (
     <>
       {socket && console.log("socket", authUser)}
-      <div className="mt-4 h-screen w-screen flex items-center justify-center overflow-auto">
+      <div className="mt-4 h-screen w-screen flex items-center justify-center">
         <div className="grid grid-cols-12 w-full mt-4">
-          <div className="col-span-4 p-4 pt-0 mb-4 xl:col-span-3 hidden lg:block overflow-y-auto">
+          <div className="col-span-4 p-4 pt-0 mb-4 xl:col-span-3 hidden lg:block">
             <HomePageSideProfile currentUser={authUser} />
           </div>
           <div className="h-screen col-span-12 lg:col-span-8 xl:col-span-6 gap-2 overflow-auto p-2 px-0 mt-4 flex flex-col items-center">

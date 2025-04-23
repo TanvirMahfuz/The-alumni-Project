@@ -2,8 +2,7 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useChatStore } from "../../store/useChatStore";
 function InputBox() {
-  const [message, setMessage] = useState
-  ("");
+  const [message, setMessage] = useState("");
   const { sendMessage, selectedUser } = useChatStore();
   const messageRef = useRef(null);
 

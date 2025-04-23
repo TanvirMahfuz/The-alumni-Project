@@ -24,6 +24,7 @@ export const registerUser = async (req, res) => {
   }
 };
 const login = async (req, res) => {
+  console.log("login attempted.by :",req.body);
   try {
     const {email, password} = req.body;
     if (!email || !password) {

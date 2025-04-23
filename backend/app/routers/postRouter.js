@@ -20,6 +20,7 @@ postRouter.delete(
   postController.deletePostController
 );
 postRouter.post("/likepost", isLoggedIn, postController.likePostController);
+
 postRouter.post(
   "/addComments",
   isLoggedIn,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../laytout/layout";
+import Layout from "../laytout/layout.jsx";
 import { PostCard } from "../components/PostCard.jsx";
 import axios from "axios";
 import { Textarea,Typography,Button } from "@material-tailwind/react";

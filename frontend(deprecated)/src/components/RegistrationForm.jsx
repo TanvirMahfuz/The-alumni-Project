@@ -1,12 +1,12 @@
 import {useState} from "react";
 import {PhotoIcon} from "@heroicons/react/24/solid";
 import {Input, Textarea, Typography,Button} from "@material-tailwind/react";
-import Form1 from "./RegForm/Form1";
-import Form2 from "./RegForm/Form2";
-import Form3 from "./RegForm/Form3";
-import Form4 from "./RegForm/Form4";
-import Form5 from "./RegForm/Form5";
-import Form6 from "./RegForm/Form6";
+import Form1 from "./RegForm/Form1.jsx";
+import Form2 from "./RegForm/Form2.jsx";
+import Form3 from "./RegForm/Form3.jsx";
+import Form4 from "./RegForm/Form4.jsx";
+import Form5 from "./RegForm/Form5.jsx";
+import Form6 from "./RegForm/Form6.jsx";
 import axios from "axios";
 import { toFormdata } from "../assets/toFormdata.js";
 import { useNavigate } from "react-router-dom";

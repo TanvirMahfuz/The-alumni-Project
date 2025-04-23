@@ -1,7 +1,7 @@
 import React from "react";
-import ChatHeader from "./ChatHeader";
-import InputBox from "./InputBox";
-import Texts from "./Texts";
+import ChatHeader from "./ChatHeader.jsx";
+import InputBox from "./InputBox.jsx";
+import Texts from "./Texts.jsx";
 import { useChatStore } from "../../store/useChatStore.js";
 
 function ChatGround({ onlineUsers }) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../laytout/layout";
+import Layout from "../laytout/layout.jsx";
 import { PostCard } from "../components/PostCard.jsx";
 import { CreatePost2 } from "../components/CreatePost2.jsx";
 import HomePageSideProfile  from "../components/HomePageSideProfile.jsx";

@@ -1,7 +1,7 @@
 import React from "react";
 import { useGeneralStore } from "../../store/useGeneralStore.js";
-import SearchMessageUsers from "./SearchMessageUsers";
-import ChatUser from "./ChatUser";
+import SearchMessageUsers from "./SearchMessageUsers.jsx";
+import ChatUser from "./ChatUser.jsx";
 const ChatUsers = ({ selectedUser}) => {
   const { allUsers, getUsers } = useGeneralStore();
   React.useEffect(() => {

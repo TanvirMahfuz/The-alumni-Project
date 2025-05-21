@@ -73,15 +73,34 @@ export const deletePost = async (data) => {
 };
 export const likePost = async (data) => {
   try {
-    const val = await Post.findByIdAndUpdate(data.id, {
-      $push: {likes: data.userId},
-    });
+    const val = await Post.findByIdAndUpdate(
+      data.id,
+      { $addToSet: { likes: data.userId } }, 
+      { new: true } 
+    );
+    console.log(val);
+    
     return val;
   } catch (error) {
     console.log(error.message);
     return null;
   }
 };
+export const removeLike = async (data) => {
+  try {
+    const val = await Post.findByIdAndUpdate(
+      data.id,
+      { $pull: { likes: data.userId } },
+      { new: true } 
+    );
+    return val;
+  } catch (error) {
+    console.log(error.message);
+    return null;
+  }
+};
+
+
 export const commentOnPost = async (data) => {
   try {
     console.log(data);

@@ -1,7 +1,7 @@
 
 import { create } from "zustand";
 
-export const usePostStore = create((set , get) => ({
+export const usePostStore = create((set, get) => ({
   allPosts: [],
   selectedPost: null,
   completeComments: [],
@@ -47,7 +47,7 @@ export const usePostStore = create((set , get) => ({
       });
       const res = await response.json();
       set({ isCreatingPost: false });
-      await get().getAllPosts()
+      await get().getAllPosts();
       return res.data;
     } catch (error) {
       console.log(error);
@@ -58,21 +58,51 @@ export const usePostStore = create((set , get) => ({
   },
 
   //accidentally implemented to update the entire post. which means instead of returning a new comment it will return a updated post
-  commentOnPost: async (postId,comment) => {
+  commentOnPost: async (postId, comment) => {
     try {
       const response = await fetch(`/api/post/addComments`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ postId,comment }),
-    });
-    const res = await response.json();
-    return res.data;
-
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ postId, comment }),
+      });
+      const res = await response.json();
+      return res.data;
     } catch (error) {
       console.log(error);
     }
-    
+  },
+
+  likePost: async (data) => {
+    try {
+      const response = await fetch("/api/post/likepost", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const body = await response.json();
+      console.log(body);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  removeLikePost: async (data) => {
+    try {
+      const response = await fetch("/api/post/removeLike", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  
+      const body = await response.json();
+      console.log(body);
+    } catch (error) {
+      console.log("Remove like failed", error);
+    }
   },
 }));

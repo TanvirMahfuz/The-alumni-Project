@@ -5,7 +5,7 @@ import {
   likedSolidIcon,
 } from "../../../../../assets/icons.jsx";
 import { useUserStore } from "../../../../../store/useUserStore.js";
-
+import { usePostStore } from "../../../../../store/usePostStore.js";
 function LikeComment({
   localPost,
   setLocalPost,
@@ -13,6 +13,7 @@ function LikeComment({
   setCommentsOpen,
 }) {
   const { authUser } = useUserStore();
+  const { likePost, removeLikePost } = usePostStore();
   const [liked, setLiked] = React.useState(
     localPost.likes.includes(authUser?._id)
   );
@@ -33,12 +34,14 @@ function LikeComment({
       const newLikes = localPost.likes.filter((id) => id !== authUser._id);
       setLocalPost((prevPost) => ({ ...prevPost, likes: newLikes }));
       setLiked(false);
+      removeLikePost({ id: localPost._id, userId: authUser._id });
     } else {
       setLocalPost((prevPost) => ({
         ...prevPost,
         likes: [...prevPost.likes, authUser._id],
       }));
       setLiked(true);
+      likePost({id:localPost._id,userId:authUser._id})
     }
   };
 

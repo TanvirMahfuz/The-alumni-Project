@@ -75,14 +75,6 @@ const recruitmentSchema = new mongoose.Schema({
   logo: {
     type: String,
     trim: true,
-    validate: {
-      validator: function (v) {
-        return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(
-          v
-        );
-      },
-      message: (props) => `${props.value} is not a valid URL!`,
-    },
   },
   description: {
     type: String,

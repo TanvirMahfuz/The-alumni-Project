@@ -6,7 +6,7 @@ import { login, logout,registerUser,checkUser } from "../utility/auth.js";
 
 authRouter.post("/register",registerUser);
 
-authRouter.get("/check", isLoggedIn,checkUser);
+authRouter.get("/check",checkUser);
 
 authRouter.post("/log-in", login);
 

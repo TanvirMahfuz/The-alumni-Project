@@ -1,0 +1,70 @@
+import React from "react";
+import {
+  commentIcon,
+  likeIcon,
+  likedSolidIcon,
+} from "../../../../../assets/icons.jsx";
+import { useUserStore } from "../../../../../store/useUserStore.js";
+
+function LikeComment({
+  localPost,
+  setLocalPost,
+  commentsOpen,
+  setCommentsOpen,
+}) {
+  const { authUser } = useUserStore();
+  const [liked, setLiked] = React.useState(
+    localPost.likes.includes(authUser?._id)
+  );
+
+  const handleClick = () => {
+    setCommentsOpen(!commentsOpen);
+  };
+
+  const handleLike = () => {
+    if (!authUser) {
+      console.warn("User not authenticated, cannot like.");
+      return;
+    }
+
+    const alreadyLiked = localPost.likes.includes(authUser._id);
+
+    if (alreadyLiked) {
+      const newLikes = localPost.likes.filter((id) => id !== authUser._id);
+      setLocalPost((prevPost) => ({ ...prevPost, likes: newLikes }));
+      setLiked(false);
+    } else {
+      setLocalPost((prevPost) => ({
+        ...prevPost,
+        likes: [...prevPost.likes, authUser._id],
+      }));
+      setLiked(true);
+    }
+  };
+
+  React.useEffect(() => {
+    setLiked(localPost.likes.includes(authUser?._id));
+  }, [localPost.likes, authUser?._id]);
+
+  return (
+    <div className="w-full px-15 flex justify-between items-center">
+      <div
+        className="flex gap-1 rounded-xl px-4 py-2 hover:cursor-pointer hover:bg-gray-700"
+        onClick={handleLike}>
+        {liked ? likedSolidIcon : likeIcon}
+        <div>{localPost?.likes?.length ?? "0"} Likes</div>
+      </div>
+
+      <div
+        className={`flex gap-1 rounded-xl px-4 py-2 hover:cursor-pointer ${
+          commentsOpen ? `bg-gray-700 hover:bg-gray-500` : `hover:bg-gray-700`
+        }`}
+        onClick={handleClick}>
+        {commentIcon}
+        <div>{localPost?.comments?.length ?? "0"} comments</div>
+      </div>
+    </div>
+  );
+}
+
+export default LikeComment;

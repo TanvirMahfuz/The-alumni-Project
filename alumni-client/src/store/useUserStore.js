@@ -21,19 +21,19 @@ export const useUserStore = create((set, get) => ({
       if (!res.ok) {
         throw new Error("Failed to fetch authenticated user");
       }
-  
+
       const data = await res.json();
-  
+
       if (!data.user) {
         throw new Error("No user found in response");
       }
-  
+
       get().setUser(data.user);
       get().connectSocket();
     } catch (err) {
       console.error("getAuthUser error:", err.message);
     }
-  },  
+  },
 
   getOnlineUsers: async (userIds) => {
     if (!Array.isArray(userIds) || userIds.length === 0) {
@@ -53,10 +53,9 @@ export const useUserStore = create((set, get) => ({
       })
     );
 
-    const validUsers = onlineUsers.filter((user) => 
-      user !== null 
-    & user._id !== get().authUser._id 
-  );
+    const validUsers = onlineUsers.filter(
+      (user) => (user !== null) & (user._id !== get().authUser._id)
+    );
     get().setOnlineUsers(validUsers);
   },
   getOneUser: async (userId) => {
@@ -97,7 +96,6 @@ export const useUserStore = create((set, get) => ({
     if (get().socket?.connected) get().socket.disconnect();
   },
   logIn: async (email, password) => {
-  
     try {
       const res = await fetch("/api/auth/log-in", {
         method: "POST",
@@ -106,56 +104,65 @@ export const useUserStore = create((set, get) => ({
         },
         body: JSON.stringify({ email, password }),
       });
-  
+
       if (!res.ok) {
         throw new Error("Login failed");
       }
-  
+
       const data = await res.json();
-  
+
       if (!data.user) {
         throw new Error("User data missing");
       }
-  
+
       get().setUser(data.user);
       get().connectSocket();
-  
-      return true
+
+      return true;
     } catch (err) {
       console.error("Login error:", err.message);
-      return false
+      return false;
     }
   },
   logOut: () => {
     try {
       const res = fetch("/api/auth/log-out").then((res) => res.json());
-        get().disconnectSocket();
-        get().setUser(null);
-        return true
+      get().disconnectSocket();
+      get().setUser(null);
+      return true;
     } catch (error) {
       console.error("Logout error:", error);
       return false;
     }
-
-
   },
-  register: async (username, email, password, confirmPassword) => {
+  register: async (name, email, password, confirmPassword) => {
     if (password !== confirmPassword) {
       console.log("Passwords do not match");
-      return;
+      return false;
     }
-    const user = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, email, password }),
-    })
-      .then((res) => res.json())
-      .then((data) => data.user)
-      .catch((err) => console.log(err));
-    get().setUser(user);
-    get().connectSocket();
-  },
 
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password, confirmPassword }),
+      });
+
+      const data = await res.json();
+      console.log("Registration response:", data);
+      if (!res.ok || !data.user) {
+        console.log("Registration failed:", data.message || "Unknown error");
+        return false;
+      }
+
+      get().setUser(data.user);
+      get().connectSocket();
+      return true;
+    } catch (err) {
+      console.error("Error during registration:", err);
+      return false;
+    }
+  },
 }));

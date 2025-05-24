@@ -3,7 +3,7 @@ import Tag from "../../../../common/Tag.jsx";
 
 function Users({ users }) {
   const [select, setSelect] = useState(null);
-
+  console.log("Users component rendered with users:", users);
   return (
     <div className="m-2 space-y-1 overflow-y-auto h-[30rem] transform transition-all ease-in-out duration-1000">
       {users.map((item, index) => (

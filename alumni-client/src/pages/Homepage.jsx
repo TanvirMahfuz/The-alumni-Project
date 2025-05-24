@@ -22,7 +22,7 @@ const menuItems = [
   { id: 5, Icon: documentIcon, label: "Resume" },
 ];
 function Homepage() {  
-  const [selectedTag, setSelectedTag] = React.useState(3);
+  const [selectedTag, setSelectedTag] = React.useState(0);
   console.log(selectedTag);
 
   return (

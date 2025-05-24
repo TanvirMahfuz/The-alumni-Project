@@ -2,8 +2,8 @@ import { verifyUser, createNewUser } from "../services/authServices.js";
 
 export const registerUser = async (req, res) => {
   try {
-    let { password, confirmPassword, email } = req.body;
-
+    let {name, password, confirmPassword, email } = req.body;
+    console.log("register attempted.by :",req.body);
     if (password !== confirmPassword || !password || !confirmPassword || !email)
       return res.status(400).json({ message: "bad request" });
 
@@ -13,12 +13,12 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: response.error });
     }
 
-    res
+    return res
       .status(201)
       .cookie("token", response.token, { httpOnly: true, secure: true })
       .json({ message: "User registered successfully", user: response.user });
   } catch (error) {
-    res
+    return res
       .status(500)
       .json({ message: "Error registering user", error: error.message });
   }

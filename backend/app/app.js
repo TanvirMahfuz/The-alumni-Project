@@ -12,7 +12,23 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
-app.use(cors({origin: "http://localhost:3000/", credentials: true}));
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://the-alumni-project-ycj7.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 app.use((req, res, next) => {
   console.log(req.url);
   next();

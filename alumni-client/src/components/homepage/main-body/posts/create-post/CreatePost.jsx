@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import avatar from "../../../../../assets/avatar.png";;
+import avatar from "../../../../../assets/avatar.png";
 import HiringForm from "./HiringForm.jsx";
 import FileUpload from "./FileUpload.jsx";
 import Avatar from "./Avatar.jsx";

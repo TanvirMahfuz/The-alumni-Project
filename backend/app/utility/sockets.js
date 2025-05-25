@@ -5,8 +5,10 @@ import app from "../app.js";
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
-    credentials: true,
+    origin: [
+      "http://localhost:5173",
+      "https://the-alumni-project-vrtg-git-main-tanvirmahfuzs-projects.vercel.app",
+    ],
   },
 });
 

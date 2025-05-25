@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import {findOneUser} from "../services/userServices.js";
 export const isLoggedIn = async (req, res, next) => {
   const token = req.cookies.token;
+  console.log("Token received:", token);
   if (!token) {
     return res.status(401).json({message: "Unauthorized"});
   }

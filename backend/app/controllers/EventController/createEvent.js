@@ -20,6 +20,7 @@ import uploadFileToCloudinary from "../../utility/cloudinary64.js";
 export const createEvent = async (req,res) => {
   try {
     const eventData = req.body;
+    console.log("Event data received:", eventData);
     const requiredFields = [
       "title",
       "date",
@@ -43,14 +44,17 @@ export const createEvent = async (req,res) => {
     if (new Date(eventData.date) < new Date()) {
       throw new Error("Event date must be in the future");
     }
-    const imgUrl = await uploadFileToCloudinary(
-      eventData.image,
-      req.user._id
-    );
-    if (!imgUrl) {
-      throw new Error("Image upload failed");
+    if (eventData.image){
+      const imgUrl = await uploadFileToCloudinary(
+        eventData.image,
+        req.user._id
+      );
+      if (!imgUrl) {
+        throw new Error("Image upload failed");
+      }
+      eventData.image = imgUrl.secure_url;
     }
-    eventData.image = imgUrl.secure_url;
+    
     // Set defaults
     const newEvent = new Event({
       ...eventData,

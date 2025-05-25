@@ -34,7 +34,7 @@ const login = async (req, res) => {
     if (response.status === false) {
       return res.status(401).json({ message: response.error });
     }
-
+    console.log(response);
     return res
       .status(200)
       .cookie("token", response.token, {

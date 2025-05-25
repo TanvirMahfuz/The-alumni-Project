@@ -32,11 +32,11 @@ export const useUserStore = create((set, get) => ({
       get().setUser(data.user);
       get().connectSocket();
     } catch (err) {
-      console.error("getAuthUser error:", err.message);
+      console.error("error getting authenticated user:");
     }
   },
 
-  getOnlineUsers: async (userIds) => {
+  getOnlineUsers: async (userIds = []) => {
     if (!Array.isArray(userIds) || userIds.length === 0) {
       console.warn("No userIds provided to getOnlineUsers");
       return;
@@ -69,10 +69,16 @@ export const useUserStore = create((set, get) => ({
   getAllUsers: async () => {
     const allUsers = await fetch("/api/user/allUsers")
       .then((res) => res.json())
-      .then((data) => data)
-      .catch((err) => console.log(err));
-    allUsers.filter((user) => user._id !== get().authUser?._id);
-    get().setAllUsers(allUsers);
+      .catch((err) => {
+        console.log(err);
+        return []; // fallback to empty array
+      });
+
+    const filteredUsers = allUsers.filter(
+      (user) => user._id !== get().authUser?._id
+    );
+
+    get().setAllUsers(filteredUsers);
   },
 
   connectSocket: () => {
@@ -185,13 +191,13 @@ export const useUserStore = create((set, get) => ({
       const data = await res.json();
       console.log("Update response:", data);
       get().setUser(data.user);
-      set({ isUpdating: false })
+      set({ isUpdating: false });
       return true;
     } catch (err) {
       console.error("Update error:", err.message);
       alert("Failed to update profile: " + err.message);
       return false;
-    }finally {
+    } finally {
       set({ isUpdating: false });
     }
   },

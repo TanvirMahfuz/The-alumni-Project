@@ -1,5 +1,10 @@
-
 import { create } from "zustand";
+
+// Set API base URL based on environment
+const API_BASE_URL =
+  import.meta.env.VITE_ENVIRONMENT === "development"
+    ? import.meta.env.VITE_DEVELOPMENT_URL
+    : import.meta.env.VITE_DEPLOYMENT_URL;
 
 export const usePostStore = create((set, get) => ({
   allPosts: [],
@@ -11,98 +16,110 @@ export const usePostStore = create((set, get) => ({
   setSelectedPost: (postId) => set({ selectedPost: postId }),
 
   getAllPosts: async () => {
-    const posts = await fetch("/api/post")
-      .then((res) => res.json())
-      .then((data) => data.data)
-      .catch((err) => console.log(err));
-    set({ allPosts: posts });
+    try {
+      const res = await fetch(`${API_BASE_URL}/post`, {
+        credentials: "include",
+      });
+      const data = await res.json();
+      set({ allPosts: data.data });
+    } catch (err) {
+      console.error("Error fetching posts:", err);
+    }
   },
 
   getCompleteComments: async (comments) => {
-    if (!comments) {
-      return [];
-    }
+    if (!comments) return [];
 
     const completeComments = await Promise.all(
       comments.map(async (comment) => {
-        const author = await fetch(`/api/user/info/${comment.author}`)
-          .then((res) => res.json())
-          .then((data) => data.user)
-          .catch((err) => console.log(err));
-        return { ...comment, author };
+        try {
+          const res = await fetch(
+            `${API_BASE_URL}/user/info/${comment.author}`,
+            {
+              credentials: "include",
+            }
+          );
+          const data = await res.json();
+          return { ...comment, author: data.user };
+        } catch (err) {
+          console.error("Error fetching comment author:", err);
+          return { ...comment, author: null };
+        }
       })
     );
+
     return completeComments;
   },
 
   createPost: async (post) => {
     set({ isCreatingPost: true });
     try {
-      const response = await fetch("/api/post/createPost", {
+      const response = await fetch(`${API_BASE_URL}/post/createPost`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(post),
       });
       const res = await response.json();
-      set({ isCreatingPost: false });
       await get().getAllPosts();
       return res.data;
     } catch (error) {
-      console.log(error);
-      set({ isCreatingPost: false });
+      console.error("Error creating post:", error);
     } finally {
       set({ isCreatingPost: false });
     }
   },
 
-  //accidentally implemented to update the entire post. which means instead of returning a new comment it will return a updated post
   commentOnPost: async (postId, comment) => {
     try {
-      const response = await fetch(`/api/post/addComments`, {
+      const response = await fetch(`${API_BASE_URL}/post/addComments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ postId, comment }),
       });
       const res = await response.json();
       return res.data;
     } catch (error) {
-      console.log(error);
+      console.error("Error adding comment:", error);
     }
   },
 
   likePost: async (data) => {
     try {
-      const response = await fetch("/api/post/likepost", {
+      const response = await fetch(`${API_BASE_URL}/post/likepost`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(data),
       });
       const body = await response.json();
       console.log(body);
     } catch (error) {
-      console.log(error);
+      console.error("Error liking post:", error);
     }
   },
+
   removeLikePost: async (data) => {
     try {
-      const response = await fetch("/api/post/removeLike", {
+      const response = await fetch(`${API_BASE_URL}/post/removeLike`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(data),
       });
-  
       const body = await response.json();
       console.log(body);
     } catch (error) {
-      console.log("Remove like failed", error);
+      console.error("Remove like failed", error);
     }
   },
 }));

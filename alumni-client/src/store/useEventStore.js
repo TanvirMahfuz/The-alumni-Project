@@ -1,23 +1,21 @@
 import { create } from "zustand";
-
 import { useUserStore } from "./useUserStore";
+
+const API_BASE_URL =
+  import.meta.env.VITE_ENVIRONMENT === "development"
+    ? import.meta.env.VITE_DEVELOPMENT_URL
+    : import.meta.env.VITE_DEPLOYMENT_URL;
 
 export const useEventStore = create((set, get) => ({
   events: [],
-
   selectedEvent: null,
-
   eventOrganizer: null,
-
   openForm: false,
-
   isLoading: false,
-
   submissionError: null,
 
   toggleSelectedEvent: (eventId) => {
     console.log("toggling event");
-
     if (get().selectedEvent && get().selectedEvent._id === eventId) {
       set({ selectedEvent: null });
     } else {
@@ -25,7 +23,7 @@ export const useEventStore = create((set, get) => ({
     }
   },
 
-  setSelectedEvent:async  (eventId) => {
+  setSelectedEvent: async (eventId) => {
     console.log("setting event");
     const event = get().events.find((event) => event._id === eventId);
     if (event) {
@@ -41,49 +39,48 @@ export const useEventStore = create((set, get) => ({
 
   setEvents: (events) => set({ events }),
 
-  // Add a new event to the state
   addEvent: (event) =>
     set((state) => ({
       events: [...state.events, event],
     })),
 
-  // Fetch all events from the backend
   getEvents: async () => {
     try {
-      const response = await fetch("api/event/allEvent");
-
+      const response = await fetch(`${API_BASE_URL}/event/allEvent`, {
+        credentials: "include",
+      });
       const data = await response.json();
-
+      console.log(data);
       set({ events: data.data });
     } catch (error) {
       console.error("Error fetching events:", error);
     }
   },
 
-  // Fetch a single event by ID
   getEvent: async (eventId) => {
     try {
-      const response = await fetch(`/api/event/${eventId}`);
-
+      const response = await fetch(`${API_BASE_URL}/event/${eventId}`, {
+        credentials: "include",
+      });
       const data = await response.json();
-
       return data.event;
     } catch (error) {
       console.error("Error fetching event:", error);
-
       return null;
     }
   },
 
-  // Set the event organizer
   setOrganizer: (organizer) => set({ eventOrganizer: organizer }),
-  // Fetch event organizer's information by ID
 
   getOrganizer: async (organizerId) => {
     try {
-      const response = await fetch(`/api/user/info/${organizerId}`);
+      const response = await fetch(
+        `${API_BASE_URL}/user/info/${organizerId}`,
+        {
+          credentials: "include",
+        }
+      );
       const data = await response.json();
-
       set({ eventOrganizer: data.user });
     } catch (error) {
       console.error("Error fetching organizer:", error);
@@ -91,15 +88,15 @@ export const useEventStore = create((set, get) => ({
     }
   },
 
-  // Save a new event and update the state
   saveEvent: async (event) => {
     set({ isLoading: true });
     try {
-      const response = await fetch("/api/event/create", {
+      const response = await fetch(`${API_BASE_URL}/event/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(event),
       });
 
@@ -110,11 +107,9 @@ export const useEventStore = create((set, get) => ({
           events: [...state.events, data.data],
         }));
         set({ openForm: false });
-        set({ isLoading: false });
         get().getEvents();
       }
     } catch (error) {
-      set({ isLoading: false });
       set({ submissionError: error });
       console.error("Error saving event:", error);
     } finally {
@@ -128,24 +123,30 @@ export const useEventStore = create((set, get) => ({
         eventId,
         applicantId: useUserStore.getState().authUser._id,
       };
-      const response = await fetch("/api/event/onBoard", {
+      const response = await fetch(`${API_BASE_URL}/event/onBoard`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(data),
       });
 
       const res = await response.json();
       console.log(res);
     } catch (error) {
-      console.error("Error saving event:", error);
+      console.error("Error saving event onBoard:", error);
     }
   },
 
   getOnBoardUsers: async (eventId) => {
     try {
-      const response = await fetch(`/api/event/onBoardUsers/${eventId}`);
+      const response = await fetch(
+        `${API_BASE_URL}/event/onBoardUsers/${eventId}`,
+        {
+          credentials: "include",
+        }
+      );
       const data = await response.json();
       return data.data;
     } catch (error) {

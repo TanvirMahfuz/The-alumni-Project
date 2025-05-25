@@ -1,5 +1,11 @@
 import { create } from "zustand";
 import { useUserStore } from "./useUserStore";
+
+const API_BASE_URL =
+  import.meta.env.VITE_ENVIRONMENT === "development"
+    ? import.meta.env.VITE_DEVELOPMENT_URL
+    : import.meta.env.VITE_DEPLOYMENT_URL;
+
 export const useChatStore = create((set, get) => ({
   authUser: useUserStore.getState().authUser,
   selectedChatUser: null,
@@ -11,29 +17,37 @@ export const useChatStore = create((set, get) => ({
 
   getMessages: async () => {
     if (!get().selectedChatUser) {
-      console.warn("No get().selectedChatUser._id provided to getMessages");
+      console.warn("No selectedChatUser._id provided to getMessages");
       return;
     }
-    const response = await fetch(
-      `/api/chat/get-messages/${get().selectedChatUser._id}`
-    )
-      .then((res) => res.json())
-      .then((data) => data)
-      .catch((err) => console.log(err));
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/chat/get-messages/${get().selectedChatUser._id}`,
+        { credentials: "include" }
+      );
 
-    set({ messages: response });
+      if (!response.ok) {
+        throw new Error("Failed to fetch messages");
+      }
+
+      const data = await response.json();
+      set({ messages: data });
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
   },
 
   sendMessage: async (messageData) => {
-    const { selectedChatUser, messages,isMessageLoading } = get();
+    const { selectedChatUser, messages } = get();
     set({ isMessageLoading: true });
     try {
       console.log("messageData", messageData);
-      const response = await fetch("/api/chat/send-message", {
+      const response = await fetch(`${API_BASE_URL}/api/chat/send-message`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           ...messageData,
           receiverId: selectedChatUser._id,
@@ -45,7 +59,6 @@ export const useChatStore = create((set, get) => ({
       }
       const data = await response.json();
       set({ messages: [...messages, data] });
-      set({ isMessageLoading:false})
       console.log("message sent:", data);
     } catch (error) {
       console.error(error.message);
@@ -55,23 +68,23 @@ export const useChatStore = create((set, get) => ({
   },
 
   subscribeToMessages: async () => {
-    const { setSelectedChatUser } = get();
-    console.log("subscribing to messages", setSelectedChatUser);
-
-    if (!setSelectedChatUser) return;
     const socket = useUserStore.getState().socket;
+    if (!socket) {
+      console.warn("Socket not connected");
+      return;
+    }
     console.log("socket connected:", socket.id);
+
     socket.on("newMessage", (newMessage) => {
+      // Only add message if current user is receiver
       if (newMessage.receiverId !== get().authUser._id) return;
       set({ messages: [...get().messages, newMessage] });
     });
   },
+
   unSubscribeFromMessages: async () => {
-    const { setSelectedChatUser } = get();
-    if (!setSelectedChatUser) return;
     const socket = useUserStore.getState().socket;
+    if (!socket) return;
     socket.off("newMessage");
   },
 }));
-
-

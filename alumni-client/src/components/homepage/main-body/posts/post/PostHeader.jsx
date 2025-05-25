@@ -6,7 +6,7 @@ function PostHeader({  author , createdAt }) {
       <div className="flex justify-start gap-4 items-center ">
         <div className="rounded-full h-17 w-17  bg-gray-500 p-1">
           <img
-            src={author?.image??"./avatar.png"}
+            src={author?.image  && author.image.trim() !== "" ? author.image :"./avatar.png"}
             alt="profile-picture"
             className="rounded-full h-full w-full object-cover"
           />

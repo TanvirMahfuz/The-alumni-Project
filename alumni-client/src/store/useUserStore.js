@@ -1,126 +1,132 @@
 import { create } from "zustand";
-import { useNavigate } from "react-router-dom";
-
 import { io } from "socket.io-client";
+
+const API_BASE_URL =
+  import.meta.env.VITE_ENVIRONMENT === "development"
+    ? import.meta.env.VITE_DEVELOPMENT_URL
+    : import.meta.env.VITE_DEPLOYMENT_URL;
+
+const SOCKET_BASE_URL =
+  import.meta.env.VITE_ENVIRONMENT === "development"
+    ? "http://localhost:3000"
+    : "https://the-alumni-project.vercel.app";
+
 export const useUserStore = create((set, get) => ({
   authUser: null,
   onlineUsers: [],
   allUsers: [],
   selectedUser: null,
   socket: null,
-  onlineUsers: [],
   isUpdating: false,
 
-  setUser: (user) => set({ authUser: user }), // fix key
+  setUser: (user) => set({ authUser: user }),
   setOnlineUsers: (users) => set({ onlineUsers: users }),
   setAllUsers: (users) => set({ allUsers: users }),
   setSelectedUser: (user) => set({ selectedUser: user }),
 
   getAuthUser: async () => {
     try {
-      const res = await fetch("/api/auth/check");
-      if (!res.ok) {
-        throw new Error("Failed to fetch authenticated user");
-      }
+      const res = await fetch(`${API_BASE_URL}/auth/check`, {
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Failed to fetch authenticated user");
 
       const data = await res.json();
-
-      if (!data.user) {
-        throw new Error("No user found in response");
-      }
+      if (!data.user) throw new Error("No user found in response");
 
       get().setUser(data.user);
       get().connectSocket();
     } catch (err) {
-      console.error("error getting authenticated user:");
+      console.error("getAuthUser error:", err.message);
     }
   },
 
-  getOnlineUsers: async (userIds = []) => {
-    if (!Array.isArray(userIds) || userIds.length === 0) {
-      console.warn("No userIds provided to getOnlineUsers");
-      return;
-    }
+  getOnlineUsers: async (userIds) => {
+    if (!Array.isArray(userIds) || userIds.length === 0) return;
+
     const onlineUsers = await Promise.all(
       userIds.map(async (userId) => {
-        const user = await fetch(`/api/user/info/${userId}`)
-          .then((res) => res.json())
-          .then((data) => data.user)
-          .catch((err) => {
-            console.log(err);
-            return null;
+        try {
+          const res = await fetch(`${API_BASE_URL}/user/info/${userId}`, {
+            credentials: "include",
           });
-        return user;
+          const data = await res.json();
+          return data.user;
+        } catch (err) {
+          console.error(err);
+          return null;
+        }
       })
     );
 
     const validUsers = onlineUsers.filter(
-      (user) => (user !== null) & (user._id !== get().authUser._id)
+      (user) => user && user._id !== get().authUser?._id
     );
+
     get().setOnlineUsers(validUsers);
   },
+
   getOneUser: async (userId) => {
-    const user = await fetch(`/api/user/info/${userId}`)
-      .then((res) => res.json())
-      .then((data) => data.user)
-      .catch((err) => console.log(err));
-    return user;
-  },
-  getAllUsers: async () => {
-    const allUsers = await fetch("/api/user/allUsers")
-      .then((res) => res.json())
-      .catch((err) => {
-        console.log(err);
-        return []; // fallback to empty array
+    try {
+      const res = await fetch(`${API_BASE_URL}/user/info/${userId}`, {
+        credentials: "include",
       });
+      const data = await res.json();
+      return data.user;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  },
 
-    const filteredUsers = allUsers.filter(
-      (user) => user._id !== get().authUser?._id
-    );
-
-    get().setAllUsers(filteredUsers);
+  getAllUsers: async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/user/allUsers`, {
+        credentials: "include",
+      });
+      const data = await res.json();
+      // const filtered = data.filter((user) => user._id !== get().authUser?._id);
+      get().setAllUsers(data);
+    } catch (err) {
+      console.error(err);
+    }
   },
 
   connectSocket: () => {
-    const { authUser } = get();
-    console.log("socket already connected:", get().socket?.connected);
-    console.log("socket:", get().socket);
-    if (!authUser || get().socket?.connected) {
-      return;
-    }
-    const socket = io("http://localhost:3000", {
+    const { authUser, socket } = get();
+    if (!authUser || socket?.connected) return;
+
+    const newSocket = io(SOCKET_BASE_URL, {
       query: { userId: authUser._id },
     });
-    socket.connect();
-    set({ socket: socket });
-    socket.on("getOnlineUsers", (userIds) => {
+
+    newSocket.connect();
+    set({ socket: newSocket });
+
+    newSocket.on("getOnlineUsers", (userIds) => {
       set({ onlineUsers: userIds });
       get().getOnlineUsers(userIds);
     });
   },
+
   disconnectSocket: () => {
-    console.log("disconnecting socket");
-    if (get().socket?.connected) get().socket.disconnect();
+    const { socket } = get();
+    if (socket?.connected) socket.disconnect();
   },
+
   logIn: async (email, password) => {
     try {
-      const res = await fetch("/api/auth/log-in", {
+      const res = await fetch(`${API_BASE_URL}/auth/log-in`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
 
-      if (!res.ok) {
-        throw new Error("Login failed");
-      }
-
+      if (!res.ok) throw new Error("Login failed");
       const data = await res.json();
 
-      if (!data.user) {
-        throw new Error("User data missing");
-      }
+      if (!data.user) throw new Error("User data missing");
 
       get().setUser(data.user);
       get().connectSocket();
@@ -131,17 +137,21 @@ export const useUserStore = create((set, get) => ({
       return false;
     }
   },
-  logOut: () => {
+
+  logOut: async () => {
     try {
-      const res = fetch("/api/auth/log-out").then((res) => res.json());
+      await fetch(`${API_BASE_URL}/auth/log-out`, {
+        credentials: "include",
+      });
       get().disconnectSocket();
       get().setUser(null);
       return true;
-    } catch (error) {
-      console.error("Logout error:", error);
+    } catch (err) {
+      console.error("Logout error:", err);
       return false;
     }
   },
+
   register: async (name, email, password, confirmPassword) => {
     if (password !== confirmPassword) {
       console.log("Passwords do not match");
@@ -149,16 +159,14 @@ export const useUserStore = create((set, get) => ({
     }
 
     try {
-      const res = await fetch("/api/auth/register", {
+      const res = await fetch(`${API_BASE_URL}/auth/register`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ name, email, password, confirmPassword }),
       });
 
       const data = await res.json();
-      console.log("Registration response:", data);
       if (!res.ok || !data.user) {
         console.log("Registration failed:", data.message || "Unknown error");
         return false;
@@ -168,30 +176,25 @@ export const useUserStore = create((set, get) => ({
       get().connectSocket();
       return true;
     } catch (err) {
-      console.error("Error during registration:", err);
+      console.error("Registration error:", err);
       return false;
     }
   },
+
   updateUser: async (userData) => {
-    const { isUpdating } = get();
     try {
       set({ isUpdating: true });
-      const res = await fetch(`/api/user/updateUser`, {
+      const res = await fetch(`${API_BASE_URL}/user/updateUser`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(userData),
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to update user");
-      }
+      if (!res.ok) throw new Error("Failed to update user");
 
       const data = await res.json();
-      console.log("Update response:", data);
       get().setUser(data.user);
-      set({ isUpdating: false });
       return true;
     } catch (err) {
       console.error("Update error:", err.message);

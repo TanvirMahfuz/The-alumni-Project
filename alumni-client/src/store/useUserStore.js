@@ -9,6 +9,7 @@ export const useUserStore = create((set, get) => ({
   selectedUser: null,
   socket: null,
   onlineUsers: [],
+  isUpdating: false,
 
   setUser: (user) => set({ authUser: user }), // fix key
   setOnlineUsers: (users) => set({ onlineUsers: users }),
@@ -163,6 +164,35 @@ export const useUserStore = create((set, get) => ({
     } catch (err) {
       console.error("Error during registration:", err);
       return false;
+    }
+  },
+  updateUser: async (userData) => {
+    const { isUpdating } = get();
+    try {
+      set({ isUpdating: true });
+      const res = await fetch(`/api/user/updateUser`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to update user");
+      }
+
+      const data = await res.json();
+      console.log("Update response:", data);
+      get().setUser(data.user);
+      set({ isUpdating: false })
+      return true;
+    } catch (err) {
+      console.error("Update error:", err.message);
+      alert("Failed to update profile: " + err.message);
+      return false;
+    }finally {
+      set({ isUpdating: false });
     }
   },
 }));

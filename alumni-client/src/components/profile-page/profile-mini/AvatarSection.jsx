@@ -10,7 +10,7 @@ function AvatarSection() {
           alt="Profile"
           className="w-full h-full object-cover"
           onError={(e) => {
-            e.target.src = "https://via.placeholder.com/150"; // Fallback image
+            e.target.src = "./avatar.png"; // Fallback image
           }}
         />
       </div>

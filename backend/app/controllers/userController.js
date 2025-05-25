@@ -2,7 +2,7 @@
 import * as userServices from "../services/userServices.js";
 import { getMultiplePosts } from "../services/postServices.js";
 import { validateUserUpdate } from "../utility/updateValidation.js";
-
+import uploadFileToCloudinary from "../utility/cloudinary.config.js";
 export const getAllUsers = async (req, res) => {
   try {
     const users = await userServices.findAllUser();
@@ -32,7 +32,7 @@ export const getOneUser = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-  const proid = req.query.id;
+  const proid = req.body._id;
   if (proid !== req.user._id.toString()) {
     return res.status(401).json({ message: "Unauthorized" });
   }
@@ -46,7 +46,18 @@ export const updateUser = async (req, res) => {
   if (!params) {
     return res.status(400).json({ message: "Invalid request" });
   }
-
+  if (body.image){
+    return res.status(400).json({ message: "Image not allowed yet" });
+  }
+  if(body.resume){
+    console.log("Uploading resume to cloudinary");
+    const uploadResult = await uploadFileToCloudinary(body.resume.base64, id);
+    if (!uploadResult) {
+      return res.status(500).json({ message: "Error uploading resume" });
+    }
+    params.resume = uploadResult.secure_url;
+    console.log("Resume uploaded successfully", uploadResult.secure_url);
+  }
   const updatedUser = await userServices.updateUser(id, params);
   if (!updatedUser) {
     return res.status(500).json({message: "Error updating user"});

@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(express.static("public"));
 app.use(cookieParser());
 const allowedOrigins = [
-  "http://localhost:3000",
+  "http://localhost:5173",
   "https://the-alumni-project-ycj7.vercel.app",
 ];
 

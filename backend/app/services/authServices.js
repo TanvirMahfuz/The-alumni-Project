@@ -9,8 +9,11 @@ const verifyUser = async (email, password) => {
     if (!user) {
       return { status: false, error: "User not found" };
     }
+    console.log("User found", user);
     //password validation
     const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    
     if (!isPasswordValid) {
       return { status: false, error: "Invalid password" };
     }
@@ -21,7 +24,7 @@ const verifyUser = async (email, password) => {
     //password field removal
     const userWithoutPassword = user.toObject();
     delete userWithoutPassword.password;
-
+    
     return { status: true, user:userWithoutPassword, token };
 
   } catch (error) {

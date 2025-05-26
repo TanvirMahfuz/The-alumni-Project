@@ -11,7 +11,7 @@ const SelectField = ({
   <div className="mb-5">
     <label
       htmlFor={id}
-      className="block text-sm font-bold text-gray-200 mb-1">
+      className="block text-sm font-[600] text-gray-700 dark:text-gray-200 mb-1">
       {label}
     </label>
     <select

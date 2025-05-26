@@ -3,7 +3,7 @@ import React from "react";
 function FakeInput({ setFormOpen }) {
   return (
     <div
-      className="w-10/12 h-15 bg-gray-700 rounded-xl flex items-center p-4 text-xl text-gray-400 hover:cursor-pointer hover:bg-gray-800"
+      className="w-10/12 h-12 bg-[#F3F3F3] rounded-full flex items-center p-4 text-md text-gray-400 hover:cursor-pointer"
       onClick={() => setFormOpen(true)}>
       Share your ideas
     </div>

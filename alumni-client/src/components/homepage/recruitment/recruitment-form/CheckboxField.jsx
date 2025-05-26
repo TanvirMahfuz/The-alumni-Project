@@ -11,7 +11,9 @@ const CheckboxField = ({ label, name, checked, onChange }) => (
       />
     </div>
     <div className="ml-3 text-sm">
-      <label htmlFor={name} className="font-bold text-gray-200">
+      <label
+        htmlFor={name}
+        className="font-[600] text-gray-700 dark:text-gray-200">
         {label}
       </label>
     </div>

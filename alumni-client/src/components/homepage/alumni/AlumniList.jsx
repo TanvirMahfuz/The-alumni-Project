@@ -26,12 +26,12 @@ function AlumniList() {
 
   return (
     <div className="h-screen overflow-y-auto">
-      <div className="flex flex-col gap-4 mb-8">
-      {Object.entries(sessions).map(([session, users]) => (
-        <List key={session} session={session} users={users} />
-      ))}
-    </div></div>
-    
+      <div className="flex flex-col gap-4 mb-8 bg-white">
+        {Object.entries(sessions).map(([session, users]) => (
+          <List key={session} session={session} users={users} />
+        ))}
+      </div>
+    </div>
   );
 }
 

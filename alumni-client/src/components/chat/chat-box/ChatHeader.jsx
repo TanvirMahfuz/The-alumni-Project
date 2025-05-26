@@ -6,7 +6,7 @@ function ChatHeader() {
   return (
     <div className="flex  w-full justify-between items-center ">
       <div className="flex items-center space-x-2">
-        <div className="rounded-full p-1 bg-gray-500">
+        <div className="rounded-full  bg-gray-500">
           <img
             src={selectedChatUser?.image ?? "./avatar.png"}
             alt=""

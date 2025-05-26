@@ -4,7 +4,7 @@ function Button() {
   return (
     <button
       className="w-11/12 mx-auto bg-gradient-to-r opacity-70 from-sky-500 to-blue-600 hover:opacity-100
-                 rounded-full py-1 text-xl font-semibold text-white shadow-lg
+                 rounded-full py-0.5 text-md font-[300] text-white shadow-lg
                  transition-all duration-300 transform hover:translate-y-[-2px]
                  focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-75
                  flex items-center justify-center

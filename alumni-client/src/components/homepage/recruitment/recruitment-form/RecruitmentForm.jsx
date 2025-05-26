@@ -6,7 +6,7 @@ import CheckboxField from "./CheckboxField.jsx";
 import ArrayInputField from "./ArrayInputField.jsx";
 import { useRecruitmentStore } from "../../../../store/useRecruitmentStore.js";
 const RecruitmentForm = () => {
-  const { createJobPost} = useRecruitmentStore();
+  const { createJobPost } = useRecruitmentStore();
   const [formData, setFormData] = useState({
     applyLink: "",
     position: "",
@@ -63,8 +63,8 @@ const RecruitmentForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-full max-h-150 mx-auto  text-white p-8 rounded-lg shadow-xl">
-      <h2 className="text-xl font-semibold text-white mb-7">
+      className="max-w-full max-h-150 mx-auto dark:text-white p-8 rounded-lg shadow-xl">
+      <h2 className="text-xl font-semibold text-gray-700 dark:text-white mb-7">
         Create New Recruitment
       </h2>
 
@@ -205,10 +205,10 @@ const RecruitmentForm = () => {
         Defaults to 30 days from now if not specified.
       </p>
 
-      <div className="mt-8">
+      <div className="mt-8 flex justify-start">
         <button
           type="submit"
-          className="inline-flex items-center px-5 py-3 border border-transparent text-sm font-medium rounded-md shadow-lg text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors">
+          className="inline-flex items-center px-5 py-3 mb-4 border border-transparent text-sm font-medium rounded-md shadow-lg text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors">
           Create Recruitment
         </button>
       </div>

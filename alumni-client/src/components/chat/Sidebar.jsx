@@ -13,8 +13,10 @@ function Sidebar() {
       getAllUsers();
     }, []);
   return (
-    <div className="bg-gray-600 h-[calc(100vh-70px)] overflow-y-auto mt-2 rounded-2xl p-2">
-      <h1 className="text-white text-2xl font-bold p-2">Chats</h1>
+    <div className="bg-stone-50 shadow-md dark:bg-gray-600 h-[calc(100vh-70px)] overflow-y-auto mt-2 rounded-2xl p-2">
+      <h1 className="text-gray-700 dark:text-white text-2xl font-[500] p-2">
+        Chats
+      </h1>
       <Searchbox />
 
       <div className="flex justify-between items-center px-4 transition-all ease-in-out duration-300">
@@ -22,13 +24,9 @@ function Sidebar() {
         <Toggle {...{ isChecked, setIsChecked }} />
       </div>
 
-      {isChecked === false ? (
-        allUsers.length > 0 &&
-        <Users {...{ users:allUsers}} />
-      ) : (
-        onlineUsers.length > 0 &&
-        <Users {...{ users:onlineUsers}}  />
-      )}
+      {isChecked === false
+        ? allUsers.length > 0 && <Users {...{ users: allUsers }} />
+        : onlineUsers.length > 0 && <Users {...{ users: onlineUsers }} />}
     </div>
   );
 }

@@ -12,7 +12,6 @@ const EventCard = ({
   category,
   isFree,
   isFeatured,
-
 }) => {
   const { eventOrganizer, getOrganizer, setOnBoard, toggleSelectedEvent } =
     useEventStore();
@@ -20,45 +19,49 @@ const EventCard = ({
     getOrganizer(organizer);
   }, [getOrganizer, organizer]);
   return (
-    <div className="w-full min-w-100 max-w-sm bg-gray-600 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div className="w-full min-w-100 max-w-sm bg-stone-50 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
       {/* Event Image with Badges */}
-      <div className="relative h-48 bg-gray-100">
+      <div className="relative h-48 bg-white ">
         <img
-          className="w-full h-full object-cover"
-          src={image || "https://via.placeholder.com/400x300"}
+          className="w-full h-full object-cover opacity-30"
+          src="/no-img-event.png"
           alt={`${title} event`}
         />
+        {console.log(image)}
 
         {/* Badges */}
         <div className="absolute top-2 left-2 flex gap-2">
           {isFeatured && (
-            <span className="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+            <span className="bg-yellow-500  text-xs px-2 py-1 rounded-full font-semibold">
               Featured
             </span>
           )}
           {isFree && (
-            <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+            <span className="bg-green-500  text-xs px-2 py-1 rounded-full font-semibold">
               Free
             </span>
           )}
           {category && (
-            <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+            <span className="bg-blue-500  text-xs px-2 py-1 rounded-full font-semibold">
               {category}
             </span>
           )}
         </div>
+
         {/* on board */}
-        <div 
-        className="absolute top-2 right-2 px-2 text-sm font-bold rounded-full  bg-gray-700 hover:bg-gray-800 cursor-pointer text-white"
-        onClick={()=>{toggleSelectedEvent(eventId);}}>
-            i
+        <div
+          className="absolute top-2 right-2 px-2 text-sm font-bold rounded-full  bg-gray-700 hover:bg-gray-800 cursor-pointer "
+          onClick={() => {
+            toggleSelectedEvent(eventId);
+          }}>
+          i
         </div>
       </div>
 
       {/* Event Content */}
       <div className="p-5">
         {/* Date & Time */}
-        <div className="flex items-center text-sm text-gray-300 mb-2">
+        <div className="flex items-center text-sm text-gray-400 mb-2">
           <svg
             className="w-4 h-4 mr-1"
             fill="none"
@@ -75,16 +78,18 @@ const EventCard = ({
         </div>
 
         {/* Title & Description */}
-        <h3 className="text-xl text-gray-100 font-bold  mb-2">{title}</h3>
+        <h3 className="text-gray-700  font-semibold text-xl mb-2">
+          {title}
+        </h3>
         {description && (
-          <p className="text-gray-200 text-sm mb-4 line-clamp-2">
+          <p className="text-gray-400 font-[300]  text-sm mb-4 line-clamp-2">
             {description}
           </p>
         )}
 
         {/* Location & Organizer */}
         <div className="space-y-2 mb-4">
-          <div className="flex items-center text-sm text-gray-300">
+          <div className="flex items-center text-sm text-gray-500 ">
             <svg
               className="w-4 h-4 mr-1"
               fill="none"
@@ -106,7 +111,7 @@ const EventCard = ({
             {location}
           </div>
           {organizer && (
-            <div className="flex items-center text-sm text-gray-300">
+            <div className="flex items-center text-sm text-gray-500 ">
               <svg
                 className="w-4 h-4 mr-1"
                 fill="none"
@@ -126,7 +131,7 @@ const EventCard = ({
 
         {/* Action Button */}
         <button
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg"
+          className="w-full mt-2 my-1.5 bg-purple-600 hover:bg-purple-700  font-medium py-1.5 px-3.5 rounded-lg"
           onClick={() => setOnBoard(eventId)}>
           on board
         </button>

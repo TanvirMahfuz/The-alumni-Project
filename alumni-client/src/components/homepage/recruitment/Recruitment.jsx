@@ -4,12 +4,13 @@ import { useRecruitmentStore } from "../../../store/useRecruitmentStore.js";
 import MobileLayout from "./mobile-layout/MobileLayout.jsx";
 import DesktopLayout from "./desktop-layout/DesktopLayout.jsx";
 import Header from "./Header.jsx";
-import RecruitmentForm from "./recruitment-form/RecruitmentForm.jsx"
-import Modal from "../../common/Modal.jsx"
+import RecruitmentForm from "./recruitment-form/RecruitmentForm.jsx";
+import Modal from "../../common/Modal.jsx";
 function Recruitment() {
   const [openPanelId, setOpenPanelId] = useState(null);
-  const { recruitments, getRecruitments,formOpen,setFormOpen,isLoading, } = useRecruitmentStore();
-  console.log(formOpen,isLoading)
+  const { recruitments, getRecruitments, formOpen, setFormOpen, isLoading } =
+    useRecruitmentStore();
+  console.log(formOpen, isLoading);
   useEffect(() => {
     getRecruitments();
   }, [getRecruitments]);
@@ -25,10 +26,9 @@ function Recruitment() {
           ) : (
             <RecruitmentForm />
           )}
-
         </Modal>
       )}
-      <div className="m-4 mt-8">
+      <div className="m-4 mt-8 pe-4">
         <Header />
         {/* Desktop Layout */}
         <DesktopLayout

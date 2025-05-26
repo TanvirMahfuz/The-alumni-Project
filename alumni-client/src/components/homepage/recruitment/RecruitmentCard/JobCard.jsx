@@ -19,7 +19,7 @@ const JobCard = ({
     return [...perks, ...benefits];
   }
   return (
-    <div className="w-full min-w-84 h-auto bg-gray-100 p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-200">
+    <div className="w-full min-w-84 h-auto bg-white  p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
       <div className="flex items-start space-x-3">
         <div className="flex-1 min-w-0">
           <JobMetaInfo
@@ -40,13 +40,13 @@ const JobCard = ({
         </div>
       </div>
 
-      <div className="mt-3 flex justify-between items-center">
+      <div className="mt-5 flex justify-between items-center">
         <button
           onClick={onLearnMore}
-          className="text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none">
+          className="text-sm font-medium text-blue-400 hover:text-blue-600 focus:outline-none">
           Learn more →
         </button>
-        <button className="px-3 py-1 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+        <button className="px-3 py-1 bg-blue-600 text-white text-sm font-[400] rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
           Quick apply
         </button>
       </div>

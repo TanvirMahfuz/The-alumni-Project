@@ -38,8 +38,8 @@ function UpdateProfile() {
     }
   };
   return (
-    <div className="w-full flex justify-center items-center">
-      <div className="w-full md:w-3/4 p-6 bg-gray-800 rounded-lg shadow-lg space-y-6">
+    <div className="w-full flex bg-white text-black justify-center items-center">
+      <div className="w-full md:w-3/4 p-6 bg-white text-black rounded-lg shadow-lg space-y-6">
         <h2 className="text-2xl text-white font-bold mb-4">Update Profile</h2>
         <Contacts {...{ formData, setFormData }} />
 

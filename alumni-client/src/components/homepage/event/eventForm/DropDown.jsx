@@ -1,4 +1,4 @@
-import { useState,useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function DropDown({ value, onChange }) {
   const selectRef = useRef(null);
@@ -17,7 +17,7 @@ export default function DropDown({ value, onChange }) {
           ref={selectRef} // Attach the ref to the select element
           value={value}
           onChange={(e) => onChange(e.target.value)} // Handle selection change
-          className="bg-gray-500 rounded-lg py-2 px-1 text-white">
+          className="bg-white dark:bg-gray-500 rounded-lg py-2 px-1 text-gray-800">
           <option value="conference">Conference</option>
           <option value="workshop">Workshop</option>
           <option value="seminar">Seminar</option>

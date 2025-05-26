@@ -14,7 +14,9 @@ function Mainbody() {
       <div className="h-screen w-full col-span-1 md:col-span-8 xl:col-span-6 px-4 overflow-y-auto">
         <CreatePost />
         {allPosts &&
-          allPosts.map((post) => <Posts key={post._id} post={post} />)}
+          allPosts.map((post) => (
+            <Posts className="mt-20" key={post._id} post={post} />
+          ))}
       </div>
 
       <div className="hidden lg:col-span-3 xl:block">

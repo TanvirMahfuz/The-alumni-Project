@@ -7,26 +7,27 @@ function Faculty() {
   const { faculty, fetchFaculty } = useFacultyStore();
   React.useEffect(() => {
     fetchFaculty();
-  },[fetchFaculty]);
+  }, [fetchFaculty]);
 
-      const staffData = {
-        name: "John Smith",
-        position: "Lab Manager",
-        department: "School of Engineering",
-        image: "/path/to/staff-image.jpg", // Use a real path or URL
-        email: "john.smith@university.edu",
-        phone: "(123) 987-6543",
-        officeLocation: "Engineering Building, Room 101",
-        isActive: true,
-      };
+  const staffData = {
+    name: "John Smith",
+    position: "Lab Manager",
+    department: "School of Engineering",
+    image: "/path/to/staff-image.jpg", // Use a real path or URL
+    email: "john.smith@university.edu",
+    phone: "(123) 987-6543",
+    officeLocation: "Engineering Building, Room 101",
+    isActive: true,
+  };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 p-4 mt-4">
-      {faculty?.length>0 && faculty.map((person,index)=>{
-        return <FacultyCard key={index} {...person} />;
-      })}
-      
-    
+    <div className="h-screen overflow-y-auto">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 p-4 mt-4">
+        {faculty?.length > 0 &&
+          faculty.map((person, index) => {
+            return <FacultyCard key={index} {...person} />;
+          })}
+      </div>
     </div>
   );
 }

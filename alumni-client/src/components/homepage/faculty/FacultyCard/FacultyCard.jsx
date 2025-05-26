@@ -11,13 +11,13 @@ const FacultyCard = ({
   officeLocation,
   isActive,
 }) => {
-  console.log(phone)
+  console.log(phone);
   return (
     <div className="w-full max-w-sm bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
       {/* Faculty Image */}
       <div className="relative h-48 bg-gray-100">
         <img
-          className="w-full h-full object-contain bg-gray-700"
+          className="w-full h-full object-contain bg:white overflow-y-auto "
           src={image || "https://via.placeholder.com/400x300"}
           alt={`Portrait of ${name}`}
         />
@@ -55,7 +55,9 @@ const FacultyCard = ({
           </div>
           {phone &&
             phone.map((number, index) => (
-              <div key={index} className="flex items-center text-sm text-gray-600">
+              <div
+                key={index}
+                className="flex items-center text-sm text-gray-600">
                 <svg
                   className="w-4 h-4 mr-2"
                   fill="none"

@@ -6,7 +6,7 @@ import ContactList from "./ContactList";
 
 function DetailsSection() {
   return (
-    <div className="flex-1 flex flex-col p-4 text-white">
+    <div className="flex-1 flex flex-col p-4 text-black bg-white">
       <div className="mb-2 md:mb-1">
         <ContactList />
       </div>

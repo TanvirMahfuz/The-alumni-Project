@@ -22,7 +22,7 @@ const EventForm = ({ openForm, setOpenForm }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    saveEvent({...formData,time:convertTo12HourFormat(formData.time)});
+    saveEvent({ ...formData, time: convertTo12HourFormat(formData.time) });
   }
 
   const handleChange = (e) => {
@@ -51,15 +51,15 @@ const EventForm = ({ openForm, setOpenForm }) => {
       <CloseButton {...{ openForm, setOpenForm }} />
       <form
         onSubmit={handleSubmit}
-        className="w-full bg-gray-600 p-4 rounded-lg shadow-2xl">
+        className="w-full bg-stone-50 dark:bg-gray-600 p-4 rounded-lg shadow-2xl">
         <TextInput
-          name="title"
+          name="Title"
           placeholder="Enter event title"
           value={formData.title}
           onChange={handleChange}
         />
         <TextInput
-          name="location"
+          name="Location"
           placeholder="Enter event location"
           value={formData.location}
           onChange={handleChange}
@@ -68,7 +68,7 @@ const EventForm = ({ openForm, setOpenForm }) => {
         <TimePicker value={formData.time} onChange={handleTimeChange} />
         <DropDown value={formData.category} onChange={handleCategoryChange} />
         <TextArea
-          name="description"
+          name="Description"
           placeholder="Enter description"
           value={formData.description}
           onChange={handleChange}

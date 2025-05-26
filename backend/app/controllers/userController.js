@@ -2,7 +2,7 @@
 import * as userServices from "../services/userServices.js";
 import { getMultiplePosts } from "../services/postServices.js";
 import { validateUserUpdate } from "../utility/updateValidation.js";
-import uploadFileToCloudinary from "../utility/cloudinary.config.js";
+import uploadFileToCloudinary from "../utility/cloudinary64.js";
 export const getAllUsers = async (req, res) => {
   try {
     const users = await userServices.findAllUser();
@@ -46,8 +46,14 @@ export const updateUser = async (req, res) => {
   if (!params) {
     return res.status(400).json({ message: "Invalid request" });
   }
-  if (body.image){
-    return res.status(400).json({ message: "Image not allowed yet" });
+  if (body.image.length > 0) {
+    console.log("Uploading image to cloudinary");
+    const uploadResult = await uploadFileToCloudinary(body.image[0], id);
+    if (!uploadResult) {
+      return res.status(500).json({ message: "Error uploading image" });
+    }
+    params.image = uploadResult.secure_url;
+    console.log("Image uploaded successfully", uploadResult.secure_url);
   }
   if(body.resume){
     console.log("Uploading resume to cloudinary");

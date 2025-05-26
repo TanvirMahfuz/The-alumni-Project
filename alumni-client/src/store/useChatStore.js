@@ -22,7 +22,7 @@ export const useChatStore = create((set, get) => ({
     }
     try {
       const response = await fetch(
-        `${API_BASE_URL}/api/chat/get-messages/${get().selectedChatUser._id}`,
+        `${API_BASE_URL}/chat/get-messages/${get().selectedChatUser._id}`,
         { credentials: "include" }
       );
 
@@ -42,7 +42,7 @@ export const useChatStore = create((set, get) => ({
     set({ isMessageLoading: true });
     try {
       console.log("messageData", messageData);
-      const response = await fetch(`${API_BASE_URL}/api/chat/send-message`, {
+      const response = await fetch(`${API_BASE_URL}/chat/send-message`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

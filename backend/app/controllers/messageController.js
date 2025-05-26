@@ -61,9 +61,8 @@ export const getMessagesByChat = async (req, res) => {
     const senderId = req.user._id;
     const receiverId = req.params.id;
     const messages = await getMessages(senderId, receiverId);
-    
-    res.status(200).json(messages);
+    return res.status(200).json(messages);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 };

@@ -8,11 +8,19 @@ const allowedOrigins = ["http://localhost:5173"];
 const io = new Server(server, {
   cors: {
     origin: function (origin, callback) {
-      if (
+      const allowedOrigins = [
+        "http://localhost:5173",
+        "https://the-alumni-project-vrtg.vercel.app",
+      ];
+
+      const isAllowed =
         !origin ||
         allowedOrigins.includes(origin) ||
-        origin.startsWith("https://the-alumni-project-vrtg.vercel.app")
-      ) {
+        /^https:\/\/the-alumni-project-vrtg(-[\w\d]+)?\.vercel\.app$/.test(
+          origin
+        );
+
+      if (isAllowed) {
         callback(null, true);
       } else {
         console.warn("Blocked by Socket.IO CORS:", origin);

@@ -98,7 +98,10 @@ export const useUserStore = create((set, get) => ({
 
     const newSocket = io(SOCKET_BASE_URL, {
       query: { userId: authUser._id },
+      withCredentials: true,
+      transports: ["websocket", "polling"], // helps with connection fallback
     });
+    
 
     newSocket.connect();
     set({ socket: newSocket });

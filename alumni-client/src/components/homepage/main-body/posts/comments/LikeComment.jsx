@@ -52,14 +52,16 @@ function LikeComment({
   return (
     <div className="w-full px-15 flex justify-between items-center">
       <div
-        className="flex gap-1 rounded-xl px-4 py-2 hover:cursor-pointer bg-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700"
+        className={`flex gap-1 rounded-xl px-4 py-2 text-gray-700 hover:cursor-pointer bg-white hover:bg-gray-200`}
+
         onClick={handleLike}>
         {liked ? likedSolidIcon : likeIcon}
         <div>{localPost?.likes?.length ?? "0"} Likes</div>
       </div>
 
       <div
-        className={`flex gap-1 rounded-xl px-4 py-2 hover:cursor-pointer bg-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 `}
+        className={`flex gap-1 rounded-xl px-4 py-2 text-gray-700 hover:cursor-pointer bg-white hover:bg-gray-200
+`}
         onClick={handleClick}>
         {commentIcon}
         <div>{localPost?.comments?.length ?? "0"} comments</div>

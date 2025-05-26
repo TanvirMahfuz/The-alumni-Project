@@ -48,7 +48,7 @@ const Modal = ({ isOpen, onClose, children }) => {
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex justify-center items-center bg-black/30 backdrop-blur-sm "
+      className="fixed inset-0 z-50 flex justify-center items-center bg-white/90 backdrop-blur-sm "
       onMouseDown={handleOverlayMouseDown}
       onMouseUp={handleOverlayMouseUp}
       style={{ pointerEvents: isOpen ? "auto" : "none" }} // Ensure overlay is clickable only when open

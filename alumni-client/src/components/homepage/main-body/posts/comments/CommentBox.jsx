@@ -1,7 +1,9 @@
 import React from "react";
 import Input from "../../../../common/Input.jsx";
 import { usePostStore } from "../../../../../store/usePostStore.js";
+import { useUserStore } from "../../../../../store/useUserStore.js";
 function CommentBox({ localPost, setLocalPost, author }) {
+  const { authUser } = useUserStore();
   const [comment, setComment] = React.useState("");
   const { commentOnPost } = usePostStore();
   const handleSubmit = async () => {
@@ -13,7 +15,7 @@ function CommentBox({ localPost, setLocalPost, author }) {
     <div className="flex m-2 p-2">
       <div className="rounded-full h-13 w-13">
         <img
-          src={author?.image ?? "./avatar.png"}
+          src={authUser?.image ?? "./avatar.png"}
           alt="profile-picture"
           className="rounded-full h-full w-full object-cover"
         />

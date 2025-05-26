@@ -13,14 +13,14 @@ function Sidebar() {
       getAllUsers();
     }, []);
   return (
-    <div className="bg-stone-50 shadow-md dark:bg-gray-600 h-[calc(100vh-70px)] overflow-y-auto mt-2 rounded-2xl p-2">
-      <h1 className="text-gray-700 dark:text-white text-2xl font-[500] p-2">
+    <div className="bg-stone-50 shadow-md text-black h-[calc(100vh-90px)] overflow-y-auto mt-2 rounded-2xl p-2">
+      <h1 className="text-gray-700 text-2xl font-[500] p-2">
         Chats
       </h1>
       <Searchbox />
 
       <div className="flex justify-between items-center px-4 transition-all ease-in-out duration-300">
-        <h1 className="text-white text-xl font-bold p-2">Users</h1>
+        <h1 className="text-black text-xl font-bold p-2">Users</h1>
         <Toggle {...{ isChecked, setIsChecked }} />
       </div>
 

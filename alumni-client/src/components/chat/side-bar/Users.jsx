@@ -14,9 +14,9 @@ function Users({ users }) {
             onClick={() => {
               setSelectedChatUser(user);
             }}
-            className={`flex mb-2 items-center gap-2 space-x-2 p-2 rounded-lg dark:hover:bg-gray-500 cursor-pointer transition-all duration-400 border-b border-gray-200 ${
+            className={`flex mb-2 items-center gap-2 space-x-2 p-2 rounded-lg hover:bg-stone-300/80 cursor-pointer transition-all duration-400 border-b border-gray-200 ${
               selectedChatUser?._id === user._id
-                ? "bg-gray-200 dark:bg-gray-800"
+                ? "bg-gray-200 "
                 : ""
             }`}>
             <img

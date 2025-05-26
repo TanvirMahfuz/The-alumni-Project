@@ -159,9 +159,18 @@ const Navbar = () => {
       </div>
 
       {/* Logout Button */}
-      <button className="hidden md:block bg-red-300 text-white text-sm px-4 py-2 rounded-3xl hover:bg-red-400 ml-[100px]">
-        Logout
-      </button>
+     
+      {authUser ? (
+        <div
+          className="hidden md:block bg-red-300 text-white text-sm px-4 py-2 rounded-3xl hover:bg-red-400 ml-[100px]"
+          onClick={handleLogOut}>
+          Logout
+        </div>
+      ) : (
+        <div className="hidden md:block bg-red-300 text-white text-sm px-4 py-2 rounded-3xl hover:bg-red-400 ml-[100px]">
+          <Link to="/login">LogIn</Link>
+        </div>
+      )}
 
       {/* Hamburger Menu for Mobile */}
       <button
@@ -193,9 +202,7 @@ const Navbar = () => {
               {item.name}
             </Link>
           ))}
-          <button className="bg-red-300 text-white px-4 py-2 rounded-3xl hover:bg-red-400">
-            Logout
-          </button>
+
           {authUser ? (
             <div
               className="bg-red-300 text-white px-4 py-2 rounded-3xl hover:bg-red-400"

@@ -50,7 +50,7 @@ const EventCard = ({
 
         {/* on board */}
         <div
-          className="absolute top-2 right-2 px-2 text-sm font-bold rounded-full  bg-gray-700 hover:bg-gray-800 cursor-pointer "
+          className="absolute top-2 right-2 px-2 text-sm font-bold rounded-full  bg-gray-300 hover:bg-gray-800 cursor-pointer "
           onClick={() => {
             toggleSelectedEvent(eventId);
           }}>

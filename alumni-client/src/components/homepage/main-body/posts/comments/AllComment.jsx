@@ -11,7 +11,7 @@ function AllComment({ comments }) {
     fetchData();
   }, [comments]);
   return (
-    <div className="w-full bg-gray-200  p-4 h-50 overflow-auto mt-2 rounded-xl flex flex-col gap-4">
+    <div className="w-full bg-white  p-4 h-50 overflow-auto mt-2 rounded-xl flex flex-col gap-4">
       <h1 className="text-lg pt-2 pb-3 font-[500] text-black">All Comments</h1>
       {completeComments?.length > 0 &&
         completeComments.map((comment) => (

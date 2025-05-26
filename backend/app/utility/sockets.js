@@ -3,15 +3,16 @@ import http from "http";
 import app from "../app.js";
 
 const server = http.createServer(app);
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://the-alumni-project-vrtg.vercel.app/",
-];
+const allowedOrigins = ["http://localhost:5173"];
 
 const io = new Server(server, {
   cors: {
     origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        origin.startsWith("https://the-alumni-project-vrtg.vercel.app")
+      ) {
         callback(null, true);
       } else {
         console.warn("Blocked by Socket.IO CORS:", origin);
@@ -21,6 +22,7 @@ const io = new Server(server, {
     credentials: true,
   },
 });
+
 
 
 const userSocketMap = {};

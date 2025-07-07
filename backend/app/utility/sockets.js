@@ -6,6 +6,8 @@ const server = http.createServer(app);
 const allowedOrigins = [
   "http://localhost:5173",
   "https://the-alumni-project.vercel.app",
+  
+
 ];
 
 const isAllowedOrigin = (origin) => {

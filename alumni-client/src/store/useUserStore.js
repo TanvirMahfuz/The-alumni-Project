@@ -8,8 +8,9 @@ const API_BASE_URL =
 
 const SOCKET_BASE_URL =
   import.meta.env.VITE_ENVIRONMENT === "development"
-    ? import.meta.env.VITE_DEVELOPMENT_URL
-    : import.meta.env.VITE_DEPLOYMENT_URL;
+    ? "http://localhost:3000"
+    : "https://the-alumni-project.onrender.com";
+//important note: socket io do not work with sub roots like /api/v1
 
 export const useUserStore = create((set, get) => ({
   authUser: null,
@@ -93,23 +94,36 @@ export const useUserStore = create((set, get) => ({
   },
 
   connectSocket: () => {
-    const { authUser, socket } = get();
-    if (!authUser || socket?.connected) return;
 
-    const newSocket = io(SOCKET_BASE_URL, {
-      query: { userId: authUser._id },
-      withCredentials: true,
-      transports: ["websocket", "polling"], // helps with connection fallback
-    });
-    
+      console.log("Connecting socket...");
+      const { authUser, socket } = get();
 
-    newSocket.connect();
-    set({ socket: newSocket });
+      if (!authUser || socket?.connected) return;
 
-    newSocket.on("getOnlineUsers", (userIds) => {
-      set({ onlineUsers: userIds });
-      get().getOnlineUsers(userIds);
-    });
+      const newSocket = io(SOCKET_BASE_URL, {
+        query: { userId: authUser._id },
+        withCredentials: true,
+        transports: ["websocket", "polling"], // fallback support
+      });
+      try {
+        newSocket.connect();
+        set({ socket: newSocket });
+      }catch (error) {
+          console.error("Failed to connect socket:", error);
+        }
+        newSocket.on("connection", () => {
+          console.log("Socket connected");
+        });
+
+        newSocket.on("getOnlineUsers", (userIds) => {
+          set({ onlineUsers: userIds });
+          get().getOnlineUsers(userIds);
+        });
+
+        newSocket.on("connect_error", (err) => {
+          console.error("Socket connection error:", err);
+        });
+      
   },
 
   disconnectSocket: () => {

@@ -7,8 +7,12 @@ export const isLoggedIn = async (req, res, next) => {
     return res.status(401).json({message: "Unauthorized"});
   }
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = await findOneUser({_id: decoded._id});
+    const decoded = await jwt.verify(token, process.env.JWT_SECRET);
+    if (!decoded) {
+      return res.status(401).json({ message: "decoding failed" });
+    }
+    const newUser = await findOneUser({ _id: decoded._id });
+    req.user = newUser
     next();
   } catch (error) {
     return res.status(401).json({message: "Unauthorized"});

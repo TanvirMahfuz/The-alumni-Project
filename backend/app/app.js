@@ -27,14 +27,13 @@ app.use(limiter);
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://the-alumni-project.vercel.app",
+  "https://the-alumni-project-vrtg.vercel.app", // ✅ this is essential
+  /^https:\/\/the-alumni-project-[\w-]+\.vercel\.app$/, // optional wildcard for preview deployments
 ];
-
 const isAllowedOrigin = (origin) => {
   return (
     !origin ||
-    allowedOrigins.includes(origin) ||
-    /^https:\/\/the-alumni-project-[\w-]+\.vercel\.app$/.test(origin)
+    allowedOrigins.includes(origin)
   );
 };
 app.use(

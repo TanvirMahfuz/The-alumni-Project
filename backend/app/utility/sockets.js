@@ -3,11 +3,11 @@ import http from "http";
 import app from "../app.js";
 
 const server = http.createServer(app);
+
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://the-alumni-project.vercel.app",
-  
-
+  "https://the-alumni-project-vrtg.vercel.app", // ✅ this is essential
+  /^https:\/\/the-alumni-project-[\w-]+\.vercel\.app$/, // optional wildcard for preview deployments
 ];
 
 const isAllowedOrigin = (origin) => {

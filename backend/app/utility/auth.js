@@ -12,10 +12,15 @@ export const registerUser = async (req, res) => {
     if (response.status === false) {
       return res.status(400).json({ message: response.error });
     }
+    isProduction = true ? process.env.ENVIRONMENT === "deployment" : false;
 
     return res
       .status(201)
-      .cookie("token", response.token, { httpOnly: true, secure: true })
+      .cookie("token", response.token, 
+        { httpOnly: true,
+           secure: true, 
+           sameSite: isProduction ? "None" : "Lax", // ✅ Important!
+        })
       .json({ message: "User registered successfully", user: response.user });
   } catch (error) {
     return res
@@ -35,13 +40,15 @@ const login = async (req, res) => {
       return res.status(401).json({ message: response.error });
     }
     console.log(response);
+    isProduction = true ? process.env.ENVIRONMENT === "deployment" : false;
     return res
       .status(200)
       .cookie("token", response.token, {
         httpOnly: true,
         secure: true,
+        sameSite: isProduction ? "None" : "Lax", // ✅ Important!
       })
-      .json({message: "User logged in successfully", user:response.user});
+      .json({ message: "User logged in successfully", user: response.user });
   } catch (error) {
     res.status(500).json({message: "Error logging in", error: error.message});
   }

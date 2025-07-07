@@ -8,8 +8,8 @@ const API_BASE_URL =
 
 const SOCKET_BASE_URL =
   import.meta.env.VITE_ENVIRONMENT === "development"
-    ? "http://localhost:3000"
-    : "https://the-alumni-project.vercel.app";
+    ? import.meta.env.VITE_DEVELOPMENT_URL
+    : import.meta.env.VITE_DEPLOYMENT_URL;
 
 export const useUserStore = create((set, get) => ({
   authUser: null,

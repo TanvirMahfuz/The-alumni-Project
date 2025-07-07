@@ -92,6 +92,6 @@ export const userPosts = async (req,res)=>{
   } catch (error) {
     return res
       .status(500)
-      .json({ message: "Error fetching users", error: error.message });
+      .json({ message: "Error fetching posts", error: error.message });
   }
 }

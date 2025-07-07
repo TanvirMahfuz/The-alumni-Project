@@ -5,20 +5,18 @@ function Miniprofile() {
   const { authUser } = useUserStore();
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden">
-      {/* Header with background image */}
       <div className="relative h-14 bg-cover bg-center">
         <img src="./bg-final.png" alt="" />
-        {/* Profile Image - overlapping and right aligned */}
         <div className="absolute -bottom-25 left-6 h-24 w-24 rounded-full shadow-md overflow-hidden bg-white">
           <img
-            src={authUser?.image ?? "./avatar.png"}
+            src={authUser?.image.length>0 ? authUser.image : "./avatar.png"}
             alt="profile"
             className="h-full w-full object-cover"
           />
         </div>
       </div>
 
-      {/* Professional Info */}
+
       <div className="pt-28 px-6 text-sm text-gray-700 space-y-2">
         <Link to="/profile">
           <p className="text-left text-2xl mb-2 font-semibold">

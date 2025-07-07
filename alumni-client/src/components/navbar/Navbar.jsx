@@ -11,7 +11,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   React.useEffect(() => {
     try {
-      console.log("the connected user is : ", authUser);
+      // console.log("the connected user is : ", authUser);
       if (authUser) {
         console.log("user logged in ");
         console.log(authUser);

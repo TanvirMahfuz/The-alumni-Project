@@ -23,7 +23,6 @@ const menuItems = [
 ];
 function Homepage() {
   const [selectedTag, setSelectedTag] = React.useState(0);
-  console.log(selectedTag);
 
   return (
     <div className="h-screen w-screen grid grid-cols-1 lg:grid-cols-12 bg-[#f3f2f1]">

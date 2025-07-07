@@ -27,17 +27,20 @@ app.use(limiter);
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://the-alumni-project-vrtg.vercel.app",
+  "https://the-alumni-project.vercel.app",
 ];
 
+const isAllowedOrigin = (origin) => {
+  return (
+    !origin ||
+    allowedOrigins.includes(origin) ||
+    /^https:\/\/the-alumni-project-[\w-]+\.vercel\.app$/.test(origin)
+  );
+};
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (
-        !origin ||
-        allowedOrigins.includes(origin) ||
-        origin.startsWith("https://the-alumni-project-vrtg.vercel.app")
-      ) {
+    origin(origin, callback) {
+      if (isAllowedOrigin(origin)) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
@@ -46,6 +49,23 @@ app.use(
     credentials: true,
   })
 );
+
+// app.use(
+//   cors({
+//     origin: function (origin, callback) {
+//       if (
+//         !origin ||
+//         allowedOrigins.includes(origin) ||
+//         origin.startsWith("https://the-alumni-project-vrtg.vercel.app")
+//       ) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//     credentials: true,
+//   })
+// );
 
 // app.use((req, res, next) => {
 //   console.log(req.url);

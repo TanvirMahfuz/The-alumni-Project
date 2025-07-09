@@ -1,7 +1,7 @@
 import { useState } from "react";
 import PhotoGallery from "./PhotoGallery";
 // import Profile from "./Profile";
-import ProfileBrief from "./ProfileBrief";
+import ProfileBrief from "./profilebrief/ProfileBrief.jsx";
 import EditProfileButton from "./EditProfileButton";
 import { useUserStore } from "../../../store/useUserStore.js";
 import TimelineSection from "./TimelineSection.jsx";
@@ -48,7 +48,7 @@ export default function ProDem({ isAuthUser = true }) {
   ];
   
   return (
-    <div className="mt-12 bg-white flex flex-col lg:flex-row w-full p-12 mx-auto shadow-md space-y-6 lg:space-y-0 lg:space-x-8">
+    <div className=" bg-white flex flex-col lg:flex-row w-full p-12 mx-auto shadow-md space-y-6 lg:space-y-0 lg:space-x-8">
       {/* Left Section */}
       <ProfileBrief user={authUser} />
 
@@ -81,7 +81,7 @@ export default function ProDem({ isAuthUser = true }) {
             <UpdateProfile/>
           )}
           {activeTab === "profile" && authUser && (
-            <TimelineSection data={educationData} />
+            <TimelineSection user={authUser} />
           )}
           {activeTab === "posts" && (
             <UserPosts/>

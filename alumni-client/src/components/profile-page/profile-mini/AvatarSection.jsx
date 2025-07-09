@@ -35,18 +35,18 @@ function AvatarSection() {
 
   return (
     <div className="flex flex-col items-center gap-4 p-4">
-      <div className="relative group w-48 h-48 rounded-full bg-gray-200 overflow-hidden border-4 border-white shadow-md">
+      <div className="relative group w-40 h-40 md:w-40 md:h-40 mx-auto rounded-full border-4 border-teal-200 overflow-hidden  shadow-md">
         <img
           src={authUser?.image?.length > 0 ? authUser.image : "./avatar.png"}
           alt="Profile"
-          className="w-full h-full object-cover"
+          className="rounded-full w-full md:w-40 md:h-40 mx-auto object-cover"
         />
 
         {/* Overlay for camera icon */}
         <div
           onClick={handleEditClick}
           className="absolute inset-0 flex items-center justify-center  hover:backdrop-blur-xs transition group-hover:bg-black/30 z-10 cursor-pointer">
-          <div className="p-2  rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
             {cameraIcon}
           </div>
         </div>

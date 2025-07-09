@@ -46,20 +46,38 @@ export const updateUser = async (req, res) => {
   if (!params) {
     return res.status(400).json({ message: "Invalid request" });
   }
+
+  
   if (
-    body.image.length > 0 &&
-    !body.image.startsWith("https://res.cloudinary.com/dtpuispy4/")
+    (body.image && Array.isArray(body.image) && body.image.length > 0) || // base64 array case
+    (typeof body.image === "string" &&
+      !body.image.startsWith("https://res.cloudinary.com/dtpuispy4/")) // base64 string case
   ) {
-    console.log("Uploading image to cloudinary");
-    const uploadResult = await uploadFileToCloudinary(body.image[0], id);
+    let imageToUpload;
+
+    if (Array.isArray(body.image)) {
+      imageToUpload = body.image[0]; // take first base64 string from array
+    } else {
+      imageToUpload = body.image; // base64 string directly
+    }
+
+    // Upload to Cloudinary
+    const uploadResult = await uploadFileToCloudinary(imageToUpload, id);
     if (!uploadResult) {
       return res.status(500).json({ message: "Error uploading image" });
     }
     params.image = uploadResult.secure_url;
     console.log("Image uploaded successfully", uploadResult.secure_url);
+  } else if (
+    typeof body.image === "string" &&
+    body.image.startsWith("https://res.cloudinary.com/dtpuispy4/")
+  ) {
+    // It's already a Cloudinary URL - just pass it along as is
+    params.image = body.image;
   }
-  console.log(body);
-  console.log("image check passes successfully");
+  
+  
+
   if (
     body.resume &&
     body.resume.base64 &&

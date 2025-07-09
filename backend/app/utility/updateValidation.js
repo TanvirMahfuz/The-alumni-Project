@@ -14,19 +14,37 @@ function field_selectors() {
 export const validateUserUpdate = (id, body) => {
   if (!id || !body) return null;
 
-  // Get valid field names from schema
   const validFields = Object.keys(User.schema.paths)
     .filter((key) => !["_id", "__v", "createdAt", "updatedAt"].includes(key))
     .map((key) => key.split(".")[0]);
   const uniqueFields = [...new Set(validFields)];
 
-  // Create clean body object
   const cleanBody = {};
 
-  for (const key in body) {
-    if (!uniqueFields.includes(key)) continue;
+  // ✅ Handle contacts separately
+  if (body.contacts && typeof body.contacts === "object") {
+    const cleanContacts = {};
+    let hasContacts = false;
 
-    // Handle primitive fields
+    for (const contactKey of ["facebook", "github", "linkedin", "portfolio"]) {
+      const val = body.contacts[contactKey];
+      if (val && val.trim() !== "") {
+        cleanContacts[contactKey] = val.trim();
+        hasContacts = true;
+      }
+    }
+
+    if (hasContacts) {
+      cleanBody.contacts = cleanContacts;
+      
+    }
+  }
+  console.log(cleanBody);
+
+  // ✅ Loop for the rest of the fields
+  for (const key in body) {
+    if (!uniqueFields.includes(key) || key === "contacts") continue;
+
     if (
       [
         "name",
@@ -44,32 +62,14 @@ export const validateUserUpdate = (id, body) => {
       continue;
     }
 
-    // Handle boolean field
     if (key === "availableForWork" || key === "isAdmin") {
       cleanBody[key] = body[key];
       continue;
     }
 
-    // Handle contacts object
-    if (key === "contacts") {
-      const cleanContacts = {};
-      let hasContacts = false;
-
-      for (const contactKey in body[key]) {
-        if (body[key][contactKey] && body[key][contactKey] !== "") {
-          cleanContacts[contactKey] = body[key][contactKey];
-          hasContacts = true;
-        }
-      }
-
-      if (hasContacts) cleanBody[key] = cleanContacts;
-      continue;
-    }
-
-    // Handle array fields
     if (Array.isArray(body[key])) {
       const arrayValue = body[key];
-    
+
       if (
         arrayValue.every(
           (item) =>
@@ -79,16 +79,14 @@ export const validateUserUpdate = (id, body) => {
             item !== null
         )
       ) {
-        // It's an array of primitives (e.g., strings)
         cleanBody[key] = arrayValue;
         continue;
       }
-    
-      // Existing object-cleaning logic
+
       const cleanArray = arrayValue
         .filter((item) => {
           if (!item || typeof item !== "object") return false;
-    
+
           if (key === "currentlyWorkingIn" || key === "haveWorkedIn") {
             return !(
               (item.title === "none" || item.title === "") &&
@@ -96,7 +94,7 @@ export const validateUserUpdate = (id, body) => {
               item.description === ""
             );
           }
-    
+
           return !Object.values(item).every(
             (val) => val === "" || val === undefined || val === null
           );
@@ -110,21 +108,20 @@ export const validateUserUpdate = (id, body) => {
           }
           return cleanItem;
         });
-    
+
       if (cleanArray.length > 0) cleanBody[key] = cleanArray;
     }
-    
   }
 
-  // Special validation for email format if email is being updated
   if (cleanBody.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanBody.email)) {
     throw new Error("Invalid email format");
   }
 
-  // Special validation for password length if password is being updated
   if (cleanBody.password && cleanBody.password.length < 6) {
     throw new Error("Password must be at least 6 characters");
   }
-
+  // console.log(cleanBody);
+  
   return cleanBody;
 };
+

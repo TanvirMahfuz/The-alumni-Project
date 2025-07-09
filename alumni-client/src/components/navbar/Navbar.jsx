@@ -1,25 +1,25 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
-
+import "./navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../../store/useUserStore";
+
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("Category");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [hoverIndex, setHoverIndex] = useState(null);
   const { logOut, authUser } = useUserStore();
   const navigate = useNavigate();
+
   React.useEffect(() => {
-    try {
-      // console.log("the connected user is : ", authUser);
-      if (authUser) {
-        console.log("user logged in ");
-        console.log(authUser);
-      }
-    } catch (error) {
-      console.log("no user logged in ");
+    if (authUser) {
+      console.log("user logged in ", authUser);
+    } else {
+      console.log("no user logged in");
     }
   }, [authUser]);
+
   const handleLogOut = async () => {
     const success = await logOut();
     if (success) {
@@ -30,6 +30,7 @@ const Navbar = () => {
       navigate("/");
     }
   };
+
   const handleDropdownSelect = (value) => {
     setSelectedOption(value);
     setDropdownOpen(false);
@@ -114,7 +115,7 @@ const Navbar = () => {
               placeholder="Search ..."
               className="px-4 py-2 w-full pe-12 rounded-3xl focus:outline-none text-gray-600"
             />
-            <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600">
+            <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600 rounded-full p-2 transition duration-300 hover:cursor-pointer hover:scale-110">
               <FaSearch className="h-4 w-4" />
             </button>
           </div>
@@ -122,47 +123,56 @@ const Navbar = () => {
       </div>
 
       {/* Desktop Navbar Links */}
-      <div className="hidden md:flex items-center space-x-2 ml-[-100px]">
-        {navLinks.map((link) => (
-          <Link
+      <div className="hidden lg:flex items-center ml-[-100px] navbar-group">
+        {navLinks.map((link, i) => (
+          <div
             key={link.name}
-            to={link.to}
-            className="group flex items-center relative rounded-3xl hover:bg-[#e8f2f8] py-1.5 px-3 text-[#8D9295] hover:text-[#2992FE] transition">
-            {/* Default Icon */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="size-7 group-hover:hidden">
-              {link.icon}
-            </svg>
+            className={`nav-wrapper
+              ${hoverIndex === i ? "hovered" : ""}
+              ${hoverIndex === i - 1 ? "prev-hovered" : ""}
+              ${hoverIndex === i + 1 ? "next-hovered" : ""}
+            `}
+            onMouseEnter={() => setHoverIndex(i)}
+            onMouseLeave={() => setHoverIndex(null)}>
+            <Link
+              to={link.to}
+              className="nav-link flex items-center relative rounded-3xl py-1.5 px-3 text-[#8D9295] hover:text-[#2992FE] transition-all group">
+              {/* Default Icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="size-7 group-hover:hidden hidden md:block">
+                {link.icon}
+              </svg>
 
-            {/* Hover Icon */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="#e8f2f8"
-              className="size-8 hidden group-hover:block text-[#2992FE]">
-              {link.icon}
-            </svg>
+              {/* Hover Icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="#e8f2f8"
+                className="size-8 hidden group-hover:block text-[#2992FE]">
+                {link.icon}
+              </svg>
 
-            {/* Link Name */}
-            <span className="hidden lg:group-hover:inline mx-1 text-sm">
-              {link.name}
-            </span>
-          </Link>
+              {/* Link Name */}
+              <span className="hidden md:block lg:group-hover:inline mx-1 text-sm">
+                {link.name}
+              </span>
+            </Link>
+          </div>
         ))}
       </div>
 
       {/* Logout Button */}
-     
+
       {authUser ? (
         <div
-          className="hidden md:block bg-red-300 text-white text-sm px-4 py-2 rounded-3xl hover:bg-red-400 ml-[100px]"
+          className="hidden lg:block bg-red-300 text-white text-sm px-4 py-2 rounded-3xl hover:bg-red-400 ml-[100px] cursor-pointer"
           onClick={handleLogOut}>
           Logout
         </div>
@@ -175,7 +185,7 @@ const Navbar = () => {
       {/* Hamburger Menu for Mobile */}
       <button
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        className="md:hidden text-gray-600 focus:outline-none">
+        className="lg:hidden text-gray-600 focus:outline-none">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-6 w-6"
@@ -193,7 +203,7 @@ const Navbar = () => {
 
       {/* Mobile Menu Items */}
       {mobileMenuOpen && (
-        <div className="absolute top-full left-0 w-full bg-white shadow-md z-20 flex flex-col items-start p-5 space-y-2 md:hidden">
+        <div className="absolute top-full left-0 w-full bg-white shadow-md z-20 flex flex-col items-start p-5 space-y-2 lg:hidden">
           {navLinks.map((item) => (
             <Link
               key={item.name}
@@ -205,7 +215,7 @@ const Navbar = () => {
 
           {authUser ? (
             <div
-              className="bg-red-300 text-white px-4 py-2 rounded-3xl hover:bg-red-400"
+              className="bg-red-300 text-white px-4 py-2 rounded-3xl hover:bg-red-400 cursor-pointer"
               onClick={handleLogOut}>
               Logout
             </div>

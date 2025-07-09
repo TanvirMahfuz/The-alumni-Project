@@ -60,7 +60,7 @@ function Experience({ formData, setFormData }) {
       {formData.jobExperience?.map((item, index) => (
         <div
           key={index}
-          className="relative p-6 border border-gray-200 rounded-lg shadow-sm space-y-4 bg-gray-700">
+          className="relative p-6 border border-gray-200 rounded-lg shadow-sm space-y-4 bg-white/10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-white mb-1">

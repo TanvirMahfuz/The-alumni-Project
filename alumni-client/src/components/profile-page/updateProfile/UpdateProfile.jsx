@@ -16,7 +16,6 @@ import Education from "./form/Education";
 function UpdateProfile() {
   const navigate = useNavigate();
   const { authUser,updateUser,isUpdating } = useUserStore();
-  console.log(isUpdating)
   const [formData, setFormData] = React.useState({});
   React.useEffect(() => {
     if (authUser) {

@@ -115,10 +115,10 @@ function FileUploads({ formData, setFormData }) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 mt-6">
       {" "}
       {/* Increased space-y for better separation */}
-      <h3 className="text-xl font-semibold text-gray-800">File Uploads</h3>{" "}
+      <h3 className="text-2xl font-semibold text-gray-600">File Uploads</h3>{" "}
       {/* Added a heading */}
       <label
         htmlFor="resume-upload"
@@ -129,8 +129,8 @@ function FileUploads({ formData, setFormData }) {
         className={`border-2 border-dashed rounded-lg p-6 text-center transition-all duration-200 ease-in-out
           ${
             isDragging
-              ? "border-blue-500 bg-blue-50"
-              : "border-gray-300 hover:border-blue-300" // Subtle hover effect
+              ? "border-teal-500 bg-blue-50"
+              : "border-gray-300 hover:border-teal-300" // Subtle hover effect
           }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -138,7 +138,7 @@ function FileUploads({ formData, setFormData }) {
         <div className="flex flex-col items-center justify-center space-y-3">
           <svg
             className={`w-12 h-12 transition-colors duration-200 ${
-              isDragging ? "text-blue-500" : "text-gray-400"
+              isDragging ? "text-teal-500" : "text-gray-400"
             }`}
             fill="none"
             stroke="currentColor"
@@ -154,7 +154,7 @@ function FileUploads({ formData, setFormData }) {
 
           <div className="flex flex-col items-center">
             <p className="text-sm text-gray-600">
-              <span className="font-medium text-blue-600 hover:text-blue-700 cursor-pointer">
+              <span className="font-medium text-teal-600 hover:text-teal-700 cursor-pointer">
                 Click to upload
               </span>{" "}
               or drag and drop
@@ -171,9 +171,9 @@ function FileUploads({ formData, setFormData }) {
           />
           <label
             htmlFor="resume-upload"
-            className="mt-3 px-6 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-sm
-                       hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2
-                       focus:ring-blue-500 cursor-pointer transition duration-200 ease-in-out">
+            className="mt-3 px-6 py-2 bg-teal-600 text-white font-semibold rounded-md shadow-sm
+                       hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2
+                       focus:ring-teal-500 cursor-pointer transition duration-200 ease-in-out">
             Browse Files
           </label>
         </div>

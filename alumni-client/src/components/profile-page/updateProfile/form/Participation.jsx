@@ -56,48 +56,52 @@ function Participation({ formData, setFormData }) {
   };
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-xl font-semibold">Participated In</h3>
+    <div className="space-y-6 mt-6">
+      <h3 className="text-2xl font-semibold text-gray-600">Participated In</h3>
 
       {participations.length > 0 ? (
         participations.map((participation, index) => (
           <div
             key={index}
-            className="relative p-4 border border-gray-300 rounded-lg space-y-3">
-            <div className="flex flex-col space-y-1">
-              <label className="text-sm font-medium text-gray-700">Title</label>
+            className="relative p-5 border border-teal-600 rounded-lg bg-white/10 space-y-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-500">
+                Title
+              </label>
               <input
                 type="text"
-                className="border-b border-gray-300 p-2 focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
                 value={participation.title}
                 onChange={(e) =>
                   handleParticipationChange(index, "title", e.target.value)
                 }
+                placeholder="Enter title"
               />
             </div>
 
-            <div className="flex flex-col space-y-1">
-              <label className="text-sm font-medium text-gray-700">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-500">
                 Institute
               </label>
               <input
                 type="text"
-                className="border-b border-gray-300 p-2 focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
                 value={participation.institute}
                 onChange={(e) =>
                   handleParticipationChange(index, "institute", e.target.value)
                 }
+                placeholder="Enter institute name"
               />
             </div>
 
-            <div className="flex gap-3">
-              <div className="flex-1 flex flex-col space-y-1">
-                <label className="text-sm font-medium text-gray-700">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-500">
                   Start Date
                 </label>
                 <input
                   type="date"
-                  className="border-b border-gray-300 p-2 focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                   value={participation.startDate}
                   onChange={(e) =>
                     handleParticipationChange(
@@ -108,13 +112,13 @@ function Participation({ formData, setFormData }) {
                   }
                 />
               </div>
-              <div className="flex-1 flex flex-col space-y-1">
-                <label className="text-sm font-medium text-gray-700">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-500">
                   End Date
                 </label>
                 <input
                   type="date"
-                  className="border-b border-gray-300 p-2 focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                   value={participation.endDate}
                   onChange={(e) =>
                     handleParticipationChange(index, "endDate", e.target.value)
@@ -124,8 +128,9 @@ function Participation({ formData, setFormData }) {
             </div>
 
             <button
-              className="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-xl font-bold"
-              onClick={() => removeParticipation(index)}>
+              className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold transition-all"
+              onClick={() => removeParticipation(index)}
+              aria-label="Remove participation">
               ×
             </button>
           </div>
@@ -136,11 +141,12 @@ function Participation({ formData, setFormData }) {
 
       <button
         onClick={addNewParticipation}
-        className="px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-800 transition-colors">
+        className="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-gray-800 transition-colors duration-200">
         + Add Participation
       </button>
     </div>
   );
+  
 }
 
 export default Participation;

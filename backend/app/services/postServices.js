@@ -41,11 +41,12 @@ export const getOnePost = async (id) => {
     return null;
   }
 };
-export const getMultiplePosts = async (data) => {
+export const getMultiplePosts = async (data,user) => {
   try {
     let allPosts = [];
     for (let i = 0; i < data.length; i++) {
       const post = await Post.findById(data[i]);
+      post.author = user
       allPosts.push(post);
     }
     return allPosts;

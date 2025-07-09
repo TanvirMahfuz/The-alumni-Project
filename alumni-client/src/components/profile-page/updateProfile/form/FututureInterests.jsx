@@ -39,44 +39,43 @@ function FutureInterests({ formData, setFormData }) {
   };
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-xl font-semibold">Future Interests</h3>
+    <div className="space-y-6 mt-6">
+      <h3 className="text-2xl font-semibold text-gray-600">Future Interests</h3>
 
       {formData.futureInterests?.length > 0 ? (
-        <>
-          <div className="flex flex-wrap items-center gap-4">
-            {formData.futureInterests.map((interest, index) => (
-              <div key={index} className="relative group">
-                <div className="flex items-center">
-                  <input
-                    type="text"
-                    className="w-40 px-3 py-2 border-b border-gray-300 focus:outline-none focus:border-gray-900"
-                    placeholder="Interest"
-                    value={interest}
-                    onChange={(e) =>
-                      handleInterestChange(index, e.target.value)
-                    }
-                  />
-                  <button
-                    onClick={() => removeInterest(index)}
-                    className="p-1 text-gray-500 hover:text-red-500 transition-colors">
-                    ×
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
+        <div className="flex flex-wrap items-center gap-4">
+          {formData.futureInterests.map((interest, index) => (
+            <div
+              key={index}
+              className="relative flex items-center space-x-2 p-3 border border-teal-600 rounded-md bg-white/10">
+              <input
+                type="text"
+                className="w-40 px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
+                placeholder="Interest"
+                value={interest}
+                onChange={(e) => handleInterestChange(index, e.target.value)}
+              />
+              <button
+                onClick={() => removeInterest(index)}
+                className="text-gray-400 hover:text-red-500 text-xl font-bold transition-colors"
+                aria-label="Remove interest">
+                ×
+              </button>
+            </div>
+          ))}
+        </div>
       ) : (
         <p className="text-gray-500">None</p>
       )}
+
       <button
         onClick={addNewInterest}
-        className="px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-800 transition-colors">
+        className="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-gray-800 transition-colors duration-200">
         + Add Interest
       </button>
     </div>
   );
+  
 }
 
 export default FutureInterests;

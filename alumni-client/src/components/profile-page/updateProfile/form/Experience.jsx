@@ -55,7 +55,7 @@ function Experience({ formData, setFormData }) {
 
   return (
     <div className="space-y-6">
-      <h3 className="text-2xl font-bold text-white">Work Experience</h3>
+      <h3 className="text-2xl font-semibold text-gray-600">Work Experience</h3>
 
       {formData.jobExperience?.map((item, index) => (
         <div
@@ -143,7 +143,7 @@ function Experience({ formData, setFormData }) {
 
       <button
         onClick={addNewExperience}
-        className="px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-800 transition-colors">
+        className="px-4 py-2 bg-teal-600 text-white rounded hover:bg-gray-800 transition-colors">
         + Add Experience
       </button>
     </div>

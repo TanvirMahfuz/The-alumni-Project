@@ -3,6 +3,8 @@ import PostBody from "./PostBody";
 import PostFooter from "./PostFooter";
 import PostHeader from "./PostHeader";
 function Posts({ post }) {
+  console.log(post);
+  console.log(post.author);
   return (
     <div className="mt-6 bg-white my-4 p-4 rounded-2xl">
       <PostHeader author={post.author} createdAt={post.createdAt} />

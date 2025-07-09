@@ -92,7 +92,7 @@ const ProfileBrief = () => {
       )}
 
       {/* Skills Section */}
-      <div className="mt-8 text-left">
+      {/* <div className="mt-8 text-left">
         <h3 className="text-lg font-semibold text-gray-600 mb-2">Skills</h3>
         <div className="flex flex-wrap gap-3">
           {authUser?.skills && authUser.skills.length > 0 ? (
@@ -119,7 +119,7 @@ const ProfileBrief = () => {
             <p className="text-sm text-gray-400">No skills added.</p>
           )}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

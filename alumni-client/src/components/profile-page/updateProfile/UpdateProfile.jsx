@@ -39,10 +39,9 @@ function UpdateProfile() {
   };
   return (
     <div className="w-full flex bg-white text-black justify-center items-center">
-      <div className="w-full md:w-3/4 p-6 bg-white text-black rounded-lg shadow-lg space-y-6">
+      <div className="w-full  p-6 bg-white text-black rounded-lg space-y-6">
         <h2 className="text-2xl text-white font-bold mb-4">Update Profile</h2>
         <Contacts {...{ formData, setFormData }} />
-
         <Introduction {...{ formData, setFormData }} />
         <Education {...{ formData, setFormData }} />
         <Experience {...{ formData, setFormData }} />
@@ -61,11 +60,12 @@ function UpdateProfile() {
         <FileUploads {...{ formData, setFormData }} />
 
         <div>
-          {isUpdating ? "Updating..." : (
+          {isUpdating ? (
+            "Updating..."
+          ) : (
             <button
               onClick={handleSubmit}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
+              className="flex items-center space-x-1 text-white  px-3 py-1 rounded-md bg-teal-600 hover:bg-teal-500 cursor-pointer transition">
               Update Profile
             </button>
           )}

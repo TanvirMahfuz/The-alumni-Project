@@ -68,11 +68,27 @@ export const validateUserUpdate = (id, body) => {
 
     // Handle array fields
     if (Array.isArray(body[key])) {
-      const cleanArray = body[key]
+      const arrayValue = body[key];
+    
+      if (
+        arrayValue.every(
+          (item) =>
+            typeof item !== "object" &&
+            item !== "" &&
+            item !== undefined &&
+            item !== null
+        )
+      ) {
+        // It's an array of primitives (e.g., strings)
+        cleanBody[key] = arrayValue;
+        continue;
+      }
+    
+      // Existing object-cleaning logic
+      const cleanArray = arrayValue
         .filter((item) => {
           if (!item || typeof item !== "object") return false;
-
-          // Special handling for currentlyWorkingIn/haveWorkedIn
+    
           if (key === "currentlyWorkingIn" || key === "haveWorkedIn") {
             return !(
               (item.title === "none" || item.title === "") &&
@@ -80,14 +96,12 @@ export const validateUserUpdate = (id, body) => {
               item.description === ""
             );
           }
-
-          // Filter empty objects from arrays
+    
           return !Object.values(item).every(
             (val) => val === "" || val === undefined || val === null
           );
         })
         .map((item) => {
-          // Clean each item in array
           const cleanItem = {};
           for (const itemKey in item) {
             if (item[itemKey] !== "" && item[itemKey] !== undefined) {
@@ -96,9 +110,10 @@ export const validateUserUpdate = (id, body) => {
           }
           return cleanItem;
         });
-
+    
       if (cleanArray.length > 0) cleanBody[key] = cleanArray;
     }
+    
   }
 
   // Special validation for email format if email is being updated

@@ -18,58 +18,35 @@ function Contacts({ formData, setFormData }) {
 
   return (
     <>
-      <h3 className="text-2xl font-bold text-white">Contacts</h3>
-      <div className="contact-fields">
-        <label>
-          GitHub:
-          <input
-            type="text"
-            name="github"
-            value={contacts.github}
-            onChange={handleChange}
-            placeholder={contacts.github}
-            className="border-b border-gray-500 p-2 text-white focus:outline-none focus:border-gray-300 transition-colors duration-200"
-          />
-        </label>
-
-        <label>
-          LinkedIn:
-          <input
-            type="text"
-            name="linkedin"
-            value={contacts.linkedin}
-            onChange={handleChange}
-            placeholder={contacts.linkedin}
-            className="border-b border-gray-500 p-2 text-white focus:outline-none focus:border-gray-300 transition-colors duration-200"
-          />
-        </label>
-
-        <label>
-          Facebook:
-          <input
-            type="text"
-            name="facebook"
-            value={contacts.facebook}
-            onChange={handleChange}
-            placeholder={contacts.facebook}
-            className="border-b border-gray-500 p-2 text-white focus:outline-none focus:border-gray-300 transition-colors duration-200"
-          />
-        </label>
-
-        <label>
-          Portfolio:
-          <input
-            type="text"
-            name="portfolio"
-            value={contacts.portfolio}
-            onChange={handleChange}
-            placeholder={contacts.portfolio}
-            className="border-b border-gray-500 p-2 text-white focus:outline-none focus:border-gray-300 transition-colors duration-200"
-          />
-        </label>
+      <h3 className="text-2xl font-bold text-gray-600 mb-6">Contact Links</h3>
+      <div className="grid gap-6 md:grid-cols-2">
+        {[
+          { label: "GitHub", name: "github", value: contacts.github },
+          { label: "LinkedIn", name: "linkedin", value: contacts.linkedin },
+          { label: "Facebook", name: "facebook", value: contacts.facebook },
+          { label: "Portfolio", name: "portfolio", value: contacts.portfolio },
+        ].map(({ label, name, value }) => (
+          <div key={name} className="flex flex-col">
+            <label
+              htmlFor={name}
+              className="text-gray-500 mb-1 text-sm font-medium">
+              {label}
+            </label>
+            <input
+              type="text"
+              id={name}
+              name={name}
+              value={value}
+              onChange={handleChange}
+              placeholder={`Enter your ${label.toLowerCase()}`}
+              className="bg-white/10 text-gray-600 border border-teal-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-200 placeholder-gray-400"
+            />
+          </div>
+        ))}
       </div>
     </>
   );
+  
 }
 
 export default Contacts;

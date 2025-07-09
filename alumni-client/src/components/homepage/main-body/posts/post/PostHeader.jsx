@@ -1,6 +1,7 @@
 import React from "react";
 import { formatSmartDateTime } from "../../../../../bin/DateTime.js";
 function PostHeader({ author, createdAt }) {
+  console.log(author)
   return (
     <div className="flex justify-start gap-4 items-center ">
       <div className="rounded-full h-13 w-13">

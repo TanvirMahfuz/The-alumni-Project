@@ -46,7 +46,10 @@ export const updateUser = async (req, res) => {
   if (!params) {
     return res.status(400).json({ message: "Invalid request" });
   }
-  if (body.image.length > 0) {
+  if (
+    body.image.length > 0 &&
+    !body.image.startsWith("https://res.cloudinary.com/dtpuispy4/")
+  ) {
     console.log("Uploading image to cloudinary");
     const uploadResult = await uploadFileToCloudinary(body.image[0], id);
     if (!uploadResult) {
@@ -55,7 +58,13 @@ export const updateUser = async (req, res) => {
     params.image = uploadResult.secure_url;
     console.log("Image uploaded successfully", uploadResult.secure_url);
   }
-  if(body.resume){
+  console.log(body);
+  console.log("image check passes successfully");
+  if (
+    body.resume &&
+    body.resume.base64 &&
+    !body.resume.base64.startsWith("https://res.cloudinary.com/dtpuispy4/")
+  ) {
     console.log("Uploading resume to cloudinary");
     const uploadResult = await uploadFileToCloudinary(body.resume.base64, id);
     if (!uploadResult) {
@@ -75,14 +84,17 @@ export const updateUser = async (req, res) => {
 };
 export const userPosts = async (req,res)=>{
   try {
+    console.log("Inside userPosts");
         const id = req.params.id;
-        const user = await userServices.findOneUserById(id);
+        console.log(id);
+        const user = await userServices.findOneUserById(id)
         if (!user) {
           return res.status(404).json({ message: "User not found" });
         };
-
-        const posts = await getMultiplePosts(user.posts);
-
+        const posts = await getMultiplePosts(user.posts,user);
+        if (!posts) {
+          return res.status(404).json({ message: "Posts not found" });
+        }
         return res
           .status(200)
           .json({

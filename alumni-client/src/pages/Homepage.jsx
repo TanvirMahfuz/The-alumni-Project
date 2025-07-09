@@ -5,6 +5,7 @@ import Mainbody from "../components/homepage/Mainbody";
 import Alumni from "../components/homepage/alumni/AlumniList.jsx";
 import Recruitment from "../components/homepage/recruitment/Recruitment.jsx";
 import Faculty from "../components/homepage/faculty/Faculty.jsx";
+
 import {
   documentIcon,
   eventIcon,
@@ -30,7 +31,8 @@ function Homepage() {
         <Sidebar {...{ menuItems, selectedTag, setSelectedTag }} />
       </div>
       <div className=" col-span-1 lg:col-span-8 xl:col-span-9">
-        {selectedTag === 0 && <Mainbody />}
+        {selectedTag === 0 && < Mainbody />}
+
         {selectedTag === 1 && <Alumni />}
         {selectedTag === 2 && <Events />}
         {selectedTag === 3 && <Recruitment />}

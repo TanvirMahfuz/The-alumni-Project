@@ -44,63 +44,65 @@ function Education({ formData, setFormData }) {
   };
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-xl font-semibold">Education</h3>
+    <div className="space-y-6 mt-6">
+      <h3 className="text-2xl font-semibold text-gray-600">Education</h3>
 
       {formData.education?.length > 0 ? (
         formData.education.map((item, index) => (
           <div
             key={index}
-            className="relative p-4 border border-gray-300 rounded-lg space-y-4">
-            <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-700">
+            className="relative p-5 border border-teal-600 rounded-lg space-y-4 bg-white/10">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-500">
                 Institute
               </label>
               <input
                 type="text"
-                className="w-full p-2 border-b border-gray-300 focus:border-blue-500 focus:outline-none"
+                className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
                 value={item.institute}
                 onChange={(e) =>
                   handleEducationChange(index, "institute", e.target.value)
                 }
+                placeholder="Enter institute name"
               />
             </div>
 
-            <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-700">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-500">
                 Degree
               </label>
               <input
                 type="text"
-                className="w-full p-2 border-b border-gray-300 focus:border-blue-500 focus:outline-none"
+                className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
                 value={item.degree}
                 onChange={(e) =>
                   handleEducationChange(index, "degree", e.target.value)
                 }
+                placeholder="Enter degree name"
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <label className="block text-sm font-medium text-gray-700">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-500">
                   Start Date
                 </label>
                 <input
                   type="date"
-                  className="w-full p-2 border-b border-gray-300 focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                   value={item.startDate}
                   onChange={(e) =>
                     handleEducationChange(index, "startDate", e.target.value)
                   }
                 />
               </div>
-              <div className="space-y-1">
-                <label className="block text-sm font-medium text-gray-700">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-500">
                   End Date
                 </label>
                 <input
                   type="date"
-                  className="w-full p-2 border-b border-gray-300 focus:border-blue-500 focus:outline-none"
+                  className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                   value={item.endDate}
                   onChange={(e) =>
                     handleEducationChange(index, "endDate", e.target.value)
@@ -110,8 +112,9 @@ function Education({ formData, setFormData }) {
             </div>
 
             <button
-              className="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-xl font-bold"
-              onClick={() => removeEducation(index)}>
+              className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold transition-colors"
+              onClick={() => removeEducation(index)}
+              aria-label="Remove education entry">
               ×
             </button>
           </div>
@@ -122,11 +125,12 @@ function Education({ formData, setFormData }) {
 
       <button
         onClick={addNewEducation}
-        className="px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors">
+        className="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-gray-800 transition-colors duration-200">
         + Add Education
       </button>
     </div>
   );
+  
 }
 
 export default Education;

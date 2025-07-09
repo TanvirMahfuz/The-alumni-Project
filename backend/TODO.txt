@@ -1,5 +1,1 @@
-create auth router 
-remove multer
-re evaluate utility classes 
-optimize service-controller relationship
-try and separate route functionalities for microservice usage
+deployed on: https://the-alumni-project-vrtg.vercel.app/

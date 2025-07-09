@@ -55,35 +55,36 @@ function Projects({formData, setFormData}) {
   };
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-xl font-semibold">Projects</h3>
+    <div className="space-y-6 mt-6">
+      <h3 className="text-2xl font-semibold text-gray-600">Projects</h3>
 
       {projects.length > 0 ? (
         projects.map((project, index) => (
           <div
             key={index}
-            className="relative p-4 border border-gray-300 rounded-lg space-y-3">
-            <div className="flex flex-col space-y-1">
-              <label className="text-sm font-medium text-gray-700">
+            className="relative p-5 border border-teal-600 rounded-lg bg-white/10 space-y-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-500">
                 Project Name
               </label>
               <input
                 type="text"
-                className="border-b border-gray-300 p-2 focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
                 value={project.projectName}
                 onChange={(e) =>
                   handleProjectChange(index, "projectName", e.target.value)
                 }
+                placeholder="Enter project name"
               />
             </div>
 
-            <div className="flex flex-col space-y-1">
-              <label className="text-sm font-medium text-gray-700">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-500">
                 Project Description
               </label>
               <textarea
                 rows={3}
-                className="border-b border-gray-300 p-2 focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
                 value={project.projectDescription}
                 onChange={(e) =>
                   handleProjectChange(
@@ -92,16 +93,17 @@ function Projects({formData, setFormData}) {
                     e.target.value
                   )
                 }
+                placeholder="Write a short description"
               />
             </div>
 
-            <div className="flex flex-col space-y-1">
-              <label className="text-sm font-medium text-gray-700">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-500">
                 Project Link
               </label>
               <input
                 type="url"
-                className="border-b border-gray-300 p-2 focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
                 value={project.projectLink}
                 onChange={(e) =>
                   handleProjectChange(index, "projectLink", e.target.value)
@@ -111,8 +113,9 @@ function Projects({formData, setFormData}) {
             </div>
 
             <button
-              className="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-xl font-bold"
-              onClick={() => removeProject(index)}>
+              className="absolute top-3 right-3 text-gray-400 hover:text-red-500 text-2xl font-bold transition-all"
+              onClick={() => removeProject(index)}
+              aria-label="Remove project">
               ×
             </button>
           </div>
@@ -123,11 +126,12 @@ function Projects({formData, setFormData}) {
 
       <button
         onClick={addNewProject}
-        className="px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-800 transition-colors">
+        className="px-4 py-2 bg-teal-600 text-white rounded-md hover:bg-gray-800 transition-colors duration-200">
         + Add Project
       </button>
     </div>
   );
+  
 }
 
 export default Projects;

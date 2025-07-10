@@ -134,8 +134,7 @@ const userSchema = new mongoose.Schema(
       {
         title: {
           type: String,
-          default: "none",
-          unique: true,
+          default: "",
         },
         techStack: {
           type: String,

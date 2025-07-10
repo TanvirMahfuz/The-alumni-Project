@@ -20,7 +20,13 @@ import uploadFileToCloudinary from "../../utility/cloudinary64.js";
 export const createEvent = async (req,res) => {
   try {
     const eventData = req.body;
-    console.log("Event data received:", eventData);
+    if(!req.user){
+      return res.status(401).json({
+        success: false,
+        message: "User not logged in",
+        
+      });
+    }
     const requiredFields = [
       "title",
       "date",

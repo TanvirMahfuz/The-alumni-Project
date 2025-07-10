@@ -132,6 +132,8 @@ export const useUserStore = create((set, get) => ({
   },
 
   logIn: async (email, password) => {
+    set({ isUpdating: true });
+
     try {
       const res = await fetch(`${API_BASE_URL}/auth/log-in`, {
         method: "POST",
@@ -147,10 +149,11 @@ export const useUserStore = create((set, get) => ({
 
       get().setUser(data.user);
       get().connectSocket();
-
+      set({ isUpdating: false })
       return true;
     } catch (err) {
       console.error("Login error:", err.message);
+      set({ isUpdating: false });
       return false;
     }
   },

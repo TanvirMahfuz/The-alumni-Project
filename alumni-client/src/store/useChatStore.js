@@ -11,11 +11,14 @@ export const useChatStore = create((set, get) => ({
   selectedChatUser: null,
   messages: [],
   isMessageLoading: false,
+  isInitialLoading: false,
 
   setSelectedChatUser: (user) => set({ selectedChatUser: user }),
   setMessages: (messages) => set({ messages }),
+  clearMessages: () => set({ messages: [] }),
 
   getMessages: async () => {
+    set({ isInitialLoading: true });
     if (!get().selectedChatUser) {
       console.warn("No selectedChatUser._id provided to getMessages");
       return;
@@ -32,8 +35,12 @@ export const useChatStore = create((set, get) => ({
 
       const data = await response.json();
       set({ messages: data });
+      set({ isInitialLoading: false });
+      return
     } catch (error) {
       console.error("Error fetching messages:", error);
+      set({ isInitialLoading: false });
+      return;
     }
   },
 

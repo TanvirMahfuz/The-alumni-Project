@@ -48,14 +48,15 @@ const Modal = ({ isOpen, onClose, children }) => {
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-50 flex justify-center items-center bg-white/90 backdrop-blur-sm "
+      className="fixed inset-0 z-50 flex justify-center items-center 
+      bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm transition-colors duration-300"
       onMouseDown={handleOverlayMouseDown}
       onMouseUp={handleOverlayMouseUp}
       style={{ pointerEvents: isOpen ? "auto" : "none" }} // Ensure overlay is clickable only when open
     >
       <div
         ref={modalRef}
-        className="bg-white dark:bg-gray-800  rounded-xl w-full max-w-xl shadow-xl outline-none overflow-auto"
+        className="bg-white dark:bg-gray-800  rounded-xl w-full max-w-2xl min-h-48 shadow-xl outline-none overflow-auto"
         tabIndex={-1}
         // Prevent focus from interfering with click detection
         onMouseDown={(e) => e.stopPropagation()}>

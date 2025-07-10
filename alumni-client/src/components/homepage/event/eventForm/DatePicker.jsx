@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 const DatePicker = ({
-  label = "Select Date",
+  label = "Date",
   value,
   onChange,
   minDate,
@@ -13,15 +13,17 @@ const DatePicker = ({
   const [focused, setFocused] = useState(false);
   const inputRef = useRef(null);
 
-  // Keep input in sync with parent value
-  useEffect(() => {
-    if (inputRef.current && value) {
-      inputRef.current.value = new Date(value).toISOString().split("T")[0];
-    }
-  }, [value]);
+  // Convert ISO string to YYYY-MM-DD
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    if (isNaN(date)) return "";
+    return date.toISOString().split("T")[0];
+  };
 
-  const handleChange = () => {
-    const selectedDate = inputRef.current.value;
+  // Handle changes from input
+  const handleChange = (e) => {
+    const selectedDate = e.target.value;
     if (selectedDate) {
       const isoDate = new Date(`${selectedDate}T00:00:00.000Z`).toISOString();
       onChange?.(isoDate);
@@ -33,35 +35,30 @@ const DatePicker = ({
   return (
     <div className={`mb-4 ${className}`}>
       <label
-        className={`block text-sm font-medium mb-1 ${
-          error ? "text-red-600" : "text-gray-700"
-        }`}>
+        htmlFor="date"
+        className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-1">
         {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
       </label>
-
       <input
         ref={inputRef}
+        id="date"
+        name="date"
         type="date"
+        value={formatDate(value)}
         onChange={handleChange}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        min={
-          minDate ? new Date(minDate).toISOString().split("T")[0] : undefined
-        }
-        max={
-          maxDate ? new Date(maxDate).toISOString().split("T")[0] : undefined
-        }
+        min={minDate ? formatDate(minDate) : undefined}
+        max={maxDate ? formatDate(maxDate) : undefined}
         required={required}
-        className={`w-full px-3 py-2 rounded-md border focus:outline-none sm:text-sm ${
+        className={`w-full px-3 py-2 rounded-md border bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition ${
           error
-            ? "border-red-500 text-red-900"
+            ? "border-red-500 ring-red-400"
             : focused
             ? "border-blue-500"
-            : "border-gray-300"
+            : "border-gray-300 dark:border-gray-600"
         }`}
       />
-
       {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
     </div>
   );

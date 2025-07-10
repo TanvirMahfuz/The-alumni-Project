@@ -6,7 +6,7 @@ import Tabs from "../components/profile-page/Tabs";
 function Profilepage() {
 
   return (
-    <div className="w-full md:flex bg-white">
+    <div className="w-full md:flex ">
       {/* <Profile/> */}
       <ProDem />
 
@@ -16,7 +16,6 @@ function Profilepage() {
       <div className="w-full md:w-3/5 ">
         <Tabs/>
       </div> */}
-    
     </div>
   );
 }

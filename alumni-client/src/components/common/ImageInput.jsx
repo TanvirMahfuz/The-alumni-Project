@@ -8,7 +8,7 @@ function ImageInput({
   multiple = false,
 }) {
   return (
-    <div className="hover:bg-gray-600 p-1 rounded-lg">
+    <div className="bg-gray-300 hover:bg-[#2992FE] p-1 rounded-lg">
       <label htmlFor={id} className="cursor-pointer">
         {photoIcon}
       </label>

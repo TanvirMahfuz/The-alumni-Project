@@ -15,7 +15,7 @@ function Toggle({ isChecked, setIsChecked }) {
         checked={isChecked}
         onChange={handleToggle}
       />
-      <span className="me-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+      <span className="me-3 text-sm font-medium text-gray-700 ">
         {isChecked ? "online" : "all"}
       </span>
       <div

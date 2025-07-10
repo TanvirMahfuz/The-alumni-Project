@@ -20,7 +20,7 @@ function Sidebar() {
       <Searchbox />
 
       <div className="flex justify-between items-center px-4 transition-all ease-in-out duration-300">
-        <h1 className="text-black text-xl font-bold p-2">Users</h1>
+        <h1 className="text-gray-700 text-xl font-bold p-2">Users</h1>
         <Toggle {...{ isChecked, setIsChecked }} />
       </div>
 

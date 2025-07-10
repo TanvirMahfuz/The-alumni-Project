@@ -5,10 +5,10 @@ function Searchbox() {
     <div className="flex justify-end items-center space-x-2 p-4">
       <input
         type="text"
-        className="w-full bg-[#f0efef] dark:bg-gray-800 text-gray-500 dark:text-white rounded-full p-2 px-5"
+        className="w-full bg-[#f0efef] text-gray-500 rounded-full p-2 px-5"
         placeholder="Search users"
       />
-      <button className="bg-gray-200 dark:bg-gray-600 p-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-700">
+      <button className="bg-gray-200  p-2 rounded-full hover:bg-gray-300 ">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

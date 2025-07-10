@@ -7,7 +7,7 @@ function TextDropdown() {
         id="dropdownMenuIconButton"
         data-dropdown-toggle="dropdownDots"
         data-dropdown-placement="bottom-start"
-        className="inline-flex self-center items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-800 dark:focus:ring-gray-600"
+        className="inline-flex self-center items-center p-2 text-sm font-medium text-center text-gray-900 rounded-full hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-[#2993fe7d]  "
         type="button">
         <svg
           className="w-4 h-4 text-gray-500 dark:text-gray-400"

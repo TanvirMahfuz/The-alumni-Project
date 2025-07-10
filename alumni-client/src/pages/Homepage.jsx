@@ -26,7 +26,7 @@ function Homepage() {
   const [selectedTag, setSelectedTag] = React.useState(0);
 
   return (
-    <div className="h-screen w-screen grid grid-cols-1 lg:grid-cols-12 bg-[#f3f2f1]">
+    <div className="h-screen w-screen grid grid-cols-1 lg:grid-cols-12 ">
       <div className="hidden ps-3 lg:col-span-4 xl:col-span-3 lg:block ">
         <Sidebar {...{ menuItems, selectedTag, setSelectedTag }} />
       </div>

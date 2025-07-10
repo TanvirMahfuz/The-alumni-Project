@@ -1,5 +1,4 @@
-import React from 'react'
-import { formatSmartDateTime } from '../../../../bin/DateTime';
+import { useUserStore } from "../../../../store/useUserStore.js";
 import Contacts from "./Contacts";
 import {
   BuildingOfficeIcon,
@@ -9,9 +8,19 @@ import {
 import AvatarSection from "./AvatarSection.jsx";
 
 const ProfileBrief = ({user}) => {
+  const { authUser } = useUserStore();
   return (
     <div className="w-full pt-6 lg:w-2/5 bg-gray-50 px-6 py-3 pl-10 rounded-lg text-center shadow-sm">
-      <AvatarSection/>
+      {authUser && authUser._id === user._id ? (
+        <AvatarSection />
+      ) : (
+        <img
+          src={user?.image ?? "./avatar.png"}
+          alt="Profile"
+          className="rounded-full w-40 h-40 mx-auto object-cover cursor-pointer transition duration-300 border-4 border-teal-600 shadow-lg"
+        />
+      )}
+
       <h2 className="mt-4 text-2xl font-semibold text-gray-800">
         {user?.name ?? "John Doe"}
       </h2>

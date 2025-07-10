@@ -7,6 +7,7 @@ import Header from "./profile-card/Header";
 import Button from "./profile-card/Button";
 
 function ProfileCard({ user }) {
+  // console.log(user);
   return (
     <div
       className=" max-h-max min-w-96 flex flex-col items-center gap-4 rounded-2xl bg-white
@@ -15,7 +16,7 @@ function ProfileCard({ user }) {
       <Contacts item={user.contacts} />
       <JobBadge item={user.currentPost[0]} />
       <WorkBadge item={user.currentlyWorkingIn[0]} />
-      <Button />
+      <Button id={user._id} />
     </div>
   );
 }

@@ -1,18 +1,10 @@
 import React from "react";
-
-function Button() {
+import { Link } from "react-router-dom";
+function Button({id}) {
   return (
-    <button
-      className="w-11/12 mx-auto bg-gradient-to-r opacity-70 from-sky-500 to-blue-600 hover:opacity-100
-                 rounded-full py-0.5 text-md font-[300] text-white shadow-lg
-                 transition-all duration-300 transform hover:translate-y-[-2px]
-                 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-75
-                 flex items-center justify-center
-                 bg-size-200 bg-pos-0
-                 hover:bg-pos-100 cursor-pointer
-                 border border-transparent hover:border-purple-400/50">
-      <span className="whitespace-nowrap">View Profile</span>
-    </button>
+    <div className="w-full text-center  bg-sky-500 text-white font-medium py-2 rounded-2xl hover:bg-sky-600">
+      <Link to={`/profile/${id}`}>View Profile</Link>
+    </div>
   );
 }
 

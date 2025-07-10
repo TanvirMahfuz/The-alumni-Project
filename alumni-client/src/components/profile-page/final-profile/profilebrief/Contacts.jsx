@@ -1,16 +1,11 @@
 
-import {
-  facebookIcon,
-  githubIcon,
-  linkedInIcon,
-  globeIcon,
-} from "../../../../assets/icons.jsx";
+import { FaGithub, FaFacebook, FaLinkedin, FaGlobe } from "react-icons/fa";
 
 const icons = {
-  facebook: facebookIcon,
-  github: githubIcon,
-  linkedin: linkedInIcon,
-  portfolio: globeIcon,
+  facebook: FaFacebook,
+  github: FaGithub,
+  linkedin: FaLinkedin,
+  portfolio: FaGlobe,
 };
 
 export default function Contacts({ contacts }) {
@@ -29,7 +24,7 @@ export default function Contacts({ contacts }) {
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center text-gray-700 hover:text-gray-800">
-              <span className="w-6 h-6">{Icon}</span>
+              <Icon className="mr-2 text-xl" />
               <span className="font-medium capitalize">{key}</span>
             </a>
           );

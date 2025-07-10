@@ -12,9 +12,9 @@ export const useProfileStore = create((set) => ({
   isLoading: false,
   setProfile: (profile) => set({ profile }),
 
-  getProfile: async () => {
+  getProfile: async (id) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/user/profile`, {
+      const res = await fetch(`${API_BASE_URL}/user/info/${id}`, {
         credentials: "include",
       });
       const data = await res.json();

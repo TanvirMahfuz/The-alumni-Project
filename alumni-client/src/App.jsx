@@ -26,7 +26,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={!authUser?<LogIn />:<Link to="/"></Link>} />
           <Route path="/chat" element={<Chatpage />} />
-          <Route path="/profile" element={<Profilepage />} />
+          <Route path="/profile/:id" element={<Profilepage />} />
         </Routes>
       </BrowserRouter>
     </>

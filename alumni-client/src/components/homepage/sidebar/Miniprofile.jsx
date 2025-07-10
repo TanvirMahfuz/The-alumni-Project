@@ -18,7 +18,7 @@ function Miniprofile() {
 
 
       <div className="pt-28 px-6 text-sm text-gray-700 space-y-2">
-        <Link to="/profile">
+        <Link to={`/profile/${authUser?._id}`}>
           <p className="text-left text-2xl mb-2 font-semibold">
             {authUser?.name ?? "Full Name"}
           </p>
@@ -46,7 +46,7 @@ function Miniprofile() {
         {/* <!-- View Profile Button --> */}
         <div className="mt-6 mb-6">
           <Link
-            to="/profile"
+            to={`/profile/${authUser?._id}`}
             className="block text-center bg-sky-500 text-white font-medium py-2.5 rounded-2xl hover:bg-sky-600 transition">
             View Profile
           </Link>

@@ -1,7 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { formatSmartDateTime } from "../../../../../bin/DateTime.js";
 function PostHeader({ author, createdAt }) {
-  console.log(author)
   return (
     <div className="flex justify-start gap-4 items-center ">
       <div className="rounded-full h-13 w-13">
@@ -12,9 +12,9 @@ function PostHeader({ author, createdAt }) {
         />
       </div>
       <div>
-        <p className="text-[17px] font-[500] text-black hover:underline cursor-pointer">
+        <Link to={`/profile/${author?._id}`} className="text-[17px] font-[500] text-black hover:underline cursor-pointer">
           {author?.name ?? "Full Name"}
-        </p>
+        </Link>
         <p className="text-[13px] font-normal text-gray-400">
           {createdAt ? formatSmartDateTime(createdAt) : "time"}
         </p>

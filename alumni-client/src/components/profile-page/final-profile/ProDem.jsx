@@ -1,15 +1,36 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import { useUserStore } from "../../../store/useUserStore.js";
+import { useProfileStore } from "../../../store/useProfileStore.js";
+
 import PhotoGallery from "./PhotoGallery";
 // import Profile from "./Profile";
 import ProfileBrief from "./profilebrief/ProfileBrief.jsx";
 import EditProfileButton from "./EditProfileButton";
-import { useUserStore } from "../../../store/useUserStore.js";
 import TimelineSection from "./TimelineSection.jsx";
 import UpdateProfile from "../updateProfile/UpdateProfile.jsx";
 import UserPosts from "./UserPosts.jsx";
-export default function ProDem({ isAuthUser = true }) {
+
+export default function ProDem({ uid }) {
+  if (!uid || uid === "undefined") {
+    return (
+      <div className="w-full h-screen text-lg flex justify-center items-center text-gray-700">
+        You don't have an account.
+      </div>
+    );
+  }
+  
   const [activeTab, setActiveTab] = useState("profile");
   const { authUser } = useUserStore();
+  const { profile, getProfile } = useProfileStore();
+
+  const isAuthUser = authUser?.["_id"] === uid;
+
+useEffect(() => {
+    if (!isAuthUser && uid) {
+      getProfile(uid); 
+    }
+  }, [isAuthUser, uid]);
+
 
   const user = {
         name: "Alice Johnson",
@@ -50,7 +71,7 @@ export default function ProDem({ isAuthUser = true }) {
   return (
     <div className=" bg-white flex flex-col lg:flex-row w-full p-12 mx-auto shadow-md space-y-6 lg:space-y-0 lg:space-x-8">
       {/* Left Section */}
-      <ProfileBrief user={authUser} />
+      <ProfileBrief user={isAuthUser?authUser:profile} />
 
       {/* Right Section */}
       <div className="w-full lg:w-3/5 h-[80vh] overflow-y-auto pr-4 pl-8">
@@ -70,8 +91,8 @@ export default function ProDem({ isAuthUser = true }) {
             ))}
           </div>
 
-          {/* Edit button shows only if on 'profile' tab AND viewing own profile */}
-          {isAuthUser?._id === user?._id && (
+
+          {isAuthUser && (
             <EditProfileButton onEditClick={() => setActiveTab("edit")} />
           )}
         </nav>
@@ -80,8 +101,8 @@ export default function ProDem({ isAuthUser = true }) {
           {activeTab === "edit" && authUser && (
             <UpdateProfile/>
           )}
-          {activeTab === "profile" && authUser && (
-            <TimelineSection user={authUser} />
+          {activeTab === "profile" && (
+            <TimelineSection user={isAuthUser ? authUser : profile} />
           )}
           {activeTab === "posts" && (
             <UserPosts/>

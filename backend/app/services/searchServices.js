@@ -8,7 +8,11 @@ const searchService = async (category, value) => {
       jobExperienceCompanies: user.jobExperience
         .map((job) => job.company)
         .join(" "), // Flatten company names
+      currentCompanies: user.currentPost
+      .map((job) => job.company)
+      .join(" "),
     }));
+
     const res = await fuzzySearch(category, transformedUsers, value);
     if (!res) return null;
     return res;

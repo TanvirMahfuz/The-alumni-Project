@@ -24,7 +24,7 @@ function SearchResultUsers({ searchResults }) {
                   ? `${result.name} profile picture`
                   : "Profile placeholder"
               }
-              className="w-16 h-16 sm:w-18 sm:h-18 rounded-full "
+              className="w-16 h-16 sm:w-18 sm:h-18 rounded-full object-cover"
             />
 
             <div className="text-center sm:text-left">
@@ -44,8 +44,8 @@ function SearchResultUsers({ searchResults }) {
                 <span className="block sm:inline">
                   {" "}
                   | since{" "}
-                  {formatDate(new Date(result.currentPost?.[0]?.startDate),"MMM yyyy") ||
-                    "2020"}
+                  {result.currentPost?.[0]? formatDate(new Date(result.currentPost?.[0]?.startDate),"MMM yyyy") :
+                    ""}
                 </span>
               </p>
 

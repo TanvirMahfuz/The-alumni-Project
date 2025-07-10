@@ -49,7 +49,7 @@ function MultiImage({ message }) {
         />
 
         <div className="leading-1.5 flex w-full max-w-[320px] flex-col">
-          <p className="text-sm font-normal text-gray-900 dark:text-white">
+          <p className="text-sm max-h-max text-wrap font-normal text-gray-900 dark:text-white">
             {message.text}
           </p>
 

@@ -2,11 +2,13 @@ import React from "react";
 
 function TextAvatar({ image }) {
   return (
-    <img
-      className="w-8 h-8 rounded-full"
-      src={image || "./avatar.png"}
-      alt="Sender"
-    />
+    <div className="h-full flex items-start justify-start">
+      <img
+        className="w-11 h-11 rounded-full object-cover "
+        src={image || "./avatar.png"}
+        alt="Sender"
+      />
+    </div>
   );
 }
 

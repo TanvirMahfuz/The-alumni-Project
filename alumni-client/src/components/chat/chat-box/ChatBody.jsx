@@ -33,7 +33,11 @@ function ChatBody() {
         {
           if (message?.images?.length>0){
               console.log(message._id);
-            return <div key={message._id}><MultiImage message={message}/></div>
+            return (
+            <div key={message._id}>
+              <MultiImage message={message}/>
+              </div>
+              )
           }else if (message?.text?.length>0){
             return <Text key={message?._id} message={message}/>
           }

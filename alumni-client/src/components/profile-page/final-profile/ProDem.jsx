@@ -105,7 +105,7 @@ useEffect(() => {
             <TimelineSection user={isAuthUser ? authUser : profile} />
           )}
           {activeTab === "posts" && (
-            <UserPosts/>
+            <UserPosts user={isAuthUser ? authUser : profile} />
           )}
           {activeTab === "photos" && (
             <PhotoGallery

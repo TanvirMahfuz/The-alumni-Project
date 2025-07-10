@@ -11,7 +11,7 @@ const ProfileBrief = ({user}) => {
   const { authUser } = useUserStore();
   return (
     <div className="w-full pt-6 lg:w-2/5 bg-gray-50 px-6 py-3 pl-10 rounded-lg text-center shadow-sm">
-      {authUser && authUser._id === user._id ? (
+      {authUser && authUser._id === user?._id ? (
         <AvatarSection />
       ) : (
         <img

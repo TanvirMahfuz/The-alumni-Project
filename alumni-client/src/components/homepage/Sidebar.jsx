@@ -7,7 +7,7 @@ function Sidebar({ menuItems, selectedTag, setSelectedTag }) {
     <div className="space-y-4 m-4">
       <MiniProfile />
       <Menublock {...{ menuItems, selectedTag, setSelectedTag }} />
-      <Companies />
+      {/* <Companies /> */}
     </div>
   );
 }

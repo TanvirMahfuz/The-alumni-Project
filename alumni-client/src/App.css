@@ -11,7 +11,7 @@
   --bg-dark: #1a1a1a;
 }
 html, body {
-  background-color: var(--bg-dark) !important;
+  background-color: var(--bg-light) !important;
   height: 100%;
   margin: 0;
   padding: 0;

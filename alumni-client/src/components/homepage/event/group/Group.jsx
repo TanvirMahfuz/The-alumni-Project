@@ -28,7 +28,7 @@ function Group() {
   }
 
   return (
-    <div className="h-[calc(100vh-5rem)] flex gap-4 flex-wrap justify-around my-4">
+    <div className="h-[calc(100vh-5rem)] mt-8 flex gap-4 flex-wrap justify-around my-4">
       {events && events.map((event) => (
         <div key={event?._id}>
           <EventCard

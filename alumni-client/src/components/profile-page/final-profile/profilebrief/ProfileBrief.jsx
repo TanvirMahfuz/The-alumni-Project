@@ -7,7 +7,7 @@ const ProfileBrief = ({ user }) => {
   const { authUser } = useUserStore();
 
   return (
-    <div className="w-full pt-6 lg:w-2/5 bg-gray-50 dark:bg-gray-800 px-6 py-3 pl-10 rounded-lg text-center shadow-sm">
+    <div className="w-full py-6 lg:w-2/5 bg-gray-50 dark:bg-gray-800 px-6 pl-10 rounded-lg text-center shadow-sm">
       {authUser && authUser._id === user?._id ? (
         <AvatarSection />
       ) : (
@@ -61,7 +61,7 @@ const ProfileBrief = ({ user }) => {
           ))
         ) : (
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            Student at {user?.university || "No university"}
+            Studied at {user?.education[0]?.institute || "No university"}
           </p>
         )}
       </div>
@@ -83,6 +83,26 @@ const ProfileBrief = ({ user }) => {
           ) : (
             <p className="text-sm text-gray-500 dark:text-gray-400 p-4">
               No skills added.
+            </p>
+          )}
+        </div>
+      </div>
+      <div className="mt-8 text-left">
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">
+          Interests
+        </h3>
+        <div className="flex flex-wrap gap-2">
+          {user?.futureInterests && user.futureInterests.length > 0 ? (
+            user.futureInterests.map((interest,index) => (
+              <span
+                key={index}
+                className="bg-[#daf2f0] dark:bg-teal-900 text-teal-700 dark:text-teal-300 text-xs px-3 py-1 rounded-full">
+                {interest|| "Unnamed interest"}
+              </span>
+            ))
+          ) : (
+            <p className="text-sm text-gray-500 dark:text-gray-400 p-4">
+              No interests added.
             </p>
           )}
         </div>

@@ -9,6 +9,7 @@ import EditProfileButton from "./EditProfileButton";
 import TimelineSection from "./TimelineSection.jsx";
 import UpdateProfile from "../updateProfile/UpdateProfile.jsx";
 import UserPosts from "./UserPosts.jsx";
+import PDFViewer from "./PDFViewer.jsx";
 
 export default function ProDem({ uid }) {
   if (!uid || uid === "undefined") {
@@ -26,10 +27,10 @@ export default function ProDem({ uid }) {
   const isAuthUser = authUser?.["_id"] === uid;
 
 useEffect(() => {
-    if (!isAuthUser && uid) {
-      getProfile(uid); 
-    }
-  }, [isAuthUser, uid]);
+  if (!isAuthUser && uid) {
+    getProfile(uid);
+  }
+}, [isAuthUser, uid, getProfile]);
 
 
   const user = {
@@ -98,6 +99,20 @@ useEffect(() => {
 
         <div className="mt-4">
           {activeTab === "edit" && authUser && <UpdateProfile />}
+          {activeTab === "resume" && (
+            <PDFViewer
+              pdfUrl={
+                isAuthUser
+                  ? authUser?.resume?.length > 0
+                    ? authUser.resume
+                    : null
+                  : user?.resume?.length > 0
+                  ? user.resume
+                  : null
+              }
+            />
+          )}
+
           {activeTab === "profile" && (
             <TimelineSection user={isAuthUser ? authUser : profile} />
           )}
@@ -114,9 +129,6 @@ useEffect(() => {
                 )
               }
             />
-          )}
-          {activeTab === "resume" && (
-            <p className="text-gray-500">No posts yet.</p>
           )}
         </div>
       </div>

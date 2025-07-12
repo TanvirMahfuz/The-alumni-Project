@@ -22,7 +22,7 @@ const EventCard = ({
   }, [getOrganizer, organizer]);
 
   return (
-    <div className="w-full min-w-100 max-w-sm bg-stone-50 dark:bg-slate-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200 dark:border-white/10">
+    <div className="w-full mb-6 min-w-100 max-w-sm bg-stone-50 dark:bg-slate-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200 dark:border-white/10">
       {/* Event Image with Badges */}
       <div className="relative h-48 bg-white dark:bg-slate-700">
         <img

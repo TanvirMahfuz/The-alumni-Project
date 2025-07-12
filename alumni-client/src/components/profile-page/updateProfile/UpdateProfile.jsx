@@ -30,7 +30,7 @@ function UpdateProfile() {
     const res = await updateUser(formData);
     if(res){
       alert("Profile updated successfully");
-      navigate("/profile");
+      window.location.reload();
     }
     else{
       alert("something went wrong");

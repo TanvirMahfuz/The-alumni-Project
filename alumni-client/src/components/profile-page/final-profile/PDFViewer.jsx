@@ -19,14 +19,14 @@ function PDFViewer({ pdfUrl }) {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <Document
+      {/* <Document
         file={pdfUrl}
         onLoadSuccess={({ numPages }) => setNumPages(numPages)}
         onLoadError={(err) => console.error("PDF load error:", err)}>
         {Array.from(new Array(numPages), (el, index) => (
           <Page key={index} pageNumber={index + 1} />
         ))}
-      </Document>
+      </Document> */}
     </div>
   );
 }

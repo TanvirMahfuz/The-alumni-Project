@@ -1,55 +1,34 @@
-
+import { Document, Page, pdfjs } from "react-pdf";
 import { useState } from "react";
+import "react-pdf/dist/Page/AnnotationLayer.css";
+import "react-pdf/dist/Page/TextLayer.css";
 
-
+// Set up PDF.js worker
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 function PDFViewer({ pdfUrl }) {
-  console.log(("PDF URL:", pdfUrl));
   const [numPages, setNumPages] = useState(null);
-  const [error, setError] = useState(null);
 
-  const handleLoadSuccess = ({ numPages }) => {
-    setNumPages(numPages);
-    setError(null);
-  };
-
-  const handleError = (err) => {
-    console.error("PDF load error:", err);
-    setError("Failed to load PDF");
-  };
-
-  if (!pdfUrl || error) {
+  if (!pdfUrl) {
     return (
-      <div className="w-full flex flex-col items-center justify-center h-96 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-inner transition-all duration-300">
-        <svg
-          className="w-16 h-16 text-gray-400 dark:text-gray-500 mb-4"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-        <p className="text-lg text-gray-600 dark:text-gray-300">
-          No PDF found or failed to load.
-        </p>
+      <div className="text-center text-gray-500 dark:text-gray-400">
+        ❌ No PDF found
       </div>
     );
   }
 
-      return (
-        <div className="w-full h-[80vh] p-4 bg-white dark:bg-gray-900">
-          <iframe
-            src={pdfUrl}
-            title="PDF Viewer"
-            className="w-full h-full border border-gray-300 rounded-lg"
-          />
-        </div>
-      );
-    
+  return (
+    <div className="flex flex-col items-center gap-4">
+      <Document
+        file={pdfUrl}
+        onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+        onLoadError={(err) => console.error("PDF load error:", err)}>
+        {Array.from(new Array(numPages), (el, index) => (
+          <Page key={index} pageNumber={index + 1} />
+        ))}
+      </Document>
+    </div>
+  );
 }
 
 export default PDFViewer;

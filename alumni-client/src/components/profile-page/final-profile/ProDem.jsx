@@ -69,13 +69,13 @@ useEffect(() => {
   ];
   
   return (
-    <div className=" bg-white flex flex-col lg:flex-row w-full p-12 mx-auto shadow-md space-y-6 lg:space-y-0 lg:space-x-8">
+    <div className=" bg-white  dark:bg-gray-900 flex flex-col lg:flex-row w-full p-12 mx-auto shadow-md space-y-6 lg:space-y-0 lg:space-x-8">
       {/* Left Section */}
-      <ProfileBrief user={isAuthUser?authUser:profile} />
+      <ProfileBrief user={isAuthUser ? authUser : profile} />
 
       {/* Right Section */}
-      <div className="w-full lg:w-3/5 h-[80vh] overflow-y-auto pr-4 pl-8">
-        <nav className="flex items-center justify-between text-[17px] sticky top-0 bg-white z-10 py-4">
+      <div className="w-full  lg:w-3/5 h-[80vh] overflow-y-auto pr-4 pl-8">
+        <nav className="flex items-center justify-between text-[17px] sticky top-0 bg-white dark:bg-gray-900 z-100 py-4">
           <div className="flex space-x-12">
             {["profile", "posts", "photos", "resume"].map((tab) => (
               <button
@@ -91,16 +91,13 @@ useEffect(() => {
             ))}
           </div>
 
-
           {isAuthUser && (
             <EditProfileButton onEditClick={() => setActiveTab("edit")} />
           )}
         </nav>
 
         <div className="mt-4">
-          {activeTab === "edit" && authUser && (
-            <UpdateProfile/>
-          )}
+          {activeTab === "edit" && authUser && <UpdateProfile />}
           {activeTab === "profile" && (
             <TimelineSection user={isAuthUser ? authUser : profile} />
           )}

@@ -1,5 +1,6 @@
 import React from "react";
 import { useEventStore } from "../../../../store/useEventStore";
+
 const EventCard = ({
   eventId,
   title,
@@ -13,47 +14,46 @@ const EventCard = ({
   isFree,
   isFeatured,
 }) => {
-  const { eventOrganizer, getOrganizer, setOnBoard, toggleSelectedEvent } =
+  const { eventOrganizer, getOrganizer, setOnBoard, toggleSelectedEvent,isLoading } =
     useEventStore();
+
   React.useEffect(() => {
     getOrganizer(organizer);
   }, [getOrganizer, organizer]);
+
   return (
-    <div className="w-full min-w-100 max-w-sm bg-stone-50 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div className="w-full min-w-100 max-w-sm bg-stone-50 dark:bg-slate-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200 dark:border-white/10">
       {/* Event Image with Badges */}
-      <div className="relative h-48 bg-white ">
+      <div className="relative h-48 bg-white dark:bg-slate-700">
         <img
-          className="w-full h-full object-cover opacity-30"
-          src="/no-img-event.png"
+          className="w-full h-full object-cover"
+          src={image?.length > 0 ? image : "/no-img-event.png"}
           alt={`${title} event`}
         />
-        {console.log(image)}
 
         {/* Badges */}
         <div className="absolute top-2 left-2 flex gap-2">
           {isFeatured && (
-            <span className="bg-yellow-500  text-xs px-2 py-1 rounded-full font-semibold">
+            <span className="bg-yellow-500 text-white text-xs px-2 py-1 rounded-full font-semibold shadow">
               Featured
             </span>
           )}
           {isFree && (
-            <span className="bg-green-500  text-xs px-2 py-1 rounded-full font-semibold">
+            <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full font-semibold shadow">
               Free
             </span>
           )}
           {category && (
-            <span className="bg-blue-500  text-xs px-2 py-1 rounded-full font-semibold">
+            <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full font-semibold shadow">
               {category}
             </span>
           )}
         </div>
 
-        {/* on board */}
+        {/* Info Icon */}
         <div
-          className="absolute top-2 right-2 px-2 text-sm font-bold rounded-full  bg-gray-300 hover:bg-gray-800 cursor-pointer "
-          onClick={() => {
-            toggleSelectedEvent(eventId);
-          }}>
+          className="absolute top-2 right-2 px-2 text-sm font-bold rounded-full bg-gray-200 dark:bg-slate-500 text-black dark:text-white hover:bg-gray-300 dark:hover:bg-slate-600 cursor-pointer"
+          onClick={() => toggleSelectedEvent(eventId)}>
           i
         </div>
       </div>
@@ -61,7 +61,7 @@ const EventCard = ({
       {/* Event Content */}
       <div className="p-5">
         {/* Date & Time */}
-        <div className="flex items-center text-sm text-gray-400 mb-2">
+        <div className="flex items-center text-sm text-gray-500 dark:text-gray-300 mb-2">
           <svg
             className="w-4 h-4 mr-1"
             fill="none"
@@ -78,18 +78,18 @@ const EventCard = ({
         </div>
 
         {/* Title & Description */}
-        <h3 className="text-gray-700  font-semibold text-xl mb-2">
+        <h3 className="text-slate-800 dark:text-white font-semibold text-xl mb-2">
           {title}
         </h3>
         {description && (
-          <p className="text-gray-400 font-[300]  text-sm mb-4 line-clamp-2">
+          <p className="text-gray-500 dark:text-gray-300 text-sm mb-4 line-clamp-2">
             {description}
           </p>
         )}
 
         {/* Location & Organizer */}
         <div className="space-y-2 mb-4">
-          <div className="flex items-center text-sm text-gray-500 ">
+          <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
             <svg
               className="w-4 h-4 mr-1"
               fill="none"
@@ -111,7 +111,7 @@ const EventCard = ({
             {location}
           </div>
           {organizer && (
-            <div className="flex items-center text-sm text-gray-500 ">
+            <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
               <svg
                 className="w-4 h-4 mr-1"
                 fill="none"
@@ -130,11 +130,38 @@ const EventCard = ({
         </div>
 
         {/* Action Button */}
-        <button
-          className="w-full mt-2 my-1.5 bg-purple-600 hover:bg-purple-700  font-medium py-1.5 px-3.5 rounded-lg"
-          onClick={() => setOnBoard(eventId)}>
-          on board
-        </button>
+        {isLoading ? (
+          <button
+            className="w-full mt-2 bg-purple-600 text-white font-medium py-1.5 px-3.5 rounded-lg transition duration-200 shadow-sm flex justify-center items-center gap-2 cursor-not-allowed"
+            disabled>
+            <svg
+              className="animate-spin h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24">
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v8H4z"
+              />
+            </svg>
+            Loading...
+          </button>
+        ) : (
+          <button
+            className="w-full mt-2 bg-purple-600 hover:bg-purple-700 text-white font-medium py-1.5 px-3.5 rounded-lg transition duration-200 shadow-sm"
+            onClick={() => setOnBoard(eventId)}>
+            On Board
+          </button>
+        )}
       </div>
     </div>
   );

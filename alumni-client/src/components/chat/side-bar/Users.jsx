@@ -20,9 +20,9 @@ function Users({ users }) {
                 : ""
             }`}>
             <img
-              src={user?.image ? user.image : "./avatar.png"}
+              src={user?.image?.length>0 ? user.image : "./avatar.png"}
               alt={user.name}
-              className="w-10 h-10 rounded-full"
+              className="w-10 h-10 rounded-full object-cover"
             />
             <span>{user.name}</span>
           </div>

@@ -6,6 +6,7 @@ import {
 } from "../../../../../assets/icons.jsx";
 import { useUserStore } from "../../../../../store/useUserStore.js";
 import { usePostStore } from "../../../../../store/usePostStore.js";
+
 function LikeComment({
   localPost,
   setLocalPost,
@@ -50,22 +51,37 @@ function LikeComment({
   }, [localPost.likes, authUser?._id]);
 
   return (
-    <div className="w-full px-15 flex justify-between items-center">
+    <div className="w-full px-4 flex justify-between items-center">
+      {/* Like Button */}
       <div
-        className={`flex gap-1 rounded-xl px-4 py-2 text-gray-700 hover:cursor-pointer bg-white hover:bg-gray-200`}
-
+        className="flex gap-1 items-center rounded-xl px-4 py-2 
+             text-gray-700 dark:text-gray-200 
+             cursor-pointer transition group"
         onClick={handleLike}>
-        {liked ? likedSolidIcon : likeIcon}
-        <div>{localPost?.likes?.length ?? "0"} Likes</div>
+        <span className="transition-colors text-inherit group-hover:text-blue-600 dark:group-hover:text-blue-400">
+          {liked ? likedSolidIcon : likeIcon}
+        </span>
+        <div className="transition-colors text-inherit group-hover:text-blue-600 dark:group-hover:text-blue-400">
+          {`${localPost?.likes?.length ?? 0} ${
+            (localPost?.likes?.length ?? 0) === 1 ? "Like" : "Likes"
+          }`}
+        </div>
       </div>
-
       <div
-        className={`flex gap-1 rounded-xl px-4 py-2 text-gray-700 hover:cursor-pointer bg-white hover:bg-gray-200
-`}
+        className="flex gap-1 items-center rounded-xl px-4 py-2 
+             text-gray-700 dark:text-gray-200 
+             cursor-pointer transition group"
         onClick={handleClick}>
-        {commentIcon}
-        <div>{localPost?.comments?.length ?? "0"} comments</div>
+        <span className="transition-colors text-inherit group-hover:text-blue-600 dark:group-hover:text-blue-400">
+          {commentIcon}
+        </span>
+        <div className="transition-colors text-inherit group-hover:text-blue-600 dark:group-hover:text-blue-400">
+          {`${localPost?.comments?.length ?? 0} ${
+            (localPost?.comments?.length ?? 0) === 1 ? "Comment" : "Comments"
+          }`}
+        </div>
       </div>
+      {/* Comment Button */}
     </div>
   );
 }

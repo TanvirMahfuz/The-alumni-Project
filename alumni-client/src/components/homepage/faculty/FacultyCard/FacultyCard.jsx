@@ -11,13 +11,12 @@ const FacultyCard = ({
   officeLocation,
   isActive,
 }) => {
-  console.log(phone);
   return (
-    <div className="w-full max-w-sm bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div className="w-full max-w-sm bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200 dark:border-gray-700">
       {/* Faculty Image */}
-      <div className="relative h-48 bg-gray-100">
+      <div className="relative h-48 bg-gray-100 dark:bg-gray-700">
         <img
-          className="w-full h-full object-contain bg:white overflow-y-auto "
+          className="w-full h-full object-contain"
           src={image || "https://via.placeholder.com/400x300"}
           alt={`Portrait of ${name}`}
         />
@@ -31,14 +30,18 @@ const FacultyCard = ({
       {/* Faculty Info */}
       <div className="p-6">
         <div className="mb-4">
-          <h3 className="text-xl font-bold text-gray-800">{name}</h3>
-          <p className="text-gray-600">{position}</p>
-          <p className="text-sm text-blue-600">{department}</p>
+          <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">
+            {name}
+          </h3>
+          <p className="text-gray-600 dark:text-gray-300">{position}</p>
+          <p className="text-sm text-blue-600 dark:text-blue-400">
+            {department}
+          </p>
         </div>
 
         {/* Contact Info */}
         <div className="mb-4">
-          <div className="flex items-center text-sm text-gray-600 mb-1">
+          <div className="flex items-center text-sm text-gray-600 dark:text-gray-300 mb-1">
             <svg
               className="w-4 h-4 mr-2"
               fill="none"
@@ -53,39 +56,38 @@ const FacultyCard = ({
             </svg>
             {email}
           </div>
-          {phone &&
-            phone.map((number, index) => (
-              <div
-                key={index}
-                className="flex items-center text-sm text-gray-600">
-                <svg
-                  className="w-4 h-4 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
-                  />
-                </svg>
-                {number}
-              </div>
-            ))}
+          {phone?.map((number, index) => (
+            <div
+              key={index}
+              className="flex items-center text-sm text-gray-600 dark:text-gray-300">
+              <svg
+                className="w-4 h-4 mr-2"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                />
+              </svg>
+              {number}
+            </div>
+          ))}
         </div>
 
         {/* Research Interests */}
         {researchInterests && (
           <div className="mb-4">
-            <h4 className="text-sm font-semibold text-gray-700 mb-1">
+            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
               Research Interests
             </h4>
             <div className="flex flex-wrap gap-1">
               {researchInterests.map((interest, index) => (
                 <span
                   key={index}
-                  className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                  className="text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 px-2 py-1 rounded">
                   {interest}
                 </span>
               ))}
@@ -95,7 +97,7 @@ const FacultyCard = ({
 
         {/* Office Location */}
         {officeLocation && (
-          <div className="flex items-center text-sm text-gray-600">
+          <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
             <svg
               className="w-4 h-4 mr-2"
               fill="none"

@@ -17,6 +17,7 @@ function TimelineSection({user}){
         {user?.participatedIn.length > 0 && (
           <Participation data={user.participatedIn} />
         )}
+
       </>
     );
 }

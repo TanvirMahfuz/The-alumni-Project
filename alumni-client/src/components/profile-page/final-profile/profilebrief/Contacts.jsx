@@ -23,7 +23,7 @@ export default function Contacts({ contacts }) {
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center text-gray-700 hover:text-gray-800">
+              className="flex items-center text-teal-500 hover:text-teal-200">
               <Icon className="mr-2 text-xl" />
               <span className="font-medium capitalize">{key}</span>
             </a>

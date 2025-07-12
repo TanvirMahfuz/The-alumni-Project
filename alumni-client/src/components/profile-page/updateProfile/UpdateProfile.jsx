@@ -37,9 +37,9 @@ function UpdateProfile() {
     }
   };
   return (
-    <div className="w-full flex bg-white text-black justify-center items-center">
-      <div className="w-full  p-6 bg-white text-black rounded-lg space-y-6">
-        <h2 className="text-2xl text-white font-bold mb-4">Update Profile</h2>
+    <div className="w-full flex justify-center items-center">
+      <div className="w-full  p-6 rounded-lg space-y-6">
+        {/* <h2 className="text-2xl text-white font-bold mb-4">Update Profile</h2> */}
         <Contacts {...{ formData, setFormData }} />
         <Introduction {...{ formData, setFormData }} />
         <Education {...{ formData, setFormData }} />

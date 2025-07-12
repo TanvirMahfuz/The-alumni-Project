@@ -2,26 +2,35 @@ import React from "react";
 
 function SwitchUserType({ userType, setUserType }) {
   const baseClass =
-    "text-center p-2 cursor-pointer transition duration-200 rounded-tl-2xl rounded-tr-2xl";
+    "text-center p-2 cursor-pointer transition duration-300 rounded-tl-2xl rounded-tr-2xl select-none";
 
-  const activeClass = "bg-gray-200 text-gray-800 font-semibold";
+  const activeClass =
+    "border-b-4 border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400 font-semibold";
   const inactiveClass =
-    "bg-white text-gray-500 hover:bg-gray-100 ";
+    "border-b-4 border-transparent text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200";
 
   return (
-    <div className="m-2 grid grid-cols-2 border-b border-gray-300 dark:border-gray-600">
+    <div className="m-2 mt-10 grid grid-cols-2 border-b border-gray-300 dark:border-zinc-600">
       <div
         className={`${baseClass} ${
           userType === "all" ? activeClass : inactiveClass
         }`}
-        onClick={() => setUserType("all")}>
+        onClick={() => setUserType("all")}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === "Enter" && setUserType("all")}
+        aria-pressed={userType === "all"}>
         All
       </div>
       <div
         className={`${baseClass} ${
           userType === "online" ? activeClass : inactiveClass
         }`}
-        onClick={() => setUserType("online")}>
+        onClick={() => setUserType("online")}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === "Enter" && setUserType("online")}
+        aria-pressed={userType === "online"}>
         Online
       </div>
     </div>

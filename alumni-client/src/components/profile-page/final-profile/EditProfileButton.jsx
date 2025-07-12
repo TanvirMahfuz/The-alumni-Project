@@ -2,7 +2,7 @@ import React from 'react'
 
 const EditProfileButton = ({ onEditClick }) => {
   return (
-    <button className="flex items-center space-x-1 text-teal-600 border-dashed border-2 border-teal-600 px-3 py-1 rounded-md bg-teal-50 hover:bg-teal-500 hover:text-white cursor-pointer transition"
+    <button className="flex items-center space-x-1 text-teal-600 border-dashed border-2 border-teal-600 px-3 py-1 rounded-md bg-teal-50 dark:bg-gray-800 hover:bg-teal-500 hover:text-white cursor-pointer transition"
       onClick={onEditClick}>
       <svg
         xmlns="http://www.w3.org/2000/svg"

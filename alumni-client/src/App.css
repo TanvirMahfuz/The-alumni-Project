@@ -1,4 +1,4 @@
-@plugin "daisyui";
+/* @plugin "daisyui"; */
 
 
 *{
@@ -6,6 +6,16 @@
   font-family: 'Poppins', sans-serif;
 }
 
-:root{
-  background-color: #f5f5f5 !important;
+:root {
+  --bg-light: #f5f5f5;
+  --bg-dark: #1a1a1a;
+}
+html, body {
+  background-color: var(--bg-dark) !important;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+html.dark {
+  background-color: var(--bg-dark) !important;
 }

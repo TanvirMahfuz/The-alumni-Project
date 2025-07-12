@@ -51,20 +51,22 @@ function Skills({formData, setFormData}) {
 
   return (
     <div className="space-y-6 mt-6">
-      <h3 className="text-2xl font-semibold text-gray-600">Skills</h3>
+      <h3 className="text-2xl font-semibold text-gray-600 dark:text-gray-200">
+        Skills
+      </h3>
 
       <div className="flex flex-wrap gap-4">
         {skills.map((skill, index) => (
           <div
             key={index}
-            className="relative flex flex-col gap-3 p-4 border border-teal-600 rounded-lg bg-white/10 text-gray-600 w-full max-w-sm">
+            className="relative flex flex-col gap-3 p-4 border border-teal-600 rounded-lg bg-white/10 text-gray-600 dark:text-gray-300 w-full max-w-sm">
             <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-500">
+              <label className="block text-sm font-medium text-gray-500 dark:text-gray-300">
                 Skill Name
               </label>
               <input
                 type="text"
-                className="w-full px-3 py-2 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
+                className="w-full px-3 py-2 border dark:text-gray-400 border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
                 value={skill.title}
                 onChange={(e) =>
                   handleSkillChange(index, "title", e.target.value)
@@ -74,14 +76,14 @@ function Skills({formData, setFormData}) {
             </div>
 
             <div className="space-y-1">
-              <label className="block text-sm font-medium text-gray-500">
+              <label className="block text-sm font-medium text-gray-500 dark:text-gray-300">
                 Level (0–100)
               </label>
               <input
                 type="number"
                 min="0"
                 max="100"
-                className="w-full px-3 py-2 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
+                className="w-full px-3 py-2 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400 dark:text-gray-400"
                 value={skill.level}
                 onChange={(e) =>
                   handleSkillChange(index, "level", e.target.value)

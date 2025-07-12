@@ -33,7 +33,9 @@ function Text({ message }) {
       className={`flex ${
         isSender ? "flex-row-reverse" : ""
       } items-start gap-2.5`}>
-      <TextAvatar image={textOwner?.image} />
+      <TextAvatar
+        image={textOwner?.image?.length > 0 ? textOwner?.image : null}
+      />
       <TextContent
         isSender={isSender}
         name={textOwner?.name}

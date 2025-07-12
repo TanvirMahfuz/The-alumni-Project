@@ -1,67 +1,83 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUserStore } from "../../../../store/useUserStore";
 
 function Introduction({ formData, setFormData }) {
   const { authUser } = useUserStore();
-  const [name, setName] = useState("");
-  const [session, setSession] = useState("");
-  const [email, setEmail] = useState("");
-  const [bio, setBio] = useState("");
-  const [availableForWork, setAvailableForWork] = useState(false);
 
-  React.useEffect(() => {
+  // Initialize state synced with formData or authUser on mount/update
+  const [name, setName] = useState(formData.name || "");
+  const [session, setSession] = useState(formData.session || "");
+  const [email, setEmail] = useState(formData.email || "");
+  const [bio, setBio] = useState(formData.bio || "");
+  const [availableForWork, setAvailableForWork] = useState(
+    formData.availableForWork || false
+  );
+
+  // Sync local state with authUser when it changes (for initial load)
+  useEffect(() => {
     if (authUser) {
       setName(authUser.name || "");
       setSession(authUser.session || "");
       setEmail(authUser.email || "");
       setBio(authUser.bio || "");
       setAvailableForWork(authUser.availableForWork || false);
+
+      // Also update formData accordingly if empty (optional)
+      setFormData((prev) => ({
+        ...prev,
+        name: authUser.name || "",
+        session: authUser.session || "",
+        email: authUser.email || "",
+        bio: authUser.bio || "",
+        availableForWork: authUser.availableForWork || false,
+      }));
     }
-  }, [authUser]);
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    console.log(name, value);
-    
+  }, [authUser, setFormData]);
+
+  // Generic change handler to keep state and formData in sync
+  const handleChange = (field, value) => {
+    switch (field) {
+      case "name":
+        setName(value);
+        break;
+      case "session":
+        setSession(value);
+        break;
+      case "email":
+        setEmail(value);
+        break;
+      case "bio":
+        setBio(value);
+        break;
+      case "availableForWork":
+        setAvailableForWork(value);
+        break;
+      default:
+        break;
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [field]: value,
     }));
   };
 
   return (
-    <div className="space-y-4 mt-6">
-      <h2 className="text-2xl font-semibold text-gray-600">
+    <div className="space-y-6 mt-6">
+      <h2 className="text-2xl font-semibold text-gray-700 dark:text-gray-300">
         Basic Information
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
-          {
-            label: "Name",
-            name: "name",
-            value: name,
-            type: "text",
-            setValue: setName,
-          },
-          {
-            label: "Session",
-            name: "session",
-            value: session,
-            type: "text",
-            setValue: setSession,
-          },
-          {
-            label: "Email",
-            name: "email",
-            value: email,
-            type: "email",
-            setValue: setEmail,
-          },
-        ].map(({ label, name, value, type, setValue }) => (
+          { label: "Name", name: "name", value: name, type: "text" },
+          { label: "Session", name: "session", value: session, type: "text" },
+          { label: "Email", name: "email", value: email, type: "email" },
+        ].map(({ label, name, value, type }) => (
           <div key={name} className="flex flex-col">
             <label
               htmlFor={name}
-              className="text-sm font-medium text-gray-500 mb-1">
+              className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
               {label}
             </label>
             <input
@@ -69,19 +85,18 @@ function Introduction({ formData, setFormData }) {
               id={name}
               name={name}
               value={value}
-              onChange={(e) => {
-                setValue(e.target.value);
-                handleChange(e);
-              }}
+              onChange={(e) => handleChange(name, e.target.value)}
               placeholder={`Enter your ${label.toLowerCase()}`}
-              className="bg-white/10 text-gray-600 border border-teal-600 rounded-lg px-4 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-200"
+              className="bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-400 border border-teal-600 rounded-lg px-4 py-2 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-200"
             />
           </div>
         ))}
       </div>
 
       <div className="flex flex-col">
-        <label htmlFor="bio" className="text-sm font-medium text-gray-500 mb-1">
+        <label
+          htmlFor="bio"
+          className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
           Bio
         </label>
         <textarea
@@ -89,12 +104,9 @@ function Introduction({ formData, setFormData }) {
           name="bio"
           rows={4}
           value={bio}
-          onChange={(e) => {
-            setBio(e.target.value);
-            handleChange(e);
-          }}
+          onChange={(e) => handleChange("bio", e.target.value)}
           placeholder="Tell us a little about yourself..."
-          className="bg-white/10 text-gray-600 border border-teal-600 rounded-lg px-4 py-2 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-200"
+          className="bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-400 border border-teal-600 rounded-lg px-4 py-2 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-200"
         />
       </div>
 
@@ -102,25 +114,18 @@ function Introduction({ formData, setFormData }) {
         <input
           type="checkbox"
           id="availableForWork"
-          className="h-5 w-5 text-teal-600 border-gray-300 rounded focus:ring-2 focus:ring-teal-500"
           checked={availableForWork}
-          onChange={(e) => {
-            setAvailableForWork(e.target.checked);
-            setFormData((prev) => ({
-              ...prev,
-              availableForWork: e.target.checked,
-            }));
-          }}
+          onChange={(e) => handleChange("availableForWork", e.target.checked)}
+          className="h-5 w-5 text-teal-600 border-gray-300 rounded focus:ring-2 focus:ring-teal-500"
         />
         <label
           htmlFor="availableForWork"
-          className="ml-3 text-sm text-gray-600">
+          className="ml-3 text-sm text-gray-600 dark:text-gray-400 select-none">
           I’m currently available for work
         </label>
       </div>
     </div>
   );
-  
 }
 
 export default Introduction;

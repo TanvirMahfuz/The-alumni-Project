@@ -54,7 +54,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="w-full flex items-center justify-between bg-white shadow-md px-5 py-3 font-[Poppins] relative">
+    <nav className="w-full flex items-center justify-between bg-white dark:bg-gray-900 shadow-md px-5 py-3 font-[Poppins] relative">
       <Logo />
       <div className="flex-grow flex justify-center px-4">
         <SearchBar

@@ -128,6 +128,7 @@ export const useEventStore = create((set, get) => ({
 
   setOnBoard: async (eventId) => {
     set({ fetchError: null });
+    set({ isLoading: true });
     try {
       const data = {
         eventId,
@@ -143,9 +144,15 @@ export const useEventStore = create((set, get) => ({
       if (!response.ok) throw new Error("Failed to set onBoard");
       const res = await response.json();
       console.log(res);
+      set({ isLoading: false })
+      alert("You have been added to the onBoard list");
+      return
     } catch (error) {
       set({ fetchError: error.message || "Error saving event onBoard" });
+      set({ isLoading: false });
       console.error("setOnBoard error:", error);
+      alert(error.message);
+      return;
     }
   },
 

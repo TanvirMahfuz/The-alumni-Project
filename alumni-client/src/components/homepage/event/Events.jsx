@@ -10,7 +10,7 @@ function Events() {
   const { isLoading, openForm, setOpenForm, selectedEvent } = useEventStore();
 
   return (
-    <div className="h-screen overflow-y-auto bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    <div className="h-screen px-6 overflow-y-auto bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <Header openForm={openForm} setOpenForm={setOpenForm} />
 
       {openForm && (
@@ -50,12 +50,20 @@ function Events() {
       )}
 
       {selectedEvent ? (
-        <div className="grid grid-cols-12 gap-4">
-          <div className="col-span-8">
+        <div className="flex gap-4 transition-all duration-500 ease-in-out">
+          <div
+            className={`transition-all duration-500 ease-in-out ${
+              selectedEvent ? "w-2/3" : "w-full"
+            }`}>
             <Group />
           </div>
-          <div className="col-span-4">
-            <Applicants />
+
+          {/* Only show Applicants if selectedEvent exists */}
+          <div
+            className={`transition-all duration-200 ease-in-out mt-4 ${
+              selectedEvent ? "w-1/3 opacity-100" : "w-0 opacity-0"
+            } overflow-hidden`}>
+            {selectedEvent && <Applicants />}
           </div>
         </div>
       ) : (

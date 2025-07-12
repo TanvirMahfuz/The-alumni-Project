@@ -66,7 +66,7 @@ function UserPosts({ user }) {
   }, [getUserPosts, user]);
 
   return (
-    <div className="mt-6 bg-white my-4 p-4 rounded-2xl min-h-[100px]">
+    <div className="mt-6 bg-white dark:bg-gray-900 my-4 p-4 rounded-2xl min-h-[100px]">
       {isLoading ? (
         <div className="flex justify-center items-center h-32">
           <div className="w-10 h-10 border-4 border-teal-600 border-t-transparent rounded-full animate-spin"></div>

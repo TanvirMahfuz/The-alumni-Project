@@ -118,11 +118,13 @@ function FileUploads({ formData, setFormData }) {
     <div className="space-y-4 mt-6">
       {" "}
       {/* Increased space-y for better separation */}
-      <h3 className="text-2xl font-semibold text-gray-600">File Uploads</h3>{" "}
+      <h3 className="text-2xl font-semibold text-gray-600 dark:text-gray-200">
+        File Uploads
+      </h3>{" "}
       {/* Added a heading */}
       <label
         htmlFor="resume-upload"
-        className="block text-sm font-medium text-gray-700">
+        className="block text-sm font-medium text-gray-700 dark:text-gray-300">
         Resume
       </label>
       <div

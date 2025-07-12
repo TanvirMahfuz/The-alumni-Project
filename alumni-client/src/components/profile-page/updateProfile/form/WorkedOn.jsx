@@ -55,7 +55,9 @@ function WorkedOn({ formData, setFormData }) {
   };
   return (
     <div className="space-y-6 mt-6">
-      <h3 className="text-2xl font-semibold text-gray-600">Worked On</h3>
+      <h3 className="text-2xl font-semibold text-gray-600 dark:text-gray-200">
+        Worked On
+      </h3>
 
       {workedProjects.length > 0 ? (
         workedProjects.map((project, index) => (
@@ -63,12 +65,12 @@ function WorkedOn({ formData, setFormData }) {
             key={index}
             className="relative p-5 border border-teal-600 rounded-lg bg-white/10 space-y-4">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-500">
+              <label className="block text-sm font-medium text-gray-500 dark:text-gray-300">
                 Project Title
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-2 border border-teal-600 text-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
+                className="w-full px-4 py-2 border border-teal-600 text-gray-600 dark:text-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
                 value={project.title}
                 onChange={(e) =>
                   handleProjectChange(index, "title", e.target.value)
@@ -78,12 +80,12 @@ function WorkedOn({ formData, setFormData }) {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-500">
+              <label className="block text-sm font-medium text-gray-500 dark:text-gray-300">
                 Tech Stack
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-2 border border-teal-600 text-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
+                className="w-full px-4 py-2 border border-teal-600 text-gray-600 dark:text-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
                 value={project.techStack}
                 onChange={(e) =>
                   handleProjectChange(index, "techStack", e.target.value)
@@ -93,12 +95,12 @@ function WorkedOn({ formData, setFormData }) {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-500">
+              <label className="block text-sm font-medium text-gray-500 dark:text-gray-300">
                 Description
               </label>
               <textarea
                 rows={3}
-                className="w-full px-4 py-2 border border-teal-600 text-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
+                className="w-full px-4 py-2 border border-teal-600 text-gray-600 dark:text-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
                 value={project.description}
                 onChange={(e) =>
                   handleProjectChange(index, "description", e.target.value)

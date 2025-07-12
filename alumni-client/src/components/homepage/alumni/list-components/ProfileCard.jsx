@@ -10,7 +10,7 @@ function ProfileCard({ user }) {
   // console.log(user);
   return (
     <div
-      className=" max-h-max min-w-96 flex flex-col items-center gap-4 rounded-2xl bg-white
+      className=" max-h-max min-w-96 flex flex-col items-center gap-4 rounded-2xl bg-white dark:bg-gray-800
       p-4 shadow-lg  transition-all duration-500">
       <Header imgSrc={user.image} name={user.name} email={user.email} />
       <Contacts item={user.contacts} />

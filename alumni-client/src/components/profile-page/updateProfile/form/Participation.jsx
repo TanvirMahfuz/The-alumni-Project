@@ -57,7 +57,9 @@ function Participation({ formData, setFormData }) {
 
   return (
     <div className="space-y-6 mt-6">
-      <h3 className="text-2xl font-semibold text-gray-600">Participated In</h3>
+      <h3 className="text-2xl font-semibold text-gray-600 dark:text-gray-200">
+        Participated In
+      </h3>
 
       {participations.length > 0 ? (
         participations.map((participation, index) => (
@@ -65,12 +67,12 @@ function Participation({ formData, setFormData }) {
             key={index}
             className="relative p-5 border border-teal-600 rounded-lg bg-white/10 space-y-4">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-500">
+              <label className="block text-sm font-medium text-gray-500 dark:text-gray-300">
                 Title
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
+                className="w-full px-4 py-2 text-gray-600 dark:text-gray-400 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
                 value={participation.title}
                 onChange={(e) =>
                   handleParticipationChange(index, "title", e.target.value)
@@ -80,12 +82,12 @@ function Participation({ formData, setFormData }) {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-500">
+              <label className="block text-sm font-medium text-gray-500 dark:text-gray-300">
                 Institute
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
+                className="w-full px-4 py-2 text-gray-600 dark:text-gray-400 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
                 value={participation.institute}
                 onChange={(e) =>
                   handleParticipationChange(index, "institute", e.target.value)
@@ -96,12 +98,12 @@ function Participation({ formData, setFormData }) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-500">
+                <label className="block text-sm font-medium text-gray-500 dark:text-gray-300">
                   Start Date
                 </label>
                 <input
                   type="date"
-                  className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-4 py-2 text-gray-600 dark:text-gray-400 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                   value={participation.startDate}
                   onChange={(e) =>
                     handleParticipationChange(
@@ -113,12 +115,12 @@ function Participation({ formData, setFormData }) {
                 />
               </div>
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-500">
+                <label className="block text-sm font-medium text-gray-500 dark:text-gray-300">
                   End Date
                 </label>
                 <input
                   type="date"
-                  className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full px-4 py-2 text-gray-600 border dark:text-gray-400 border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
                   value={participation.endDate}
                   onChange={(e) =>
                     handleParticipationChange(index, "endDate", e.target.value)
@@ -136,7 +138,9 @@ function Participation({ formData, setFormData }) {
           </div>
         ))
       ) : (
-        <p className="text-gray-500">No participations yet</p>
+        <p className="text-gray-500 dark:text-gray-300">
+          No participations yet
+        </p>
       )}
 
       <button

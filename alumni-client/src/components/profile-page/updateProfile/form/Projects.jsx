@@ -56,7 +56,9 @@ function Projects({formData, setFormData}) {
 
   return (
     <div className="space-y-6 mt-6">
-      <h3 className="text-2xl font-semibold text-gray-600">Projects</h3>
+      <h3 className="text-2xl font-semibold text-gray-600 dark:text-gray-200">
+        Projects
+      </h3>
 
       {projects.length > 0 ? (
         projects.map((project, index) => (
@@ -64,12 +66,12 @@ function Projects({formData, setFormData}) {
             key={index}
             className="relative p-5 border border-teal-600 rounded-lg bg-white/10 space-y-4">
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-500">
+              <label className="block text-sm font-medium text-gray-500 dark:text-gray-300">
                 Project Name
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
+                className="w-full px-4 py-2 text-gray-600 dark:text-gray-400 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
                 value={project.projectName}
                 onChange={(e) =>
                   handleProjectChange(index, "projectName", e.target.value)
@@ -79,12 +81,12 @@ function Projects({formData, setFormData}) {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-500">
+              <label className="block text-sm font-medium text-gray-500 dark:text-gray-300 ">
                 Project Description
               </label>
               <textarea
                 rows={3}
-                className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
+                className="w-full px-4 py-2 text-gray-600 dark:text-gray-400 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
                 value={project.projectDescription}
                 onChange={(e) =>
                   handleProjectChange(
@@ -98,12 +100,12 @@ function Projects({formData, setFormData}) {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-500">
+              <label className="block text-sm font-medium text-gray-500 dark:text-gray-300">
                 Project Link
               </label>
               <input
                 type="url"
-                className="w-full px-4 py-2 text-gray-600 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
+                className="w-full px-4 py-2 text-gray-600 dark:text-gray-400 border border-teal-600 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 placeholder-gray-400"
                 value={project.projectLink}
                 onChange={(e) =>
                   handleProjectChange(index, "projectLink", e.target.value)

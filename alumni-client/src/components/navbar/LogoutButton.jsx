@@ -8,7 +8,7 @@ const LogoutButton = ({ authUser, handleLogOut }) => {
       Logout
     </div>
   ) : (
-    <div className="hidden lg:block bg-red-300 text-white text-sm px-4 py-2 rounded-3xl hover:bg-red-400 ml-[100px]">
+    <div className="hidden lg:block bg-[#6bb5ff] text-white text-sm px-4 py-2 rounded-3xl hover:bg-[#2992FE] ml-[100px]">
       <Link to="/login">LogIn</Link>
     </div>
   );

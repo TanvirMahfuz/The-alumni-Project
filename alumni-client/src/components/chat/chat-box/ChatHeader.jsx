@@ -8,7 +8,7 @@ function ChatHeader() {
       <div className="flex items-center space-x-2">
         <div className="rounded-full  bg-gray-500">
           <img
-            src={selectedChatUser?.image ?? "./avatar.png"}
+            src={selectedChatUser?.image?.length>0? selectedChatUser.image : "./avatar.png"}
             alt=""
             className="w-12 h-12 rounded-full object-cover outline outline-offset-2 outline-[#2992FE]"
           />

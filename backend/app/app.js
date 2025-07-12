@@ -13,6 +13,26 @@ import morgan from "morgan";
 const app = express();
 
 // Middleware
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://the-alumni-project-vrtg.vercel.app",
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn("Blocked by CORS:", origin);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true, // If you're using cookies or Authorization headers
+};
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+
+
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(helmet());
@@ -25,29 +45,7 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://the-alumni-project-vrtg.vercel.app", // ✅ this is essential
-  /^https:\/\/the-alumni-project-[\w-]+\.vercel\.app$/, // optional wildcard for preview deployments
-];
-const isAllowedOrigin = (origin) => {
-  return (
-    !origin ||
-    allowedOrigins.includes(origin)
-  );
-};
-app.use(
-  cors({
-    origin(origin, callback) {
-      if (isAllowedOrigin(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
+
 
 // app.use(
 //   cors({
@@ -66,10 +64,11 @@ app.use(
 //   })
 // );
 
-// app.use((req, res, next) => {
-//   console.log(req.url);
-//   next();
-// });
+app.use((req, res, next) => {
+  console.log("Origin:", req.headers.origin);
+  next();
+});
+
 
 app.use("/api/v1", defaultRouter); 
 

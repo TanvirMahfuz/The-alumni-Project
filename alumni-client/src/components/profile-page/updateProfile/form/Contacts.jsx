@@ -18,7 +18,9 @@ function Contacts({ formData, setFormData }) {
 
   return (
     <>
-      <h3 className="text-2xl font-bold text-gray-600 mb-6">Contact Links</h3>
+      <h3 className="text-2xl font-bold text-gray-600 dark:text-gray-200 mb-6">
+        Contact Links
+      </h3>
       <div className="grid gap-6 md:grid-cols-2">
         {[
           { label: "GitHub", name: "github", value: contacts.github },
@@ -29,7 +31,7 @@ function Contacts({ formData, setFormData }) {
           <div key={name} className="flex flex-col">
             <label
               htmlFor={name}
-              className="text-gray-500 mb-1 text-sm font-medium">
+              className="text-gray-500 dark:text-gray-300 mb-1 text-sm font-medium">
               {label}
             </label>
             <input
@@ -39,7 +41,7 @@ function Contacts({ formData, setFormData }) {
               value={value}
               onChange={handleChange}
               placeholder={`Enter your ${label.toLowerCase()}`}
-              className="bg-white/10 text-gray-600 border border-teal-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-200 placeholder-gray-400"
+              className="bg-white/10 text-gray-600 dark:text-gray-400 border border-teal-600 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-all duration-200 placeholder-gray-400"
             />
           </div>
         ))}

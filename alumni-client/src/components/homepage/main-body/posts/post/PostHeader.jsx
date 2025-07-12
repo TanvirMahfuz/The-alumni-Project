@@ -12,7 +12,7 @@ function PostHeader({ author, createdAt }) {
         />
       </div>
       <div>
-        <Link to={`/profile/${author?._id}`} className="text-[17px] font-[500] text-black hover:underline cursor-pointer">
+        <Link to={`/profile/${author?._id}`} className="text-[17px] font-[500] text-black dark:text-white hover:underline cursor-pointer">
           {author?.name ?? "Full Name"}
         </Link>
         <p className="text-[13px] font-normal text-gray-400">

@@ -28,7 +28,7 @@ function Recruitment() {
           )}
         </Modal>
       )}
-      <div className="m-4 mt-8 pe-4">
+      <div className="px-6">
         <Header />
         {/* Desktop Layout */}
         <DesktopLayout

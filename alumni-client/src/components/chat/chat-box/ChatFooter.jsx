@@ -65,7 +65,7 @@ function handleSubmit(e) {
           />
         </div>
         <div
-          className="bg-gray-300 hover:bg-[#2992FE] px-3 py-1 text-lg rounded-xl shadow-md transition-all ease-in-out duration-250 cursor-pointer"
+          className="text-[#2992FE] dark:text-white px-3 py-1 text-lg rounded-xl transition-all ease-in-out duration-250 cursor-pointer hover:translate-y-[-5px] hover:scale-105"
           onClick={handleSubmit}>
           send
         </div>

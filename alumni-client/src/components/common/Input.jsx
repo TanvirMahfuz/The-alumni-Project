@@ -23,7 +23,7 @@ function Input({
         name={name}
         onChange={onChange}
         onClick={onClick}
-        className="bg-[#F3F3F3] dark:bg-gray-900 rounded-full w-full py-3 px-4 text-black dark:text-white text-md leading-tight  focus:outline-1 focus:border-[#2993fe8e] focus:shadow-outline"
+        className="bg-[#F3F3F3] dark:bg-gray-900 rounded-full w-full py-3 px-4 text-black border border-[#44a1ffbd] dark:text-white text-md leading-tight  focus:outline-1 focus:border-[#2993fe8e] focus:shadow-outline"
       />
     </div>
   );

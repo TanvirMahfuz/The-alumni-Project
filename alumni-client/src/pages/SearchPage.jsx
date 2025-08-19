@@ -15,16 +15,12 @@ function SearchPage() {
 
   useEffect(() => {
     if (category && value) {
-      console.log("Fetching data for:", category, value);
       search(category, value);
     }
   }, [category, value]);
 
   return (
     <div>
-      <h2>
-        Search Results for "{value}" in "{category}"
-      </h2>
 
       {category === "name" && <SearchResultUsers searchResults={searchResults} />}
 

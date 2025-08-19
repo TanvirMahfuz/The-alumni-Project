@@ -52,7 +52,7 @@ function Miniprofile() {
                 d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375a1.125 1.125 0 011.125-1.125h2.25a1.125 1.125 0 011.125 1.125V21M3 3h12m-.75 4.5H21"
               />
             </svg>
-            <p>{authUser?.currentPost?.title ?? "No title"}</p>
+            <p>{authUser?.currentPost?.length>0 ?authUser.currentPost[0].title : "No title"}</p>
           </div>
         )}
 

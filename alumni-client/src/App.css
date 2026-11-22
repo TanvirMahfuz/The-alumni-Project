@@ -19,3 +19,6 @@ html, body {
 html.dark {
   background-color: var(--bg-dark) !important;
 }
+html.dark body {
+  background-color: var(--bg-dark) !important;
+}

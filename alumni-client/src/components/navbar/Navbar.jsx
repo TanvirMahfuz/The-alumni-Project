@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "../../store/useUserStore";
-import SearchBar from "./SearchBar";
-import Logo from "./Logo";
-import NavLinks from "./NavLinks";
-import MobileMenu from "./MobileMenu";
-import LogoutButton from "./LogoutButton";
+import SearchBar from "./SearchBar/SearchBar";
+import Logo from "./Logo/Logo";
+import NavLinks from "./NavLinks/NavLinks";
+import MobileMenu from "./MobileMenu/MobileMenu";
+import LogoutButton from "./LogoutButton/LogoutButton";
+import ThemeToggle from "./ThemeToggle/ThemeToggle";
 
 const Navbar = () => {
   const [selectedOption, setSelectedOption] = useState("Category");
@@ -67,6 +68,7 @@ const Navbar = () => {
         hoverIndex={hoverIndex}
         setHoverIndex={setHoverIndex}
       />
+      <ThemeToggle />
       <LogoutButton authUser={authUser} handleLogOut={handleLogOut} />
       <button
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

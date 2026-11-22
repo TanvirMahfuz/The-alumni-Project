@@ -55,20 +55,20 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="w-full flex items-center justify-between bg-white dark:bg-gray-900 shadow-md px-5 py-3 font-[Poppins] relative">
+    <nav className="flex items-center justify-between bg-white dark:bg-gray-900 shadow-md px-5 py-3 font-[Poppins] relative">
       <Logo />
-      <div className="flex-grow flex justify-center px-4">
+      <div className="flex-grow flex justify-center px-4 bg-white">
         <SearchBar
           selectedOption={selectedOption}
           setSelectedOption={setSelectedOption}
         />
+        <ThemeToggle />
       </div>
       <NavLinks
         links={navLinks}
         hoverIndex={hoverIndex}
         setHoverIndex={setHoverIndex}
       />
-      <ThemeToggle />
       <LogoutButton authUser={authUser} handleLogOut={handleLogOut} />
       <button
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

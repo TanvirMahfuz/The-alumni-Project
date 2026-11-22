@@ -1,6 +1,6 @@
 import React from "react";
-import JobCard from "../RecruitmentCard/JobCard";
-import JobDetailsPanel from "../RecruitmentCard/JobDetailsPanel";
+import JobCard from "../RecruitmentCard/JobCard/JobCard";
+import JobDetailsPanel from "../RecruitmentCard/JobDetailsPanel/JobDetailsPanel";
 function DesktopLayout({
   recruitments,
   openPanelId,

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Tag from "../../../../common/Tag.jsx";
+import Tag from "../../../../common/Tag/Tag.jsx";
 
 function Users({ users }) {
   const [select, setSelect] = useState(null);

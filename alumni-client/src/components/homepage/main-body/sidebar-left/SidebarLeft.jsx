@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Users from "./users/Users.jsx";
-import Input from "../../../common/Input.jsx";
-import SwitchUserType from "./users/SwitchUserType.jsx";
+import Input from "../../../common/Input/Input.jsx";
+import SwitchUserType from "./users/SwitchUserType/SwitchUserType.jsx";
 import Notifications from "./notifications/Notifications.jsx";
-import SwitchUserVNotifications from "../SwitchUserVNotifications.jsx";
+import SwitchUserVNotifications from "../SwitchUserVNotifications/SwitchUserVNotifications.jsx";
 import { useUserStore } from "../../../../store/useUserStore.js";
 
 function SidebarLeft({ sidebarToggler, setSidebarToggler }) {

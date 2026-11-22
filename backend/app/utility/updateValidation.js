@@ -13,10 +13,12 @@ function field_selectors() {
 
 export const validateUserUpdate = (id, body) => {
   if (!id || !body) return null;
+  console.log("Validating user update for ID:", id);
 
   const validFields = Object.keys(User.schema.paths)
     .filter((key) => !["_id", "__v", "createdAt", "updatedAt"].includes(key))
     .map((key) => key.split(".")[0]);
+
   const uniqueFields = [...new Set(validFields)];
 
   const cleanBody = {};
@@ -36,10 +38,10 @@ export const validateUserUpdate = (id, body) => {
 
     if (hasContacts) {
       cleanBody.contacts = cleanContacts;
-      
+
     }
   }
-  console.log(cleanBody);
+  console.log("Clean Body:", cleanBody);
 
   // ✅ Loop for the rest of the fields
   for (const key in body) {
@@ -58,6 +60,7 @@ export const validateUserUpdate = (id, body) => {
     ) {
       if (body[key] !== "" && body[key] !== undefined) {
         cleanBody[key] = body[key];
+        console.log(`Added ${key}:`, body[key]);
       }
       continue;
     }
@@ -116,12 +119,11 @@ export const validateUserUpdate = (id, body) => {
   if (cleanBody.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanBody.email)) {
     throw new Error("Invalid email format");
   }
-
+  console.log("Final clean body:", cleanBody);
   if (cleanBody.password && cleanBody.password.length < 6) {
     throw new Error("Password must be at least 6 characters");
   }
-  // console.log(cleanBody);
-  
+  console.log("Final clean body:", cleanBody);
   return cleanBody;
 };
 

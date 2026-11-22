@@ -1,6 +1,6 @@
 import React from "react";
 import { useEventStore } from "../../../../store/useEventStore";
-import Tag from "../../../common/Tag";
+import Tag from "../../../common/Tag/Tag";
 
 function Applicants() {
   const { selectedEvent } = useEventStore();

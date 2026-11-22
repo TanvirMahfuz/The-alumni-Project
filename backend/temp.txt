@@ -1,0 +1,108 @@
+# Backend Error-Handling / Crash-Risk Audit (temp doc for Docker readiness)
+
+Project: The-alumni-Project/backend
+Entry files: backend/app/app.js (Express app), backend/index.js (bootstrap)
+Audit date: 2026-11-22
+
+--------------------------------------------------------------------
+1. Framework / runtime facts that make "logic will crash" likely
+--------------------------------------------------------------------
+- Express version installed: 4.22.3 (package.json declares ^4.21.1).
+  Express v4 does NOT catch rejected promises from async route handlers
+  automatically - async errors must be caught manually or wrapped.
+- Runtime: Node v24.14.0 - unhandled promise rejections terminate the
+  process by default (crash).
+- NO global Express error-handling middleware is registered anywhere
+  (no `app.use((err, req, res, next) => ...)` in backend/app/app.js).
+  Errors escaping handlers fall through to Express defaults / unhandled
+  rejections.
+
+--------------------------------------------------------------------
+2. Logic that CRASHES the process (unhandled rejection -> no proper response)
+--------------------------------------------------------------------
+
+[2.1] PUT /api/v1/user/updateUser - async handler has NO try/catch
+- File: backend/app/controllers/UserController/updateUser.js:5
+- `export const updateUser = async (req, res) => { ... }` has no try/catch.
+- Any throw escapes as rejected promise -> Express 4 ignores -> unhandled
+  rejection -> Node 24 CRASH.
+- Concrete throwers: backend/app/utility/updateValidation.js:117
+  (Error "Invalid email format") and :121 (Error "Password must be at least 6 characters").
+- Docker impact: container process dies, restarts, client gets no response.
+
+[2.2] POST /api/v1/post/updatePost - missing return + catch re-send after headers sent
+- File: backend/app/controllers/PostController/updatePostController.js:7-11 and :16-21
+- `if (!post) { res.status(400).json({...}) }` missing `return` -> execution continues.
+- Sends 200 after 400 was already sent -> ERR_HTTP_HEADERS_SENT thrown -> caught ->
+  catch tries `res.status(500).json(...)` again -> throws again -> unhandled rejection -> CRASH.
+
+[2.3] POST /api/v1/post/deletePost - same missing-return / double-send pattern
+- File: backend/app/controllers/PostController/deletePostController.js:7-11 and :16-21
+- Missing `return` after 400 response -> sends 200 after 400 -> headers already sent ->
+  throws in catch -> catch re-sends 500 -> unhandled -> CRASH.
+
+[2.4] POST /api/v1/post/deleteComments - missing return + undefined handler reference
+- File: backend/app/controllers/PostController/deleteCommentsController.js:5-9, 10-13, 14-19
+- Missing `return` before the 200 response after a 400 response.
+- Calls `deleteComments(data)` which is not imported/defined in that module -> ReferenceError ->
+  catch sends 500 (ok-ish) but the null-check flow still double-sends in the null path.
+
+--------------------------------------------------------------------
+3. Logic that responds, but with wrong status / not a good descriptive response
+--------------------------------------------------------------------
+
+[3.1] GET /api/v1/post/post/:id
+- File: backend/app/controllers/PostController/getPostByIdController.js:9-14
+- Missing `return` after `if (!post) { res.status(400).json(...) }`.
+- Post not found -> continues -> `post.author = await findOneUserById(post.author)` on null ->
+  TypeError -> catch -> sends 500 "Post not found" (should be a clean 400/404).
+
+[3.2] GET /api/v1/post
+- File: backend/app/controllers/PostController/getAllPostsController.js:14-18
+- Missing `return` after `if (!posts) { res.status(400).json(...) }`.
+- Null posts -> `posts.map(...)` -> TypeError -> catch -> sends 500 "Posts not found".
+
+[3.3] GET /api/v1/faculty/:id
+- File: backend/app/controllers/FacultyController/read.js:20-23
+- `Faculty.findById({ message: "...", faculty: faculty })` passes an object instead of the id ->
+  invalid query -> error -> catch -> sends 500 "Internal server error" even for valid faculty IDs.
+
+[3.4] DELETE /api/v1/post/deleteComments
+- File: backend/app/controllers/PostController/deleteCommentsController.js:4
+- `deleteComments` is undefined in module scope -> ReferenceError -> caught -> sends 500
+  "Post not found" (broken response instead of success/404 flow).
+
+--------------------------------------------------------------------
+4. Good error responses already baked in (patterns to keep / mimic)
+--------------------------------------------------------------------
+- backend/app/controllers/EventController/readOneEvent.js - validates ObjectId (400),
+  event not found (404), server error (500) with descriptive messages.
+- backend/app/controllers/RecruitmentController/getJobPosting.js - 404 job not found / 500.
+- backend/app/utility/auth.js - register (400/500), login (401/500), logout, checkUser (404/500)
+  all send descriptive JSON messages.
+- backend/app/middlewares/auth.middleware.js - isLoggedIn catches and returns 401.
+- backend/app/controllers/RecruitmentController/searchJobPostingsController.js - 400 missing
+  search term / 500.
+- backend/app/controllers/SearchController/searchController.js - 400 missing category+value / 500.
+- GET /health - backend/app/app.js:55-61 - returns 200 ok / 503 unhealthy based on DB state (good).
+
+--------------------------------------------------------------------
+5. Other latent crash-ish bugs (not currently wired to routes, but risky)
+--------------------------------------------------------------------
+- backend/app/services/postServices.js:27 - `console.log(data)` inside getPostById (undefined var).
+- backend/app/services/postServices.js:58-65 - updatePost never returns findByIdAndUpdate result.
+- backend/app/services/postServices.js:120-130 - deleteComment uses undefined `data`.
+- backend/app/services/userServices.js:36-78 - broken helpers (updateUserSingleField,
+  updateUserMultipleFields, getUserPostsById reference undefined vars / use res).
+- backend/app/services/searchServices.js:6-14 - user.jobExperience / user.currentPost may be
+  undefined -> TypeError -> caught in service -> rethrown -> 500.
+
+--------------------------------------------------------------------
+6. Docker-readiness gaps summary
+--------------------------------------------------------------------
+- Add global Express error handler middleware (err, req, res, next) in backend/app/app.js.
+- Add missing try/catch to PUT /api/v1/user/updateUser (backend/app/controllers/UserController/updateUser.js:5).
+- Add `return` after error responses in updatePost/deletePost/deleteComments/getPostById/getAllPosts controllers.
+- Prefer Express 5 or an asyncHandler wrapper / consistent try/catch to prevent unhandled rejections.
+- Health check exists: GET /health (backend/app/app.js:55-61).
+- Startup: backend/index.js - connectDB failure -> process.exit(1); listen errors not handled.

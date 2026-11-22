@@ -79,7 +79,6 @@ export const likePost = async (data) => {
       { $addToSet: { likes: data.userId } }, 
       { new: true } 
     );
-    console.log(val);
     
     return val;
   } catch (error) {

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import InputField from "./InputField.jsx";
-import SelectField from "./SelectField.jsx";
-import TextareaField from "./TextareaField.jsx";
-import CheckboxField from "./CheckboxField.jsx";
-import ArrayInputField from "./ArrayInputField.jsx";
+import InputField from "./InputField/InputField.jsx";
+import SelectField from "./SelectField/SelectField.jsx";
+import TextareaField from "./TextareaField/TextareaField.jsx";
+import CheckboxField from "./CheckboxField/CheckboxField.jsx";
+import ArrayInputField from "./ArrayInputField/ArrayInputField.jsx";
 import { useRecruitmentStore } from "../../../../store/useRecruitmentStore.js";
 const RecruitmentForm = () => {
   const { createJobPost } = useRecruitmentStore();

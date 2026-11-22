@@ -1,6 +1,5 @@
-import dotenv from "dotenv";
-dotenv.config();
 import express from "express";
+import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import defaultRouter from "./routers/api.js";
@@ -45,32 +44,23 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+// if (process.env.ENVIRONMENT === "development") {
+//   app.use((req, res, next) => {
+//     console.log("Origin:", req.headers.origin);
+//     next();
+//   });
+// }
 
 
-// app.use(
-//   cors({
-//     origin: function (origin, callback) {
-//       if (
-//         !origin ||
-//         allowedOrigins.includes(origin) ||
-//         origin.startsWith("https://the-alumni-project-vrtg.vercel.app")
-//       ) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error("Not allowed by CORS"));
-//       }
-//     },
-//     credentials: true,
-//   })
-// );
-
-app.use((req, res, next) => {
-  console.log("Origin:", req.headers.origin);
-  next();
+app.get("/health", (req, res) => {
+  const connected = mongoose.connection.readyState === 1;
+  return res.status(connected ? 200 : 503).json({
+    status: connected ? "ok" : "unhealthy",
+    database: connected ? "connected" : "disconnected",
+  });
 });
 
-
-app.use("/api/v1", defaultRouter); 
+app.use("/api/v1", defaultRouter);
 
 
 export default app;

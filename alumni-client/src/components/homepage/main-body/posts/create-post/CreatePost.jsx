@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import avatar from "../../../../../assets/avatar.png";
-import HiringForm from "./HiringForm.jsx";
-import FileUpload from "./FileUpload.jsx";
-import Avatar from "./Avatar.jsx";
-import SendButton from "./SendButton";
+import HiringForm from "./HiringForm/HiringForm.jsx";
+import FileUpload from "./FileUpload/FileUpload.jsx";
+import Avatar from "./Avatar/Avatar.jsx";
+import SendButton from "./SendButton/SendButton";
 import { useUserStore } from "../../../../../store/useUserStore.js";
-import FakeInput from "./FakeInput.jsx";
+import FakeInput from "./FakeInput/FakeInput.jsx";
 import PostForm from "./form-body/PostForm.jsx";
-import Modal from "../../../../common/Modal.jsx";
+import Modal from "../../../../common/Modal/Modal.jsx";
 function CreatePost() {
   const { authUser } = useUserStore();
   const [formOpen, setFormOpen] = React.useState(false);

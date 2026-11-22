@@ -1,5 +1,5 @@
 import React from "react";
-import EventCard from "./EventCard";
+import EventCard from "./EventCard/EventCard";
 import { useEventStore } from "../../../../store/useEventStore";
 import { formatSmartDateTime } from "../../../../bin/DateTime";
 

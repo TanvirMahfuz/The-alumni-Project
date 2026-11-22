@@ -1,6 +1,6 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
-import uploadFileToCloudinary from "../utility/cloudinary.config.js";
+import uploadFileToCloudinary from "../utility/cloudinaryUpload.js";
 
 const createUser = async (user) => {
   const newUser = new User(user);

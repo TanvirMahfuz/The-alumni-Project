@@ -1,7 +1,7 @@
 import React from "react";
 import { useUserStore } from "../../../../../../store/useUserStore";
 import Header from "../form-header/Header";
-import FileDropzone from "../drop-zone/FileDropzone";
+import FileDropzone from "../drop-zone/FileDropzone/FileDropzone";
 import { usePostStore } from "../../../../../../store/usePostStore";
 function PostForm({ setFormOpen }) {
   const { authUser } = useUserStore();

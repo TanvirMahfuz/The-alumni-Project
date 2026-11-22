@@ -1,8 +1,8 @@
 import React from "react";
 import Group from "./group/Group.jsx";
-import Header from "./Header";
+import Header from "./Header/Header";
 import EventForm from "./eventForm/EventForm";
-import Modal from "../../common/Modal.jsx";
+import Modal from "../../common/Modal/Modal.jsx";
 import Applicants from "./applicants/Applicants.jsx";
 import { useEventStore } from "../../../store/useEventStore.js";
 

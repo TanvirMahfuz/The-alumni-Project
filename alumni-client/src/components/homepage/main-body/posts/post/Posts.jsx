@@ -1,7 +1,7 @@
 import React from "react";
-import PostBody from "./PostBody";
-import PostFooter from "./PostFooter";
-import PostHeader from "./PostHeader";
+import PostBody from "./PostBody/PostBody";
+import PostFooter from "./PostFooter/PostFooter";
+import PostHeader from "./PostHeader/PostHeader";
 function Posts({ post }) {
 
   return (

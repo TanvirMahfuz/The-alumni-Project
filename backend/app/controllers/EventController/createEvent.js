@@ -1,6 +1,6 @@
 import Event from "../../models/eventModel.js";
 import { validateTime12hFormat } from "../../utility/validation.js";
-import uploadFileToCloudinary from "../../utility/cloudinary64.js";
+import uploadFileToCloudinary from "../../utility/cloudinaryUploadBase64.js";
 /**
  * Service function to create a new event
  * @param {Object} eventData - Event data to be created

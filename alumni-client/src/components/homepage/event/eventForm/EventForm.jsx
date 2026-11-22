@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { useEventStore } from "../../../../store/useEventStore.js";
 import { convertTo12HourFormat } from "../../../../bin/DateTime.js";
-import CloseButton from "./CloseButton.jsx";
-import TextInput from "./TextInput.jsx";
-import DatePicker from "./DatePicker.jsx";
-import TimePicker from "./TimePicker.jsx";
-import DropDown from "./DropDown.jsx";
-import TextArea from "./TextArea.jsx";
-import SubmitButton from "./SubmitButton.jsx";
-import ImageUpload from "./ImageUpload.jsx"; // Custom image uploader
+import CloseButton from "./CloseButton/CloseButton.jsx";
+import TextInput from "./TextInput/TextInput.jsx";
+import DatePicker from "./DatePicker/DatePicker.jsx";
+import TimePicker from "./TimePicker/TimePicker.jsx";
+import DropDown from "./DropDown/DropDown.jsx";
+import TextArea from "./TextArea/TextArea.jsx";
+import SubmitButton from "./SubmitButton/SubmitButton.jsx";
+import ImageUpload from "./ImageUpload/ImageUpload.jsx"; // Custom image uploader
 
 const EventForm = ({ openForm, setOpenForm }) => {
   const { saveEvent, submissionError } = useEventStore();

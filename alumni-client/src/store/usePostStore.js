@@ -1,10 +1,6 @@
 import { create } from "zustand";
+import { API_BASE_URL, readError } from "../config/api";
 
-// Set API base URL based on environment
-const API_BASE_URL =
-  import.meta.env.VITE_ENVIRONMENT === "development"
-    ? import.meta.env.VITE_DEVELOPMENT_URL
-    : import.meta.env.VITE_DEPLOYMENT_URL;
 
 export const usePostStore = create((set, get) => ({
   allPosts: [],
@@ -20,8 +16,9 @@ export const usePostStore = create((set, get) => ({
       const res = await fetch(`${API_BASE_URL}/post`, {
         credentials: "include",
       });
+      if (!res.ok) throw new Error("Failed to fetch posts");
       const data = await res.json();
-      set({ allPosts: data.data });
+      set({ allPosts: Array.isArray(data.data) ? data.data : [] });
     } catch (err) {
       console.error("Error fetching posts:", err);
     }
@@ -39,6 +36,7 @@ export const usePostStore = create((set, get) => ({
               credentials: "include",
             }
           );
+          if (!res.ok) return { ...comment, author: null };
           const data = await res.json();
           return { ...comment, author: data.user };
         } catch (err) {
@@ -62,11 +60,15 @@ export const usePostStore = create((set, get) => ({
         credentials: "include",
         body: JSON.stringify(post),
       });
+      if (!response.ok) {
+        return { ok: false, message: await readError(response, "Failed to create post") };
+      }
       const res = await response.json();
       await get().getAllPosts();
-      return res.data;
+      return { ok: true, post: res.data };
     } catch (error) {
       console.error("Error creating post:", error);
+      return { ok: false, message: "Could not reach the server" };
     } finally {
       set({ isCreatingPost: false });
     }
@@ -82,6 +84,7 @@ export const usePostStore = create((set, get) => ({
         credentials: "include",
         body: JSON.stringify({ postId, comment }),
       });
+      if (!response.ok) return null;
       const res = await response.json();
       return res.data;
     } catch (error) {
@@ -99,10 +102,10 @@ export const usePostStore = create((set, get) => ({
         credentials: "include",
         body: JSON.stringify(data),
       });
-      const body = await response.json();
-      console.log(body);
+      return response.ok;
     } catch (error) {
       console.error("Error liking post:", error);
+      return false;
     }
   },
 
@@ -116,10 +119,10 @@ export const usePostStore = create((set, get) => ({
         credentials: "include",
         body: JSON.stringify(data),
       });
-      const body = await response.json();
-      console.log(body);
+      return response.ok;
     } catch (error) {
       console.error("Remove like failed", error);
+      return false;
     }
   },
 }));

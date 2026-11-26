@@ -2,7 +2,7 @@ import React from "react";
 
 const FilePreview = ({ file, onRemove }) => {
   return (
-    <div className="relative border rounded-lg overflow-hidden group">
+    <div className="relative border border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden group">
       {file.type.startsWith("image/") ? (
         <img
           src={file.preview}
@@ -11,10 +11,10 @@ const FilePreview = ({ file, onRemove }) => {
           onLoad={() => URL.revokeObjectURL(file.preview)}
         />
       ) : (
-        <div className="h-32 flex items-center justify-center bg-gray-100">
+        <div className="h-32 flex items-center justify-center bg-gray-100 dark:bg-gray-800">
           <div className="text-center p-4">
             <p className="font-medium truncate">{file.name}</p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-400">
               {(file.size / 1024).toFixed(1)} KB
             </p>
           </div>

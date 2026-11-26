@@ -1,5 +1,7 @@
 import React from "react";
-import Sidebar from "../../components/homepage/Sidebar/Sidebar";
+import { useLocation } from "react-router-dom";
+import Sidebar from "../../components/homepage/sidebar/Sidebar";
+import FloatingNav from "../../components/homepage/sidebar/FloatingNav/FloatingNav.jsx";
 import Events from "../../components/homepage/event/Events.jsx";
 import Mainbody from "../../components/homepage/Mainbody/Mainbody";
 import Alumni from "../../components/homepage/alumni/AlumniList/AlumniList.jsx";
@@ -24,6 +26,12 @@ const menuItems = [
 ];
 function Homepage() {
   const [selectedTag, setSelectedTag] = React.useState(0);
+  const location = useLocation();
+
+  // The navbar Home button sends `state.home`; switch back to the feed tab
+  React.useEffect(() => {
+    if (location.state?.home) setSelectedTag(0);
+  }, [location.state?.home]);
 
   return (
     <div className="h-screen w-screen grid grid-cols-1 lg:grid-cols-12 ">
@@ -38,6 +46,7 @@ function Homepage() {
         {selectedTag === 3 && <Recruitment />}
         {selectedTag === 4 && <Faculty />}
       </div>
+      <FloatingNav {...{ menuItems, selectedTag, setSelectedTag }} />
     </div>
   );
 }

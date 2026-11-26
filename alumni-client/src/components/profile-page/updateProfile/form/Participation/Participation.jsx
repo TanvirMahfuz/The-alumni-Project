@@ -37,11 +37,12 @@ function Participation({ formData, setFormData }) {
       startDate: "",
       endDate: "",
     };
-    setParticipations((prev) => [...prev, newParticipation]);
+    const updated = [...participations, newParticipation];
+    setParticipations(updated);
 
     setFormData((prev) => ({
       ...prev,
-      participatedIn: newParticipation,
+      participatedIn: updated,
     }));
   };
 

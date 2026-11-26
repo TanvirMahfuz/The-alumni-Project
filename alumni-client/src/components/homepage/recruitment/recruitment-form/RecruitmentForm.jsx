@@ -6,7 +6,7 @@ import CheckboxField from "./CheckboxField/CheckboxField.jsx";
 import ArrayInputField from "./ArrayInputField/ArrayInputField.jsx";
 import { useRecruitmentStore } from "../../../../store/useRecruitmentStore.js";
 const RecruitmentForm = () => {
-  const { createJobPost } = useRecruitmentStore();
+  const { createJobPost, formError } = useRecruitmentStore();
   const [formData, setFormData] = useState({
     applyLink: "",
     position: "",
@@ -56,7 +56,6 @@ const RecruitmentForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
     await createJobPost(formData);
   };
 
@@ -67,6 +66,12 @@ const RecruitmentForm = () => {
       <h2 className="text-xl font-semibold text-gray-700 dark:text-white mb-7">
         Create New Recruitment
       </h2>
+
+      {formError && (
+        <p role="alert" className="mb-5 text-sm text-red-700 bg-red-100 dark:bg-red-900/40 dark:text-red-200 border border-red-300 dark:border-red-700 p-3 rounded-md">
+          {formError}
+        </p>
+      )}
 
       <InputField
         label="Apply Link"
@@ -201,7 +206,7 @@ const RecruitmentForm = () => {
         value={formData.expiresAt}
         onChange={handleChange}
       />
-      <p className="text-gray-500 text-sm italic mt-1">
+      <p className="text-gray-500 text-sm italic mt-1 dark:text-gray-400">
         Defaults to 30 days from now if not specified.
       </p>
 

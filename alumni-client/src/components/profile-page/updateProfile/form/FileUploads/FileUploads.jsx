@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useUserStore } from "../../../../../store/useUserStore";
 import { pdfsToBase64 } from "../../../../../bin/pdf2base64"; // Ensure this path is correct
+import { FILE_UPLOADS_ENABLED } from "../../../../../config/uploads";
+import UploadUnavailable from "../../../../common/UploadUnavailable/UploadUnavailable";
 
 function FileUploads({ formData, setFormData }) {
   const { authUser } = useUserStore();
@@ -114,6 +116,20 @@ function FileUploads({ formData, setFormData }) {
     setFormData((prevData) => ({ ...prevData, resume: null }));
   };
 
+  if (!FILE_UPLOADS_ENABLED) {
+    return (
+      <div className="space-y-4 mt-6">
+        <h3 className="text-2xl font-semibold text-gray-600 dark:text-gray-200">
+          File Uploads
+        </h3>
+        <p className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          Resume
+        </p>
+        <UploadUnavailable />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4 mt-6">
       {" "}
@@ -129,7 +145,7 @@ function FileUploads({ formData, setFormData }) {
       </label>
       <div
         className={`border-2 border-dashed rounded-lg p-6 text-center transition-all duration-200 ease-in-out
-          ${
+           dark:bg-blue-900/30 dark:border-gray-600 ${
             isDragging
               ? "border-teal-500 bg-blue-50"
               : "border-gray-300 hover:border-teal-300" // Subtle hover effect
@@ -155,13 +171,13 @@ function FileUploads({ formData, setFormData }) {
           </svg>
 
           <div className="flex flex-col items-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-600 dark:text-gray-300">
               <span className="font-medium text-teal-600 hover:text-teal-700 cursor-pointer">
                 Click to upload
               </span>{" "}
               or drag and drop
             </p>
-            <p className="text-xs text-gray-500">PDF (Max. 50MB)</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">PDF (Max. 50MB)</p>
           </div>
 
           <input
@@ -181,14 +197,14 @@ function FileUploads({ formData, setFormData }) {
         </div>
       </div>
       {error && (
-        <div className="text-sm text-red-700 bg-red-100 border border-red-200 p-3 rounded-md animate-fade-in">
+        <div className="text-sm text-red-700 bg-red-100 border border-red-200 dark:text-red-300 dark:bg-red-900/30 dark:border-red-800 p-3 rounded-md animate-fade-in">
           {" "}
           {/* Enhanced error styling */}
           {error}
         </div>
       )}
       {fileName && (
-        <div className="flex items-center justify-between p-3 bg-gray-100 rounded-md border border-gray-200 shadow-sm">
+        <div className="flex items-center justify-between p-3 bg-gray-100 rounded-md border border-gray-200 shadow-sm dark:bg-gray-800 dark:border-gray-700">
           {" "}
           {/* Enhanced file display styling */}
           <div className="flex items-center space-x-3">
@@ -207,7 +223,7 @@ function FileUploads({ formData, setFormData }) {
                 d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
               />
             </svg>
-            <span className="text-sm font-medium text-gray-800 truncate max-w-xs">
+            <span className="text-sm font-medium text-gray-800 truncate max-w-xs dark:text-gray-100">
               {" "}
               {/* Darker text */}
               {fileName}
@@ -216,7 +232,7 @@ function FileUploads({ formData, setFormData }) {
           <button
             type="button"
             onClick={handleRemoveFile}
-            className="text-gray-500 hover:text-red-600 p-1 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-red-300 transition duration-200" // Enhanced remove button
+            className="text-gray-500 hover:text-red-600 p-1 rounded-full hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-red-300 transition duration-200 dark:text-gray-400 dark:hover:bg-gray-700" // Enhanced remove button
             aria-label="Remove uploaded resume">
             <svg
               className="w-5 h-5"

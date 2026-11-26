@@ -7,14 +7,14 @@ const ArrayInputField = ({
   onRemove,
 }) => (
   <div className="mb-5">
-    <label className="block text-sm font-bold text-gray-200 mb-1">
+    <label className="block text-sm font-bold text-gray-700 dark:text-gray-200 mb-1">
       {label}
     </label>
     {values.map((value, index) => (
       <div key={index} className="mt-1 flex rounded-md shadow-sm">
         <input
           type="text"
-          className="flex-1 block w-full min-w-0 rounded-none rounded-l-md border border-gray-300 py-2 px-3 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm"
+          className="flex-1 block w-full min-w-0 rounded-none rounded-l-md border border-gray-300 py-2 px-3 focus:outline-none focus:ring-teal-500 focus:border-teal-500 sm:text-sm dark:border-gray-600"
           value={value}
           onChange={(e) => onChange(e, index, field)}
         />
@@ -22,7 +22,7 @@ const ArrayInputField = ({
           <button
             type="button"
             onClick={() => onRemove(index, field)}
-            className="relative inline-flex items-center space-x-2 px-3 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+            className="relative inline-flex items-center space-x-2 px-3 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-teal-500 focus:border-teal-500 dark:border-gray-600 dark:text-gray-200 dark:bg-gray-800 dark:hover:bg-gray-800">
             <span>-</span>
           </button>
         )}

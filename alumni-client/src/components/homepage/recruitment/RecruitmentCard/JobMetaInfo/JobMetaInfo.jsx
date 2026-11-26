@@ -15,28 +15,28 @@ const JobMetaInfo = ({
         <>
           <div className="flex justify-between items-start">
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 truncate">
+              <h3 className="text-sm font-semibold text-gray-900 truncate dark:text-gray-100">
                 {position}
               </h3>
-              <p className="text-xs text-gray-500">{company}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{company}</p>
             </div>
             {isUrgent && (
-              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800">
+              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300">
                 Urgent
               </span>
             )}
           </div>
 
           <div className="mt-2 flex flex-wrap gap-1">
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/40">
               {type}
             </span>
-            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
+            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300">
               {location}
             </span>
           </div>
 
-          <div className="mt-2 flex items-center text-sm text-gray-600">
+          <div className="mt-2 flex items-center text-sm text-gray-600 dark:text-gray-300">
             <svg
               className="flex-shrink-0 mr-1.5 h-4 w-4 text-yellow-500"
               fill="currentColor"
@@ -54,16 +54,16 @@ const JobMetaInfo = ({
       ) : (
         <div className="flex items-center space-x-4">
           <div>
-            <h3 className="text-lg font-medium text-gray-900">{company}</h3>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">{company}</h3>
             <div className="flex flex-wrap gap-2 space-x-2 mt-1">
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/40">
                 {type}
               </span>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300">
                 {location}
               </span>
               {isUrgent && (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300">
                   Urgent
                 </span>
               )}

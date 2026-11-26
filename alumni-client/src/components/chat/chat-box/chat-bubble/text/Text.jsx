@@ -1,32 +1,16 @@
 import React from "react";
 import { useUserStore } from "../../../../../store/useUserStore";
+import { useChatStore } from "../../../../../store/useChatStore";
 import TextAvatar from "../text/TextAvatar/TextAvatar.jsx";
 import TextContent from "../text/TextContent/TextContent";
 import TextDropdown from "../text/TextDropDown/TextDropDown.jsx";
 
 function Text({ message }) {
   const { authUser } = useUserStore();
-  const [textOwner, setTextOwner] = React.useState();
+  const { selectedChatUser } = useChatStore();
+  const isSender = message.senderId === authUser?._id;
+  const textOwner = isSender ? authUser : selectedChatUser;
 
-  React.useEffect(() => {
-    async function fetchUser(id) {
-      try {
-        const res = await fetch(`/api/user/info/${id}`);
-        const data = await res.json();
-        setTextOwner(data.user);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
-    if (message.senderId === authUser._id) {
-      setTextOwner(authUser);
-    } else {
-      fetchUser(message.senderId);
-    }
-  }, [message]);
-
-  const isSender = message.senderId === authUser._id;
 
   return (
     <div

@@ -6,14 +6,17 @@ import DesktopLayout from "./desktop-layout/DesktopLayout.jsx";
 import Header from "./Header/Header.jsx";
 import RecruitmentForm from "./recruitment-form/RecruitmentForm.jsx";
 import Modal from "../../common/Modal/Modal.jsx";
+import EmptyState, { PAGE_SHELL } from "../../common/EmptyState/EmptyState.jsx";
+import { FaBriefcase } from "react-icons/fa";
 function Recruitment() {
   const [openPanelId, setOpenPanelId] = useState(null);
   const { recruitments, getRecruitments, formOpen, setFormOpen, isLoading } =
     useRecruitmentStore();
-  console.log(formOpen, isLoading);
+  const [loaded, setLoaded] = useState(false);
   useEffect(() => {
-    getRecruitments();
+    getRecruitments().finally(() => setLoaded(true));
   }, [getRecruitments]);
+  const isEmpty = loaded && !recruitments?.length;
 
   return (
     <>
@@ -28,21 +31,31 @@ function Recruitment() {
           )}
         </Modal>
       )}
-      <div className="px-6">
+      <div className={PAGE_SHELL}>
         <Header />
-        {/* Desktop Layout */}
-        <DesktopLayout
-          recruitments={recruitments}
-          openPanelId={openPanelId}
-          setOpenPanelId={setOpenPanelId}
-        />
+        {isEmpty ? (
+          <EmptyState
+            icon={FaBriefcase}
+            title="No Job Posts Yet"
+            message="There are no openings right now. Check back later or post a job for fellow alumni."
+          />
+        ) : (
+          <>
+            {/* Desktop Layout */}
+            <DesktopLayout
+              recruitments={recruitments}
+              openPanelId={openPanelId}
+              setOpenPanelId={setOpenPanelId}
+            />
 
-        {/* Mobile Layout */}
-        <MobileLayout
-          recruitments={recruitments}
-          openPanelId={openPanelId}
-          setOpenPanelId={setOpenPanelId}
-        />
+            {/* Mobile Layout */}
+            <MobileLayout
+              recruitments={recruitments}
+              openPanelId={openPanelId}
+              setOpenPanelId={setOpenPanelId}
+            />
+          </>
+        )}
       </div>
     </>
   );

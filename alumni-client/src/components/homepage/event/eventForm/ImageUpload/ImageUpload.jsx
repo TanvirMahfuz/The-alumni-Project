@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { imagesToBase64 } from "../../../../../bin/Image2base64";
+import { FILE_UPLOADS_ENABLED } from "../../../../../config/uploads";
+import UploadUnavailable from "../../../../common/UploadUnavailable/UploadUnavailable";
 
 function ImageUpload({ image, setImage }) {
   const [error, setError] = useState("");
@@ -55,6 +57,17 @@ function ImageUpload({ image, setImage }) {
     setImage(null);
     setError("");
   };
+
+  if (!FILE_UPLOADS_ENABLED) {
+    return (
+      <div>
+        <p className="block text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">
+          Event Image
+        </p>
+        <UploadUnavailable className="h-48" />
+      </div>
+    );
+  }
 
   return (
     <div className="">

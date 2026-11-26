@@ -12,27 +12,17 @@ const NavLinks = ({ links, hoverIndex, setHoverIndex }) => (
         <Link
           to={link.to}
           className="nav-link flex items-center relative rounded-3xl py-1.5 px-3 text-[#8D9295] hover:text-[#2992FE] transition-all group">
-          {/* Default Icon */}
+          {/* Single fixed-size icon: hover only changes fill/stroke, never layout */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="size-7 group-hover:hidden hidden md:block"
+            className="size-7 hidden md:block shrink-0 transition-colors group-hover:fill-[#2992FE] group-hover:stroke-[#e8f2f8] dark:group-hover:stroke-gray-800"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor">
             {link.icon}
           </svg>
-          {/* Hover Icon */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="size-8 hidden group-hover:block text-[#2992FE]"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="#e8f2f8">
-            {link.icon}
-          </svg>
-          <span className="hidden md:block lg:group-hover:inline mx-1 text-sm">
+          <span className="hidden md:block mx-1 text-sm">
             {link.name}
           </span>
         </Link>

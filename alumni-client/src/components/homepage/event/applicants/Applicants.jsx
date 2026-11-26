@@ -16,7 +16,7 @@ function Applicants() {
           <div key={applicant._id || applicant.id} className="px-4">
             <Tag
               label={applicant.name}
-              imageSrc={applicant.image}
+              imageSrc={applicant.image || "/avatar.png"}
               onClick={() => {}}
             />
             <hr className="border-t border-gray-300 dark:border-white/20 my-2" />

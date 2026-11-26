@@ -14,12 +14,10 @@ const EventCard = ({
   isFree,
   isFeatured,
 }) => {
-  const { eventOrganizer, getOrganizer, setOnBoard, toggleSelectedEvent,isLoading } =
-    useEventStore();
-
-  React.useEffect(() => {
-    getOrganizer(organizer);
-  }, [getOrganizer, organizer]);
+  const { setOnBoard, toggleSelectedEvent, onBoardingId } = useEventStore();
+  const isLoading = onBoardingId === eventId;
+  // The API returns the organizer populated ({ _id, name, image })
+  const organizerName = typeof organizer === "object" ? organizer?.name : null;
 
   return (
     <div className="w-full mb-6 min-w-100 max-w-sm bg-stone-50 dark:bg-slate-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-200 dark:border-white/10">
@@ -27,7 +25,7 @@ const EventCard = ({
       <div className="relative h-48 bg-white dark:bg-slate-700">
         <img
           className="w-full h-full object-cover"
-          src={image?.length > 0 ? image : "/no-img-event.png"}
+          src={image?.length > 0 ? image : "/default-event-img.webp"}
           alt={`${title} event`}
         />
 
@@ -110,7 +108,7 @@ const EventCard = ({
             </svg>
             {location}
           </div>
-          {organizer && (
+          {organizerName && (
             <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
               <svg
                 className="w-4 h-4 mr-1"
@@ -124,7 +122,7 @@ const EventCard = ({
                   d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                 />
               </svg>
-              Organized by {eventOrganizer?.name}
+              Organized by {organizerName}
             </div>
           )}
         </div>

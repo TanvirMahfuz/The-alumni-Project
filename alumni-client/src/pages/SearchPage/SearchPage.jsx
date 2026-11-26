@@ -22,9 +22,19 @@ function SearchPage() {
   return (
     <div>
 
-      {category === "name" && <SearchResultUsers searchResults={searchResults} />}
+      {isLoading && (
+        <p className="mt-10 text-center text-gray-500 dark:text-gray-400">Searching…</p>
+      )}
 
-      {category === "company" && (
+      {!isLoading && category === "name" && (
+        <SearchResultUsers searchResults={searchResults} />
+      )}
+
+      {!isLoading && category === "session" && (
+        <SearchResultUsers searchResults={searchResults} title="Session Results" />
+      )}
+
+      {!isLoading && category === "company" && (
         <SearchResultCompanies searchResults={searchResults} />
       )}
     </div>

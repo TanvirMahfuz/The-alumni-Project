@@ -3,7 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../../store/useUserStore";
 
 function Register() {
-  const { register, isUpdating } = useUserStore(); // add isUpdating for loading state
+  const { register, isUpdating, authError, clearAuthError } = useUserStore();
+
+  React.useEffect(() => {
+    clearAuthError();
+  }, [clearAuthError]);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -21,17 +25,9 @@ function Register() {
     e.preventDefault();
     const { name, email, password, confirmPassword } = formData;
 
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-
     const res = await register(name, email, password, confirmPassword);
     if (res) {
-      console.log("Registration successful");
       navigate("/");
-    } else {
-      console.error("Registration failed");
     }
   };
 
@@ -41,6 +37,14 @@ function Register() {
         <h2 className="text-3xl font-semibold text-gray-800 dark:text-white mb-6 text-center drop-shadow-sm">
           Register
         </h2>
+
+        {authError && (
+          <p
+            role="alert"
+            className="mb-4 text-sm text-red-700 bg-red-100 dark:bg-red-900/40 dark:text-red-200 border border-red-300 dark:border-red-700 p-3 rounded-md">
+            {authError}
+          </p>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Name */}

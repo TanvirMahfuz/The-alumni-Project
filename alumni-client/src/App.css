@@ -22,3 +22,12 @@ html.dark {
 html.dark body {
   background-color: var(--bg-dark) !important;
 }
+/* Text, inputs and scrollbars with no explicit color follow the theme */
+html {
+  color: #111827;
+  color-scheme: light;
+}
+html.dark {
+  color: #e5e7eb;
+  color-scheme: dark;
+}

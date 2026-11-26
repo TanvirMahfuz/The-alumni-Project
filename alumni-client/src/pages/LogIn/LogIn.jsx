@@ -8,18 +8,17 @@ function LogIn() {
     password: "",
   });
   const navigate = useNavigate();
-  const { logIn,isUpdating } = useUserStore();
+  const { logIn, isUpdating, authError, clearAuthError } = useUserStore();
+
+  React.useEffect(() => {
+    clearAuthError();
+  }, [clearAuthError]);
 
   const handleLogIn = async (e) => {
     e.preventDefault(); // prevent page refresh
-    try {
-      const success = await logIn(formData.email, formData.password);
-      if (success) {
-        navigate("/");
-      }
-    } catch (error) {
-      console.log("log in failed");
-      navigate("/login");
+    const success = await logIn(formData.email, formData.password);
+    if (success) {
+      navigate("/");
     }
   };
 
@@ -29,6 +28,14 @@ function LogIn() {
         <h2 className="text-3xl font-semibold text-gray-800 dark:text-white mb-6 text-center drop-shadow-sm">
           Welcome Back
         </h2>
+
+        {authError && (
+          <p
+            role="alert"
+            className="mb-4 text-sm text-red-700 bg-red-100 dark:bg-red-900/40 dark:text-red-200 border border-red-300 dark:border-red-700 p-3 rounded-md">
+            {authError}
+          </p>
+        )}
 
         <form onSubmit={handleLogIn}>
           {/* Email Input */}

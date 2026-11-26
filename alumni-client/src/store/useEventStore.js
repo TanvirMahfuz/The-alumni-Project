@@ -1,10 +1,7 @@
 import { create } from "zustand";
+import { API_BASE_URL, readError } from "../config/api";
 import { useUserStore } from "./useUserStore";
 
-const API_BASE_URL =
-  import.meta.env.VITE_ENVIRONMENT === "development"
-    ? import.meta.env.VITE_DEVELOPMENT_URL
-    : import.meta.env.VITE_DEPLOYMENT_URL;
 
 export const useEventStore = create((set, get) => ({
   events: [],
@@ -12,6 +9,7 @@ export const useEventStore = create((set, get) => ({
   eventOrganizer: null,
   openForm: false,
   isLoading: false,
+  onBoardingId: null, // event currently being joined (per-card spinner)
   submissionError: null, // general error state for form submission
   fetchError: null, // error state for fetch operations
 
@@ -56,7 +54,7 @@ export const useEventStore = create((set, get) => ({
       });
       if (!response.ok) throw new Error("Failed to fetch events");
       const data = await response.json();
-      set({ events: data.data });
+      set({ events: Array.isArray(data.data) ? data.data : [] });
     } catch (error) {
       set({ fetchError: error.message || "Error fetching events" });
       console.error("getEvents error:", error);
@@ -66,12 +64,12 @@ export const useEventStore = create((set, get) => ({
   getEvent: async (eventId) => {
     set({ fetchError: null });
     try {
-      const response = await fetch(`${API_BASE_URL}/event/${eventId}`, {
+      const response = await fetch(`${API_BASE_URL}/event/getOne/${eventId}`, {
         credentials: "include",
       });
       if (!response.ok) throw new Error("Failed to fetch event");
       const data = await response.json();
-      return data.event;
+      return data.data;
     } catch (error) {
       set({ fetchError: error.message || "Error fetching event" });
       console.error("getEvent error:", error);
@@ -108,8 +106,7 @@ export const useEventStore = create((set, get) => ({
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to save event");
+        throw new Error(await readError(response, "Failed to save event"));
       }
 
       const data = await response.json();
@@ -127,13 +124,13 @@ export const useEventStore = create((set, get) => ({
   },
 
   setOnBoard: async (eventId) => {
-    set({ fetchError: null });
-    set({ isLoading: true });
+    if (!useUserStore.getState().authUser) {
+      alert("Please log in to join this event");
+      return;
+    }
+    set({ fetchError: null, onBoardingId: eventId });
     try {
-      const data = {
-        eventId,
-        applicantId: useUserStore.getState().authUser._id,
-      };
+      const data = { eventId };
       const response = await fetch(`${API_BASE_URL}/event/onBoard`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -141,18 +138,20 @@ export const useEventStore = create((set, get) => ({
         body: JSON.stringify(data),
       });
 
-      if (!response.ok) throw new Error("Failed to set onBoard");
-      const res = await response.json();
-      console.log(res);
-      set({ isLoading: false })
+      if (!response.ok) {
+        throw new Error(await readError(response, "Failed to join event"));
+      }
+      // Refresh the open applicants panel if it shows this event
+      if (get().selectedEvent?._id === eventId) {
+        const onBoard = await get().getOnBoardUsers(eventId);
+        set({ selectedEvent: { ...get().selectedEvent, onBoard } });
+      }
       alert("You have been added to the onBoard list");
-      return
     } catch (error) {
       set({ fetchError: error.message || "Error saving event onBoard" });
-      set({ isLoading: false });
-      console.error("setOnBoard error:", error);
       alert(error.message);
-      return;
+    } finally {
+      set({ onBoardingId: null });
     }
   },
 

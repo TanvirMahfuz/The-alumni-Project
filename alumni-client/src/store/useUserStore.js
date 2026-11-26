@@ -1,36 +1,30 @@
 import { create } from "zustand";
 import { io } from "socket.io-client";
-
-const API_BASE_URL =
-  import.meta.env.VITE_ENVIRONMENT === "development"
-    ? import.meta.env.VITE_DEVELOPMENT_URL
-    : import.meta.env.VITE_DEPLOYMENT_URL;
-
-const SOCKET_BASE_URL =
-  import.meta.env.VITE_ENVIRONMENT === "development"
-    ? "http://localhost:3000"
-    : "https://the-alumni-project.onrender.com";
-//important note: socket io do not work with sub roots like /api/v1
+import { API_BASE_URL, SOCKET_URL, readError } from "../config/api";
 
 export const useUserStore = create((set, get) => ({
   authUser: null,
+  // true until the first /auth/check finishes, so routes don't redirect early
+  isCheckingAuth: true,
   onlineUsers: [],
   allUsers: [],
   selectedUser: null,
   socket: null,
   isUpdating: false,
+  authError: null,
 
   setUser: (user) => set({ authUser: user }),
   setOnlineUsers: (users) => set({ onlineUsers: users }),
   setAllUsers: (users) => set({ allUsers: users }),
   setSelectedUser: (user) => set({ selectedUser: user }),
+  clearAuthError: () => set({ authError: null }),
 
   getAuthUser: async () => {
     try {
       const res = await fetch(`${API_BASE_URL}/auth/check`, {
         credentials: "include",
       });
-      if (!res.ok) throw new Error("Failed to fetch authenticated user");
+      if (!res.ok) throw new Error("Not logged in");
 
       const data = await res.json();
       if (!data.user) throw new Error("No user found in response");
@@ -38,7 +32,9 @@ export const useUserStore = create((set, get) => ({
       get().setUser(data.user);
       get().connectSocket();
     } catch (err) {
-      console.error("getAuthUser error:", err.message);
+      console.info("getAuthUser:", err.message);
+    } finally {
+      set({ isCheckingAuth: false });
     }
   },
 
@@ -51,6 +47,7 @@ export const useUserStore = create((set, get) => ({
           const res = await fetch(`${API_BASE_URL}/user/info/${userId}`, {
             credentials: "include",
           });
+          if (!res.ok) return null;
           const data = await res.json();
           return data.user;
         } catch (err) {
@@ -72,6 +69,7 @@ export const useUserStore = create((set, get) => ({
       const res = await fetch(`${API_BASE_URL}/user/info/${userId}`, {
         credentials: "include",
       });
+      if (!res.ok) return null;
       const data = await res.json();
       return data.user;
     } catch (err) {
@@ -85,54 +83,42 @@ export const useUserStore = create((set, get) => ({
       const res = await fetch(`${API_BASE_URL}/user/allUsers`, {
         credentials: "include",
       });
+      if (!res.ok) throw new Error("Failed to fetch users");
       const data = await res.json();
-      // const filtered = data.filter((user) => user._id !== get().authUser?._id);
-      get().setAllUsers(data);
+      get().setAllUsers(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
     }
   },
 
   connectSocket: () => {
+    const { authUser, socket } = get();
+    if (!authUser || socket?.connected) return;
 
-      console.log("Connecting socket...");
-      const { authUser, socket } = get();
+    // The server identifies the user from the auth cookie
+    const newSocket = io(SOCKET_URL, {
+      withCredentials: true,
+      transports: ["websocket", "polling"],
+    });
+    set({ socket: newSocket });
 
-      if (!authUser || socket?.connected) return;
+    newSocket.on("getOnlineUsers", (userIds) => {
+      get().getOnlineUsers(userIds);
+    });
 
-      const newSocket = io(SOCKET_BASE_URL, {
-        query: { userId: authUser._id },
-        withCredentials: true,
-        transports: ["websocket", "polling"], // fallback support
-      });
-      try {
-        newSocket.connect();
-        set({ socket: newSocket });
-      }catch (error) {
-          console.error("Failed to connect socket:", error);
-        }
-        newSocket.on("connection", () => {
-          console.log("Socket connected");
-        });
-
-        newSocket.on("getOnlineUsers", (userIds) => {
-          set({ onlineUsers: userIds });
-          get().getOnlineUsers(userIds);
-        });
-
-        newSocket.on("connect_error", (err) => {
-          console.error("Socket connection error:", err);
-        });
-      
+    newSocket.on("connect_error", (err) => {
+      console.error("Socket connection error:", err.message);
+    });
   },
 
   disconnectSocket: () => {
     const { socket } = get();
-    if (socket?.connected) socket.disconnect();
+    if (socket) socket.disconnect();
+    set({ socket: null, onlineUsers: [] });
   },
 
   logIn: async (email, password) => {
-    set({ isUpdating: true });
+    set({ isUpdating: true, authError: null });
 
     try {
       const res = await fetch(`${API_BASE_URL}/auth/log-in`, {
@@ -142,19 +128,20 @@ export const useUserStore = create((set, get) => ({
         body: JSON.stringify({ email, password }),
       });
 
-      if (!res.ok) throw new Error("Login failed");
+      if (!res.ok) {
+        throw new Error(await readError(res, "Login failed"));
+      }
       const data = await res.json();
-
-      if (!data.user) throw new Error("User data missing");
+      if (!data.user) throw new Error("Login failed");
 
       get().setUser(data.user);
       get().connectSocket();
-      set({ isUpdating: false })
       return true;
     } catch (err) {
-      console.error("Login error:", err.message);
-      set({ isUpdating: false });
+      set({ authError: err.message });
       return false;
+    } finally {
+      set({ isUpdating: false });
     }
   },
 
@@ -174,10 +161,11 @@ export const useUserStore = create((set, get) => ({
 
   register: async (name, email, password, confirmPassword) => {
     if (password !== confirmPassword) {
-      console.log("Passwords do not match");
+      set({ authError: "Passwords do not match" });
       return false;
     }
 
+    set({ isUpdating: true, authError: null });
     try {
       const res = await fetch(`${API_BASE_URL}/auth/register`, {
         method: "POST",
@@ -186,18 +174,20 @@ export const useUserStore = create((set, get) => ({
         body: JSON.stringify({ name, email, password, confirmPassword }),
       });
 
-      const data = await res.json();
-      if (!res.ok || !data.user) {
-        console.log("Registration failed:", data.message || "Unknown error");
-        return false;
+      if (!res.ok) {
+        throw new Error(await readError(res, "Registration failed"));
       }
+      const data = await res.json();
+      if (!data.user) throw new Error("Registration failed");
 
       get().setUser(data.user);
       get().connectSocket();
       return true;
     } catch (err) {
-      console.error("Registration error:", err);
+      set({ authError: err.message });
       return false;
+    } finally {
+      set({ isUpdating: false });
     }
   },
 
@@ -211,14 +201,15 @@ export const useUserStore = create((set, get) => ({
         body: JSON.stringify(userData),
       });
 
-      if (!res.ok) throw new Error("Failed to update user");
+      if (!res.ok) {
+        throw new Error(await readError(res, "Failed to update profile"));
+      }
 
       const data = await res.json();
       get().setUser(data.user);
       return true;
     } catch (err) {
-      console.error("Update error:", err.message);
-      alert("Failed to update profile: " + err.message);
+      alert(err.message);
       return false;
     } finally {
       set({ isUpdating: false });

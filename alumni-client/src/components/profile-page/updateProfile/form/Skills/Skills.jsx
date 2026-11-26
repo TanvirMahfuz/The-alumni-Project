@@ -17,9 +17,11 @@ function Skills({formData, setFormData}) {
   }, [authUser]);
 
   const handleSkillChange = (index, field, value) => {
-    const updatedSkills = [...skills];
-    updatedSkills[index][field] =
-      field === "level" ? parseInt(value) || 0 : value;
+    const updatedSkills = skills.map((skill, i) =>
+      i === index
+        ? { ...skill, [field]: field === "level" ? parseInt(value) || 0 : value }
+        : skill
+    );
     setSkills(updatedSkills);
     setFormData((prev) => ({
       ...prev,
@@ -33,10 +35,11 @@ function Skills({formData, setFormData}) {
       image: "",
       level: 0,
     };
-    setSkills((prev) => [...prev, newSkill]);
+    const updatedSkills = [...skills, newSkill];
+    setSkills(updatedSkills);
     setFormData((prev) => ({
       ...prev,
-      skills: newSkill,
+      skills: updatedSkills,
     }));
   };
 
@@ -45,7 +48,7 @@ function Skills({formData, setFormData}) {
     setSkills(updatedSkills);
     setFormData((prev) => ({
       ...prev,
-      skills: newSkill,
+      skills: updatedSkills,
     }));
   };
 

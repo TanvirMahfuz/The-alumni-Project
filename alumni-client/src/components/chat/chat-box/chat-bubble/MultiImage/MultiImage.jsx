@@ -5,50 +5,34 @@ import ImageWithOverlay from "../multi-image/ImageWithOverlay/ImageWithOverlay.j
 import ImageOverlayMore from "../multi-image/ImageOverlayMore/ImageOverlayMore.jsx";
 import Footer from "../multi-image/Footer/Footer.jsx";
 import { useUserStore } from "../../../../../store/useUserStore";
+import { useChatStore } from "../../../../../store/useChatStore";
 import { formatSmartDateTime } from "../../../../../bin/DateTime.js";
 function MultiImage({ message }) {
   const visibleImages = message.images.slice(0, 3);
   const remainingCount = message.images.length - 3;
   const hasMore = remainingCount > 0;
   const { authUser } = useUserStore();
-  const [textOwner, setTextOwner] = React.useState();
+  const { selectedChatUser } = useChatStore();
+  const isSender = message.senderId === authUser?._id;
+  const textOwner = isSender ? authUser : selectedChatUser;
 
-  React.useEffect(() => {
-    async function fetchUser(id) {
-      try {
-        const res = await fetch(`/api/user/info/${id}`);
-        const data = await res.json();
-        setTextOwner(data.user);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
-    if (message.senderId === authUser._id) {
-      setTextOwner(authUser);
-    } else {
-      fetchUser(message.senderId);
-    }
-  }, [message]);
-
-  const isSender = message.senderId === authUser._id;
   return (
     <div
       className={`flex ${
         isSender ? "flex-row-reverse" : ""
       } items-start gap-2.5`}>
       <Avatar
-        src={textOwner?.image || "./avatar.png"}
-        alt={`${textOwner?.name || "john"}'s image`}
+        src={textOwner?.image || "/avatar.png"}
+        alt={`${textOwner?.name || "User"}'s image`}
       />
 
       <div className="flex flex-col gap-2.5">
         <Header
-          name={textOwner?.name || "john"}
+          name={textOwner?.name || "User"}
           time={formatSmartDateTime(message.createdAt)}
         />
 
-        <div className="leading-1.5 flex w-full max-w-[320px] flex-col">
+        <div className="leading-1.5 flex w-full max-w-[75vw] md:max-w-[320px] flex-col">
           <p className="text-sm max-h-max text-wrap font-normal text-gray-900 dark:text-white">
             {message.text}
           </p>

@@ -1,0 +1,19 @@
+/* Same "push" effect as the navbar links (navbar.css .prev-hovered / .next-hovered):
+   hovering a button nudges the message bar away from it. Hovering the bar moves nothing. */
+.chat-footer-row .message-bar {
+  transition: transform 0.3s ease;
+}
+
+.chat-footer-row:has(.send-btn:hover) .message-bar {
+  transform: translateX(-10px);
+}
+
+.chat-footer-row:has(.photo-btn:hover) .message-bar {
+  transform: translateX(10px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-footer-row .message-bar {
+    transition: none;
+  }
+}

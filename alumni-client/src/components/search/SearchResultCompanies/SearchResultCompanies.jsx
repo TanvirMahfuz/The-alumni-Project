@@ -1,6 +1,7 @@
 import React from "react";
+import EmptyState from "../../common/EmptyState/EmptyState.jsx";
+import { FaSearch } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
-import { companyIcon as profilePlaceHolder } from "../../../assets/icons";
 import { countOrderedMatches } from "../../../bin/similarity.js";
 import { format } from "date-fns";
 
@@ -12,17 +13,17 @@ function ResultSection({ title, results }) {
     <div className="mt-3 flex flex-col space-y-3 items-center justify-center">
       <div className="flex items-center w-full sm:max-w-100 md:max-w-150">
         <div className="bg-blue-400 h-1 flex-grow"></div>
-        <h1 className="text-xl font-light mx-2 text-black">{title}</h1>
+        <h1 className="text-xl font-light mx-2 text-black dark:text-gray-100">{title}</h1>
         <div className="bg-blue-400 h-1 flex-grow"></div>
       </div>
 
       {results.map((result, index) => (
         <div
           key={result._id || index}
-          className="bg-white rounded-lg shadow-md p-4 w-full sm:max-w-sm md:max-w-md lg:min-w-150">
+          className="bg-white rounded-lg shadow-md p-4 w-full sm:max-w-sm md:max-w-md lg:min-w-150 dark:bg-gray-800">
           <div className="flex flex-col sm:flex-row items-center sm:items-start space-x-0 sm:space-x-4">
             <img
-              src={result?.image || profilePlaceHolder}
+              src={result?.image || "/avatar.png"}
               alt={`${result.name || "Profile"} picture`}
               className="w-16 h-16 sm:w-18 sm:h-18 rounded-full"
             />
@@ -31,7 +32,7 @@ function ResultSection({ title, results }) {
               <Link
                 className="w-full flex justify-center items-center gap-1"
                 to={`/profile/${result._id || ""}`}>
-                <span className="text-lg text-black font-semibold">
+                <span className="text-lg text-black font-semibold dark:text-gray-100">
                   {result?.name || "Alice in Wonderland"}
                 </span>
                 <span className="text-gray-400 text-xs font-medium">
@@ -39,21 +40,20 @@ function ResultSection({ title, results }) {
                 </span>
               </Link>
 
-              <p className="text-gray-500 text-xs">
+              <p className="text-gray-500 text-xs dark:text-gray-400">
                 {result?.currentPost?.[0]?.title || "Unemployed"}
                 <span className="block sm:inline">
                   {" "}
                   | since{" "}
                   {result?.currentPost?.[0]?.startDate
-                    ? format(
-                        new Date(result?.currentPost[0]?.startDate),
-                        "MMM yyyy"
-                      )
+                    ? (isNaN(new Date(result.currentPost[0].startDate))
+                        ? "N/A"
+                        : format(new Date(result.currentPost[0].startDate), "MMM yyyy"))
                     : "2020"}
                 </span>
               </p>
 
-              <div className="mt-1 text-sm text-gray-600 flex justify-center sm:justify-start items-center space-x-2">
+              <div className="mt-1 text-sm text-gray-600 flex justify-center sm:justify-start items-center space-x-2 dark:text-gray-300">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -108,6 +108,16 @@ function SearchResultCompanies({ searchResults }) {
   const category = queryParams.get("category");
   const value = queryParams.get("value");
 
+  const noResults = (
+    <EmptyState
+      icon={FaSearch}
+      title="No Results Found"
+      message="We couldn't find anyone matching your search. Try a different name, company or session."
+    />
+  );
+
+  if (!searchResults || searchResults.length === 0) return noResults;
+
   const currentlyWorking = searchResults.filter((result) =>
     countOrderedMatches(result?.currentPost?.[0]?.company, value)
   );
@@ -115,6 +125,8 @@ function SearchResultCompanies({ searchResults }) {
   const pastWorking = searchResults.filter((result) =>
     countOrderedMatches(result?.jobExperience?.[0]?.company, value)
   );
+
+  if (currentlyWorking.length === 0 && pastWorking.length === 0) return noResults;
 
   return (
     <>

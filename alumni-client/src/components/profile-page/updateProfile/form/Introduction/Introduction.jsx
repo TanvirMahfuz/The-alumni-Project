@@ -116,7 +116,7 @@ function Introduction({ formData, setFormData }) {
           id="availableForWork"
           checked={availableForWork}
           onChange={(e) => handleChange("availableForWork", e.target.checked)}
-          className="h-5 w-5 text-teal-600 border-gray-300 rounded focus:ring-2 focus:ring-teal-500"
+          className="h-5 w-5 text-teal-600 border-gray-300 rounded focus:ring-2 focus:ring-teal-500 dark:border-gray-600"
         />
         <label
           htmlFor="availableForWork"

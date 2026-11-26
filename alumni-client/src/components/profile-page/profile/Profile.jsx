@@ -26,7 +26,7 @@ export default function Profile({ uid }) {
 
   if (!uid || uid === "undefined") {
     return (
-      <div className="w-full h-screen text-lg flex justify-center items-center text-gray-700">
+      <div className="w-full h-screen text-lg flex justify-center items-center text-gray-700 dark:text-gray-200">
         You don't have an account.
       </div>
     );
@@ -44,7 +44,7 @@ export default function Profile({ uid }) {
             {["profile", "posts", "photos", "resume"].map((tab) => (
               <button
                 key={tab}
-                className={`pb-2 capitalize font-medium ${
+                className={`pb-2 capitalize font-medium  dark:text-gray-400 ${
                   activeTab === tab
                     ? "border-b-3 border-teal-600 text-teal-700"
                     : "text-gray-500 cursor-pointer"

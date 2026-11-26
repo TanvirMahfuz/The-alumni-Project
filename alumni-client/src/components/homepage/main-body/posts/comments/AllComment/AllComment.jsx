@@ -23,7 +23,7 @@ function AllComment({ comments }) {
         completeComments.map((comment) => (
           <div key={comment._id} className="flex items-center gap-4">
             <img
-              src={comment?.author?.image ?? "./avatar.png"}
+              src={comment?.author?.image || "/avatar.png"}
               alt={comment?.author?.name || "user"}
               className="w-11 h-11 rounded-full"
             />

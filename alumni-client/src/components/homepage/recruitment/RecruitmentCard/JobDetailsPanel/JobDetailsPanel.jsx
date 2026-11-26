@@ -20,7 +20,6 @@ const JobDetailsPanel = ({
   applicationProcess,
   onClose,
 }) => {
-  console.log(_id)
   const { reviewResume } = useRecruitmentStore();
   function mergePerksAndBenefits(perks, benefits) {
     if (!perks) perks = [];
@@ -32,7 +31,7 @@ const JobDetailsPanel = ({
       <div className="">
         <div className="flex">
           <div className="max-w-md">
-            <div className="h-full flex flex-col bg-white rounded-lg shadow-xl overflow-y-scroll">
+            <div className="h-full flex flex-col bg-white rounded-lg shadow-xl overflow-y-scroll dark:bg-gray-800">
               <div className="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
                 <JobHeader position={position} onClose={onClose} />
 
@@ -50,10 +49,10 @@ const JobDetailsPanel = ({
 
                   {description && (
                     <div className="mt-6">
-                      <h3 className="text-md font-medium text-gray-900">
+                      <h3 className="text-md font-medium text-gray-900 dark:text-gray-100">
                         Job Description
                       </h3>
-                      <p className="mt-1 text-sm text-gray-600 whitespace-pre-line">
+                      <p className="mt-1 text-sm text-gray-600 whitespace-pre-line dark:text-gray-300">
                         {description}
                       </p>
                     </div>
@@ -61,10 +60,10 @@ const JobDetailsPanel = ({
 
                   {requirements && (
                     <div className="mt-6">
-                      <h3 className="text-md font-medium text-gray-900">
+                      <h3 className="text-md font-medium text-gray-900 dark:text-gray-100">
                         Requirements
                       </h3>
-                      <ul className="mt-1 text-sm text-gray-600 list-disc pl-5 space-y-1">
+                      <ul className="mt-1 text-sm text-gray-600 list-disc pl-5 space-y-1 dark:text-gray-300">
                         {requirements.map((req, i) => (
                           <li key={i}>{req}</li>
                         ))}
@@ -82,10 +81,10 @@ const JobDetailsPanel = ({
 
                   {applicationProcess && (
                     <div className="mt-6">
-                      <h3 className="text-md font-medium text-gray-900">
+                      <h3 className="text-md font-medium text-gray-900 dark:text-gray-100">
                         Application Process
                       </h3>
-                      <p className="mt-1 text-sm text-gray-600 whitespace-pre-line">
+                      <p className="mt-1 text-sm text-gray-600 whitespace-pre-line dark:text-gray-300">
                         {applicationProcess}
                       </p>
                     </div>
@@ -93,7 +92,7 @@ const JobDetailsPanel = ({
                 </div>
               </div>
 
-              <div className=" flex gap-4 border-t border-gray-200 px-4 py-6 sm:px-6">
+              <div className=" flex gap-4 border-t border-gray-200 px-4 py-6 sm:px-6 dark:border-gray-700">
                 <button
                   className="w-full bg-violet-600 border border-transparent rounded-lg py-3 px-4 text-base font-medium text-white hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   onClick={() => reviewResume(_id)}>

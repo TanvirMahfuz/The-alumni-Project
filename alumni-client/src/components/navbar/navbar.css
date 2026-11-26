@@ -37,3 +37,7 @@
   background-color: #e8f2f8;
   text-shadow: 2px 2px 6px rgba(41, 146, 254, 0.3);
 }
+
+.dark .nav-link:hover {
+  background-color: #1f2937;
+}

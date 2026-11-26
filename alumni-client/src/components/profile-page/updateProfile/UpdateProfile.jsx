@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import Contacts from "./form/Contacts/Contacts";
 import Experience from "./form/Experience/Experience";
 import FutureInterests from "./form/FututureInterests/FututureInterests";
@@ -14,7 +13,6 @@ import FileUploads from "./form/FileUploads/FileUploads";
 import { useUserStore } from "../../../store/useUserStore";
 import Education from "./form/Education/Education";
 function UpdateProfile() {
-  const navigate = useNavigate();
   const { authUser,updateUser,isUpdating } = useUserStore();
   const [formData, setFormData] = React.useState({});
   React.useEffect(() => {
@@ -27,13 +25,11 @@ function UpdateProfile() {
     }
   }, [authUser]);
   const handleSubmit = async () => {
+    // updateUser shows its own error message on failure
     const res = await updateUser(formData);
-    if(res){
+    if (res) {
       alert("Profile updated successfully");
       window.location.reload();
-    }
-    else{
-      alert("something went wrong");
     }
   };
   return (

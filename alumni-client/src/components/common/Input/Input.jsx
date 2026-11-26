@@ -12,7 +12,7 @@ function Input({
   return (
     <div className="mx-4">
       {label && (
-        <label className="block text-black text-sm font-bold mb-2">
+        <label className="block text-black text-sm font-bold mb-2 dark:text-gray-100">
           {label}
         </label>
       )}

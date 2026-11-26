@@ -1,4 +1,7 @@
-export function countOrderedMatches(source = "", input = "") {
+export function countOrderedMatches(source, input) {
+  source = source || "";
+  input = input || "";
+  if (!input) return false;
   let i = 0; // pointer for source
   let j = 0; // pointer for input
   let matchCount = 0;

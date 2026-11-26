@@ -6,7 +6,6 @@ function Header() {
 
   const handleClick = () => {
     setFormOpen(!formOpen);
-    console.log(formOpen);
   };
 
   return (

@@ -11,7 +11,9 @@ function CommentBox({ localPost, setLocalPost }) {
   const handleSubmit = async () => {
     if (!comment.trim()) return;
     const newPost = await commentOnPost(localPost._id, comment);
-    setLocalPost(newPost);
+    // Keep the typed comment if posting failed
+    if (!newPost) return;
+    setLocalPost((prev) => ({ ...prev, comments: newPost.comments }));
     setComment("");
   };
 
@@ -20,7 +22,7 @@ function CommentBox({ localPost, setLocalPost }) {
       {/* Profile Picture */}
       <div className="rounded-full h-12 w-12 shrink-0">
         <img
-          src={authUser?.image ?? "./avatar.png"}
+          src={authUser?.image || "/avatar.png"}
           alt="profile-picture"
           className="rounded-full h-full w-full object-cover"
         />

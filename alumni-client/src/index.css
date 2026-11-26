@@ -5,3 +5,34 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
+/* Theme toggle: circular reveal from the toggle button (see ThemeToggle.jsx) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
+}
+
+@property --reveal-r {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+::view-transition-new(root) {
+  -webkit-mask-image: radial-gradient(
+    circle at var(--reveal-x, 50%) var(--reveal-y, 0px),
+    #000 max(0px, calc(var(--reveal-r) - var(--reveal-feather, 220px))),
+    transparent var(--reveal-r)
+  );
+  mask-image: radial-gradient(
+    circle at var(--reveal-x, 50%) var(--reveal-y, 0px),
+    #000 max(0px, calc(var(--reveal-r) - var(--reveal-feather, 220px))),
+    transparent var(--reveal-r)
+  );
+}

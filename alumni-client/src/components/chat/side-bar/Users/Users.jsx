@@ -14,13 +14,13 @@ function Users({ users }) {
             onClick={() => {
               setSelectedChatUser(user);
             }}
-            className={`flex mb-2 items-center gap-2 space-x-2 p-2 rounded-lg hover:bg-stone-300/80 cursor-pointer transition-all duration-400 border-b border-gray-200 ${
+            className={`flex mb-2 items-center gap-2 space-x-2 p-2 rounded-lg hover:bg-stone-300/80 dark:hover:bg-gray-800 cursor-pointer transition-all duration-400 border-b border-gray-200 dark:border-gray-700 ${
               selectedChatUser?._id === user._id
-                ? "bg-gray-200 "
+                ? "bg-gray-200 dark:bg-gray-700"
                 : ""
             }`}>
             <img
-              src={user?.image?.length>0 ? user.image : "./avatar.png"}
+              src={user?.image?.length>0 ? user.image : "/avatar.png"}
               alt={user.name}
               className="w-10 h-10 rounded-full object-cover"
             />

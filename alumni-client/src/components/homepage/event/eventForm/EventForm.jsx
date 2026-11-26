@@ -12,6 +12,7 @@ import ImageUpload from "./ImageUpload/ImageUpload.jsx"; // Custom image uploade
 
 const EventForm = ({ openForm, setOpenForm }) => {
   const { saveEvent, submissionError } = useEventStore();
+  const [formError, setFormError] = useState("");
 
   const [formData, setFormData] = useState({
     title: "",
@@ -25,7 +26,33 @@ const EventForm = ({ openForm, setOpenForm }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    saveEvent({ ...formData, time: convertTo12HourFormat(formData.time) });
+    const missing = [
+      !formData.title.trim() && "title",
+      !formData.location.trim() && "location",
+      !formData.date && "date",
+      !formData.time && "time",
+    ].filter(Boolean);
+    if (missing.length > 0) {
+      setFormError(`Please fill in: ${missing.join(", ")}`);
+      return;
+    }
+    // Combine the picked date (stored as UTC midnight) and time into the real moment
+    const [y, m, d] = formData.date.slice(0, 10).split("-").map(Number);
+    const [hh, mm] = formData.time.split(":").map(Number);
+    const startsAt = new Date(y, m - 1, d, hh, mm);
+    if (startsAt <= new Date()) {
+      setFormError("The event must start in the future.");
+      return;
+    }
+    setFormError("");
+    const { image, ...rest } = formData;
+    saveEvent({
+      ...rest,
+      ...(image ? { image } : {}),
+      ...(rest.category ? {} : { category: undefined }),
+      date: startsAt.toISOString(),
+      time: convertTo12HourFormat(formData.time),
+    });
   };
 
   return (
@@ -35,9 +62,9 @@ const EventForm = ({ openForm, setOpenForm }) => {
         onSubmit={handleSubmit}
         className=" bg-stone-50 dark:bg-gray-800 p-6 rounded-xl shadow-xl space-y-6 transition-colors duration-300">
         {/* Show error message if exists */}
-        {submissionError && (
+        {(formError || submissionError) && (
           <div className="p-3 text-sm text-red-700 bg-red-100 dark:bg-red-900 dark:text-red-200 rounded-md border border-red-300">
-            {submissionError}
+            {formError || submissionError}
           </div>
         )}
 

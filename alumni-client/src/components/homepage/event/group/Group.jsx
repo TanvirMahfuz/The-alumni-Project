@@ -29,7 +29,6 @@ function Group() {
 
   return (
     <div className="h-[calc(100vh-5rem)] mt-8 flex gap-4 flex-wrap justify-around my-4">
-      {console.log(events)}
       {events && events.map((event) => (
         <div key={event?._id}>
           <EventCard
@@ -38,12 +37,12 @@ function Group() {
             date={event?.date ? formatSmartDateTime(event.date) : "2023-09-23"}
             time={event?.time ?? "12:00 PM"}
             location={event?.location ?? "Event Location"}
-            image={event?.image ?? "https://via.placeholder.com/400x300"}
-            description={event?.description ?? "Event Description"}
-            organizer={event?.organizer ?? "Event Organizer"}
-            category={event?.category ?? "Event Category"}
-            isFree={false}
-            isFeatured={true}
+            image={event?.image}
+            description={event?.description ?? ""}
+            organizer={event?.organizer}
+            category={event?.category}
+            isFree={Boolean(event?.isFree)}
+            isFeatured={Boolean(event?.isFeatured)}
           />
         </div>
       ))}

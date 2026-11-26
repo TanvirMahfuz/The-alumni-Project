@@ -45,7 +45,7 @@ function MobileLayout({ recruitments, openPanelId, setOpenPanelId }) {
 
                 {/* Side panel */}
                 <div className="absolute top-15 right-5 h-[calc(100vh-5rem)] w-full max-w-md">
-                  <div className="h-full bg-white shadow-xl overflow-y-auto rounded-lg">
+                  <div className="h-full bg-white shadow-xl overflow-y-auto rounded-lg dark:bg-gray-800">
                     <JobDetailsPanel
                       {...recruitments.find((job) => job._id === openPanelId)}
                       onClose={() => setOpenPanelId(null)}

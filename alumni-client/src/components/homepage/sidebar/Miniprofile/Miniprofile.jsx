@@ -5,14 +5,14 @@ import { useUserStore } from "../../../../store/useUserStore.js";
 function Miniprofile() {
   const { authUser } = useUserStore();
   const profileImage =
-    authUser?.image?.length > 0 ? authUser.image : "./avatar.png";
+    authUser?.image?.length > 0 ? authUser.image : "/avatar.png";
 
   return (
     <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-md overflow-hidden transition-colors duration-300">
       {/* Header Background */}
       <div className="relative h-32 bg-cover bg-center">
         <img
-          src="./bg-final.png"
+          src="/bg-final.png"
           alt="Cover"
           className="h-full w-full object-cover"
         />

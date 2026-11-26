@@ -37,7 +37,7 @@ function Contacts({ item }) {
             href={item.portfolio}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xl hover:text-gray-500 dark:text-white">
+            className="text-xl hover:text-gray-500 dark:text-white dark:hover:text-gray-400">
             <FaGlobe />
           </a>
         )}

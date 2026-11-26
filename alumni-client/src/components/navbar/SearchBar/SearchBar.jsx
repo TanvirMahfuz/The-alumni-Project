@@ -1,6 +1,12 @@
 // src/components/SearchBar.jsx
 import React, { useState, useRef } from "react";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaUser, FaBuilding, FaUserGraduate } from "react-icons/fa";
+
+const CATEGORIES = [
+  { label: "Name", Icon: FaUser },
+  { label: "Company", Icon: FaBuilding },
+  { label: "Session", Icon: FaUserGraduate },
+];
 import { useNavigate } from "react-router-dom";
 
 const SearchBar = ({ selectedOption, setSelectedOption }) => {
@@ -15,9 +21,11 @@ const SearchBar = ({ selectedOption, setSelectedOption }) => {
 
   function handleSearch() {
     if (inputRef.current) {
-      const value = inputRef.current.value;
-      const category = selectedOption !== "Category" ? selectedOption : "Name";
-      navigate(`/search?category=${category.toLowerCase()}&value=${value}`);
+      const value = inputRef.current.value.trim();
+      if (!value) return;
+      const category = selectedOption || "Name";
+      const params = new URLSearchParams({ category: category.toLowerCase(), value });
+      navigate(`/search?${params.toString()}`);
     }
   }
 
@@ -26,8 +34,15 @@ const SearchBar = ({ selectedOption, setSelectedOption }) => {
       {/* Dropdown */}
       <button
         onClick={() => setDropdownOpen(!dropdownOpen)}
+        aria-label={`Search by ${selectedOption}`}
+        title={`Search by ${selectedOption}`}
         className="rounded-3xl text-gray-700 dark:text-gray-300 ps-4 pe-2 py-1.5 flex items-center space-x-2 focus:outline-none">
-        <span className="text-sm">{selectedOption}</span>
+        {/* Text on wider screens, icon on small screens */}
+        <span className="text-sm hidden md:inline">{selectedOption}</span>
+        {(() => {
+          const Icon = CATEGORIES.find((c) => c.label === selectedOption)?.Icon ?? FaUser;
+          return <Icon className="size-4 md:hidden" aria-hidden="true" />;
+        })()}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className={`h-4 w-4 transition-transform ${dropdownOpen ? "rotate-180" : ""
@@ -45,12 +60,17 @@ const SearchBar = ({ selectedOption, setSelectedOption }) => {
       {/* Dropdown Items */}
       {dropdownOpen && (
         <div className="text-sm absolute top-10 left-2 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-101 border dark:border-gray-700">
-          {["Name", "Company", "Session"].map((item) => (
+          {CATEGORIES.map((category) => (
             <button
-              key={item}
-              onClick={() => handleDropdownSelect(item)}
-              className="block w-full text-left px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-sky-100 dark:hover:bg-gray-700">
-              {item}
+              key={category.label}
+              onClick={() => handleDropdownSelect(category.label)}
+              className={`flex items-center gap-3 w-full text-left px-4 py-2 hover:bg-sky-100 dark:hover:bg-gray-700 ${
+                selectedOption === category.label
+                  ? "text-[#2992FE] font-medium"
+                  : "text-gray-700 dark:text-gray-300"
+              }`}>
+              <category.Icon className="size-4 shrink-0" aria-hidden="true" />
+              {category.label}
             </button>
           ))}
         </div>
@@ -61,6 +81,7 @@ const SearchBar = ({ selectedOption, setSelectedOption }) => {
         <input
           type="text"
           ref={inputRef}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           placeholder="Search ..."
           className="px-4 py-2 w-full pe-12 rounded-3xl focus:outline-none text-gray-700 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-500 bg-transparent"
         />

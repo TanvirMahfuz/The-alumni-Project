@@ -18,7 +18,7 @@ function TextInput({ name, placeholder, value, onChange }) {
       <input
         type="text"
         ref={inputRef}
-        className="border-2 border-gray-300 rounded-lg p-2 w-full"
+        className="border-2 border-gray-300 rounded-lg p-2 w-full dark:border-gray-600"
         id={name}
         placeholder={placeholder ?? "enter your text..."}
         name={name}

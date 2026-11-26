@@ -5,7 +5,7 @@ function TextAvatar({ image }) {
     <div className="h-full flex items-start justify-start">
       <img
         className="w-11 h-11 rounded-full object-cover "
-        src={image || "./avatar.png"}
+        src={image || "/avatar.png"}
         alt="Sender"
       />
     </div>

@@ -3,6 +3,8 @@ import { useDropzone } from "react-dropzone";
 import DropzoneArea from "../DropzoneArea/DropzoneArea.jsx";
 import FilePreviewList from "../FilePreviewList/FilePreviewList.jsx";
 import { imagesToBase64 } from "../../../../../../../bin/Image2base64.js";
+import { FILE_UPLOADS_ENABLED } from "../../../../../../../config/uploads.js";
+import UploadUnavailable from "../../../../../../common/UploadUnavailable/UploadUnavailable.jsx";
 const FileDropzone = ({ formData, setFormData }) => {
   const [files, setFiles] = useState([]);
   const onDrop = useCallback(
@@ -28,6 +30,7 @@ const FileDropzone = ({ formData, setFormData }) => {
       "application/pdf": [".pdf"],
     },
     maxFiles: 5,
+    disabled: !FILE_UPLOADS_ENABLED,
   });
 
   const removeFile = (index) => {
@@ -40,6 +43,10 @@ const FileDropzone = ({ formData, setFormData }) => {
   useEffect(() => {
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
   }, [files]);
+
+  if (!FILE_UPLOADS_ENABLED) {
+    return <UploadUnavailable />;
+  }
 
   return (
     <div className="space-y-4">

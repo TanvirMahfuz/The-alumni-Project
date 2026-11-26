@@ -106,7 +106,7 @@ function CurrentlyWorkingOn({ formData, setFormData }) {
           </div>
         ))
       ) : (
-        <p className="text-gray-500">No ongoing projects</p>
+        <p className="text-gray-500 dark:text-gray-400">No ongoing projects</p>
       )}
 
       <button

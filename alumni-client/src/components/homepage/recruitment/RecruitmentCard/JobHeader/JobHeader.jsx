@@ -1,10 +1,10 @@
 const JobHeader = ({ position, onClose }) => {
   return (
     <div className="flex items-start justify-between">
-      <h2 className="text-lg font-medium text-gray-900">{position}</h2>
+      <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">{position}</h2>
       <button
         type="button"
-        className="text-gray-400 hover:text-gray-500"
+        className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-400"
         onClick={onClose}>
         <span className="sr-only">Close panel</span>
         <svg

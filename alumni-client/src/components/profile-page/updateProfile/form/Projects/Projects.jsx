@@ -35,11 +35,12 @@ function Projects({formData, setFormData}) {
       projectDescription: "",
       projectLink: "",
     };
-    setProjects((prev) => [...prev, newProject]);
+    const updated = [...projects, newProject];
+    setProjects(updated);
 
     setFormData((prev) => ({
       ...prev,
-      projects: newProject,
+      projects: updated,
     }));
   };
 
@@ -123,7 +124,7 @@ function Projects({formData, setFormData}) {
           </div>
         ))
       ) : (
-        <p className="text-gray-500">No projects added yet</p>
+        <p className="text-gray-500 dark:text-gray-400">No projects added yet</p>
       )}
 
       <button

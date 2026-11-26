@@ -4,18 +4,18 @@ const JobPerks = ({ perks, maxDisplay, className = "", heading }) => {
   return (
     <div className={className}>
       {heading && (
-        <h3 className="text-md font-medium text-gray-900">{heading}</h3>
+        <h3 className="text-md font-medium text-gray-900 dark:text-gray-100">{heading}</h3>
       )}
       <div className="mt-2 flex flex-wrap gap-2">
         {perksToShow.map((perk, index) => (
           <span
             key={index}
-            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300">
             {perk}
           </span>
         ))}
         {remainingCount > 0 && (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-100">
             +{remainingCount} more
           </span>
         )}

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useUserStore } from "../../store/useUserStore";
 import SearchBar from "./SearchBar/SearchBar";
 import Logo from "./Logo/Logo";
@@ -7,13 +7,40 @@ import NavLinks from "./NavLinks/NavLinks";
 import MobileMenu from "./MobileMenu/MobileMenu";
 import LogoutButton from "./LogoutButton/LogoutButton";
 import ThemeToggle from "./ThemeToggle/ThemeToggle";
+import HistoryButtons from "./HistoryButtons/HistoryButtons";
 
 const Navbar = () => {
-  const [selectedOption, setSelectedOption] = useState("Category");
+  const [selectedOption, setSelectedOption] = useState("Name");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [hoverIndex, setHoverIndex] = useState(null);
   const { logOut, authUser } = useUserStore();
   const navigate = useNavigate();
+  const location = useLocation();
+  const mobileMenuRef = useRef(null);
+
+  // Close the mobile menu on any click/tap outside it (the burger button is inside the ref,
+  // so it still toggles), on Escape, and after navigating.
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const handlePointerDown = (e) => {
+      if (mobileMenuRef.current && !mobileMenuRef.current.contains(e.target)) {
+        setMobileMenuOpen(false);
+      }
+    };
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") setMobileMenuOpen(false);
+    };
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname, location.search]);
 
   useEffect(() => {
     console.log(authUser ? "user logged in" : "no user logged in", authUser);
@@ -43,7 +70,7 @@ const Navbar = () => {
     },
     {
       name: "Notifications",
-      to: "/notifications",
+      to: "/",
       icon: (
         <path
           strokeLinecap="round"
@@ -57,7 +84,8 @@ const Navbar = () => {
   return (
     <nav className="flex items-center justify-between bg-white dark:bg-gray-900 shadow-md px-5 py-3 font-[Poppins] relative">
       <Logo />
-      <div className="flex-grow flex justify-center px-4 bg-white">
+      <div className="flex-grow flex justify-center px-4">
+        <HistoryButtons />
         <SearchBar
           selectedOption={selectedOption}
           setSelectedOption={setSelectedOption}
@@ -70,9 +98,13 @@ const Navbar = () => {
         setHoverIndex={setHoverIndex}
       />
       <LogoutButton authUser={authUser} handleLogOut={handleLogOut} />
+      <div ref={mobileMenuRef} className="lg:hidden">
       <button
+        type="button"
+        aria-label="Toggle menu"
+        aria-expanded={mobileMenuOpen}
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        className="lg:hidden text-gray-600 focus:outline-none">
+        className="lg:hidden text-gray-600 focus:outline-none dark:text-gray-300 cursor-pointer">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-6 w-6"
@@ -92,7 +124,9 @@ const Navbar = () => {
         navLinks={navLinks}
         authUser={authUser}
         handleLogOut={handleLogOut}
+        onNavigate={() => setMobileMenuOpen(false)}
       />
+      </div>
     </nav>
   );
 };

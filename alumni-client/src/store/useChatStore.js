@@ -1,13 +1,9 @@
 import { create } from "zustand";
+import { API_BASE_URL, readError } from "../config/api";
 import { useUserStore } from "./useUserStore";
 
-const API_BASE_URL =
-  import.meta.env.VITE_ENVIRONMENT === "development"
-    ? import.meta.env.VITE_DEVELOPMENT_URL
-    : import.meta.env.VITE_DEPLOYMENT_URL;
 
 export const useChatStore = create((set, get) => ({
-  authUser: useUserStore.getState().authUser,
   selectedChatUser: null,
   messages: [],
   isMessageLoading: false,
@@ -17,12 +13,21 @@ export const useChatStore = create((set, get) => ({
   setMessages: (messages) => set({ messages }),
   clearMessages: () => set({ messages: [] }),
 
+  // Single entry point for appending a message. The same message can arrive twice:
+  // from the send-message response and from the socket (e.g. when the conversation is
+  // with your own account, or you're logged in elsewhere), in either order.
+  addMessage: (message) => {
+    if (!message?._id) return;
+    set((state) =>
+      state.messages.some((m) => m._id === message._id)
+        ? state
+        : { messages: [...state.messages, message] }
+    );
+  },
+
   getMessages: async () => {
+    if (!get().selectedChatUser) return;
     set({ isInitialLoading: true });
-    if (!get().selectedChatUser) {
-      console.warn("No selectedChatUser._id provided to getMessages");
-      return;
-    }
     try {
       const response = await fetch(
         `${API_BASE_URL}/chat/get-messages/${get().selectedChatUser._id}`,
@@ -34,7 +39,7 @@ export const useChatStore = create((set, get) => ({
       }
 
       const data = await response.json();
-      set({ messages: data });
+      set({ messages: Array.isArray(data) ? data : [] });
       set({ isInitialLoading: false });
       return
     } catch (error) {
@@ -45,10 +50,10 @@ export const useChatStore = create((set, get) => ({
   },
 
   sendMessage: async (messageData) => {
-    const { selectedChatUser, messages } = get();
+    const { selectedChatUser } = get();
+    if (!selectedChatUser) return false;
     set({ isMessageLoading: true });
     try {
-      console.log("messageData", messageData);
       const response = await fetch(`${API_BASE_URL}/chat/send-message`, {
         method: "POST",
         headers: {
@@ -62,13 +67,14 @@ export const useChatStore = create((set, get) => ({
       });
 
       if (!response.ok) {
-        throw new Error("Failed to send message");
+        throw new Error(await readError(response, "Failed to send message"));
       }
       const data = await response.json();
-      set({ messages: [...messages, data] });
-      console.log("message sent:", data);
+      get().addMessage(data);
+      return true;
     } catch (error) {
       console.error(error.message);
+      return false;
     } finally {
       set({ isMessageLoading: false });
     }
@@ -76,16 +82,20 @@ export const useChatStore = create((set, get) => ({
 
   subscribeToMessages: async () => {
     const socket = useUserStore.getState().socket;
-    if (!socket) {
-      console.warn("Socket not connected");
-      return;
-    }
-    console.log("socket connected:", socket.id);
+    if (!socket) return;
 
+    socket.off("newMessage");
     socket.on("newMessage", (newMessage) => {
-      // Only add message if current user is receiver
-      if (newMessage.receiverId !== get().authUser._id) return;
-      set({ messages: [...get().messages, newMessage] });
+      // Read the current user/chat at event time, not at store creation
+      const authUser = useUserStore.getState().authUser;
+      const openChat = get().selectedChatUser;
+      if (!authUser || !openChat) return;
+      // Only show messages that belong to the conversation that is open
+      const belongsHere =
+        newMessage.senderId === openChat._id &&
+        newMessage.receiverId === authUser._id;
+      if (!belongsHere) return;
+      get().addMessage(newMessage);
     });
   },
 

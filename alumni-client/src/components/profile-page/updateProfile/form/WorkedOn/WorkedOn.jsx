@@ -35,11 +35,12 @@ function WorkedOn({ formData, setFormData }) {
       techStack: "",
       description: "",
     };
-    setWorkedProjects((prev) => [...prev, newProject]);
+    const updated = [...workedProjects, newProject];
+    setWorkedProjects(updated);
 
     setFormData((prev) => ({
       ...prev,
-      haveWorkedIn: newProject,
+      haveWorkedIn: updated,
     }));
   };
 
@@ -118,7 +119,7 @@ function WorkedOn({ formData, setFormData }) {
           </div>
         ))
       ) : (
-        <p className="text-gray-500">Nothing to show</p>
+        <p className="text-gray-500 dark:text-gray-400">Nothing to show</p>
       )}
 
       <button

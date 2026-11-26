@@ -1,32 +1,39 @@
 import React from "react";
+import EmptyState from "../../common/EmptyState/EmptyState.jsx";
+import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { profileIcon as profilePlaceHolder } from "../../../assets/icons.jsx";
-import {formatDate} from "date-fns"
-function SearchResultUsers({ searchResults }) {
-  console.log(searchResults)
-  if(!searchResults){
-    return(
-      <div>
-      We are sorry. There was no result found!
-      </div>
-    )
+import { format } from "date-fns";
+const formatMonth = (date) => {
+  const d = new Date(date);
+  return isNaN(d) ? "N/A" : format(d, "MMM yyyy");
+};
+
+function SearchResultUsers({ searchResults, title = "User Results" }) {
+  if (!searchResults || searchResults.length === 0) {
+    return (
+      <EmptyState
+        icon={FaSearch}
+        title="No Results Found"
+        message="We couldn't find anyone matching your search. Try a different name, company or session."
+      />
+    );
   }
 
   return (
     <div className="mt-3 flex flex-col space-y-3 items-center justify-center">
       <div className="flex items-center w-full sm:max-w-100 md:max-w-150">
         <div className="bg-amber-300 h-1 flex-grow"></div>
-        <h1 className="text-xl text-black font-light mx-2">User Results</h1>
+        <h1 className="text-xl text-black dark:text-white font-light mx-2">{title}</h1>
         <div className="bg-amber-300 h-1 flex-grow"></div>
       </div>
 
       {searchResults?.map((result, index) => (
         <div
           key={result._id || index}
-          className="bg-white rounded-lg shadow-md p-4 w-full sm:max-w-sm md:max-w-md lg:min-w-150">
+          className="bg-white rounded-lg shadow-md p-4 w-full sm:max-w-sm md:max-w-md lg:min-w-150 dark:bg-gray-800">
           <div className="flex flex-col sm:flex-row items-center sm:items-start space-x-0 sm:space-x-4">
             <img
-              src={result?.image || profilePlaceHolder}
+              src={result?.image || "/avatar.png"}
               alt={
                 result?.name
                   ? `${result?.name} profile picture`
@@ -39,7 +46,7 @@ function SearchResultUsers({ searchResults }) {
               <Link
                 className="w-full flex justify-center items-center gap-1 "
                 to={`/profile/${result?._id || ""}`}>
-                <span className="text-lg text-black font-semibold">
+                <span className="text-lg text-black font-semibold dark:text-gray-100">
                   {result?.name || "Alice in Wonderland"}
                 </span>{" "}
                 <span className="text-gray-400 text-xs font-medium">
@@ -47,17 +54,17 @@ function SearchResultUsers({ searchResults }) {
                 </span>
               </Link>
 
-              <p className="text-gray-500 text-xs">
+              <p className="text-gray-500 text-xs dark:text-gray-400">
                 {result?.currentPost?.[0]?.title || "Unemployed"}
                 <span className="block sm:inline">
                   {" "}
                   | since{" "}
-                  {result?.currentPost?.[0]?.startDate ? format(new Date(result.currentPost[0].startDate), "MMM yyyy"): "N/A"}
+                  {result?.currentPost?.[0]?.startDate ? formatMonth(result.currentPost[0].startDate) : "N/A"}
 
                 </span>
               </p>
 
-              <div className="mt-1 text-sm text-gray-600 flex justify-center sm:justify-start items-center space-x-2">
+              <div className="mt-1 text-sm text-gray-600 flex justify-center sm:justify-start items-center space-x-2 dark:text-gray-300">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

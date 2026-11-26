@@ -30,7 +30,11 @@ function SidebarLeft({ sidebarToggler, setSidebarToggler }) {
           {userType === "all" ? (
             <Users users={allUsers} />
           ) : (
-            <Users users={onlineUsers} />
+            <Users
+              users={onlineUsers}
+              emptyTitle="No one is online"
+              emptyMessage="Users who are online right now will show up here."
+            />
           )}
         </div>
       ) : (

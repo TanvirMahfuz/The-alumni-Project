@@ -5,7 +5,7 @@ export default function PhotoGallery({ photos = [] }) {
         Photos
       </h3>
       {photos.length === 0 ? (
-        <p className="text-gray-500">No photos uploaded yet.</p>
+        <p className="text-gray-500 dark:text-gray-400">No photos uploaded yet.</p>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {photos.map((src, index) => (

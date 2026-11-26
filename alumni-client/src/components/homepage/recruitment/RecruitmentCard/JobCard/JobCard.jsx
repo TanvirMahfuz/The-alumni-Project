@@ -11,6 +11,7 @@ const JobCard = ({
   benefits,
   logo,
   isUrgent,
+  applyLink,
   onLearnMore,
 }) => {
   function mergePerksAndBenefits(perks, benefits) {
@@ -19,7 +20,7 @@ const JobCard = ({
     return [...perks, ...benefits];
   }
   return (
-    <div className="w-full min-w-84 h-auto bg-white  p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+    <div className="w-full min-w-84 h-auto bg-white  p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 dark:bg-gray-800">
       <div className="flex items-start space-x-3">
         <div className="flex-1 min-w-0">
           <JobMetaInfo
@@ -46,7 +47,11 @@ const JobCard = ({
           className="text-sm font-medium text-blue-400 hover:text-blue-600 focus:outline-none">
           Learn more →
         </button>
-        <button className="px-3 py-1 bg-blue-600 text-white text-sm font-[400] rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+        <button
+          type="button"
+          onClick={() => applyLink && window.open(applyLink, "_blank", "noopener")}
+          disabled={!applyLink}
+          className="disabled:opacity-50 px-3 py-1 bg-blue-600 text-white text-sm font-[400] rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
           Quick apply
         </button>
       </div>

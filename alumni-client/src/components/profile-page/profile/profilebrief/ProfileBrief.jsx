@@ -12,7 +12,7 @@ const ProfileBrief = ({ user }) => {
         <AvatarSection />
       ) : (
         <img
-          src={user?.image ?? "./avatar.png"}
+          src={user?.image || "/avatar.png"}
           alt="Profile"
           className="rounded-full w-40 h-40 mx-auto object-cover cursor-pointer transition duration-300 border-4 border-teal-600 shadow-lg"
         />

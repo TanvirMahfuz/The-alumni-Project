@@ -12,8 +12,10 @@ function Contacts({ formData, setFormData }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setContacts((prev) => ({ ...prev, [name]: value }));
-    setFormData((prev) => ({ ...prev, contacts }));
+    // Build the next value once so formData gets the latest keystroke too
+    const next = { ...contacts, [name]: value };
+    setContacts(next);
+    setFormData((prev) => ({ ...prev, contacts: next }));
   };
 
   return (

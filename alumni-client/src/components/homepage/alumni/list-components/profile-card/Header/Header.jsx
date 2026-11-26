@@ -5,7 +5,7 @@ function Header({ imgSrc, name, email }) {
     <div className="flex gap-4 items-center w-full">
       <div className="flex rounded-full bg-gray-200 dark:bg-gray-700">
         <img
-          src={imgSrc ?? "./avatar.png"}
+          src={imgSrc || "/avatar.png"}
           alt=""
           className="h-15 w-15 rounded-full object-cover ring-2 ring-teal-300"
         />

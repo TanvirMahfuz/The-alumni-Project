@@ -1,19 +1,26 @@
 import React from "react";
-import { useUserStore } from "../../../../../../store/useUserStore";
 import Header from "../form-header/Header";
 import FileDropzone from "../drop-zone/FileDropzone/FileDropzone";
 import { usePostStore } from "../../../../../../store/usePostStore";
 function PostForm({ setFormOpen }) {
-  const { authUser } = useUserStore();
   const { isCreatingPost, createPost } = usePostStore();
   const [formData, setFormData] = React.useState({
     description: "",
     images: [],
   });
+  const [error, setError] = React.useState("");
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!formData.description.trim() && formData.images.length === 0) {
+      setError("Write something before posting.");
+      return;
+    }
     const res = await createPost(formData);
-    console.log(formData);
+    if (!res?.ok) {
+      setError(res?.message || "Failed to create post");
+      return;
+    }
+    setError("");
     setFormOpen(false);
   }
   if (isCreatingPost) {
@@ -28,7 +35,7 @@ function PostForm({ setFormOpen }) {
       <Header />
 
       <textarea
-        className="w-full h-24 p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+        className="w-full h-24 p-4 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
         placeholder="What's on your mind?"
         value={formData.description}
         onChange={(e) =>
@@ -36,6 +43,12 @@ function PostForm({ setFormOpen }) {
         }
       />
       <FileDropzone formData={formData} setFormData={setFormData} />
+
+      {error && (
+        <p role="alert" className="text-sm text-red-700 bg-red-100 dark:bg-red-900/40 dark:text-red-200 border border-red-300 dark:border-red-700 p-3 rounded-md">
+          {error}
+        </p>
+      )}
 
       <div className="flex justify-end">
         <button

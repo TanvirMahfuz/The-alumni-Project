@@ -1,11 +1,14 @@
 import React, { useEffect, useRef } from "react";
-import Text from "../chat-bubble/Text/Text";
+import Text from "../chat-bubble/text/Text";
 import VoiceMessage from "../chat-bubble/VoiceMessage/VoiceMessage";
 import MultiImage from "../chat-bubble/MultiImage/MultiImage";
 import { useChatStore } from "../../../../store/useChatStore";
+import EmptyState from "../../../common/EmptyState/EmptyState.jsx";
+import { FaRegCommentDots } from "react-icons/fa";
 
 function ChatBody() {
   const chatBodyRef = useRef(null);
+  const [loadedFor, setLoadedFor] = React.useState(null);
 
   const {
     selectedChatUser,
@@ -29,8 +32,9 @@ function ChatBody() {
   useEffect(() => {
     if (!selectedChatUser?._id) return;
 
+    const userId = selectedChatUser._id;
     clearMessages(); // 🧼 clear old messages immediately
-    getMessages(); // 📥 fetch new messages
+    getMessages().finally(() => setLoadedFor(userId)); // 📥 fetch new messages
     subscribeToMessages();
 
     return () => unSubscribeFromMessages();
@@ -44,12 +48,20 @@ function ChatBody() {
 
   return (
     <div
-      className="flex flex-col gap-4 p-4 overflow-y-auto flex-1"
+      className="flex flex-col gap-3 md:gap-4 p-3 md:p-4 overflow-y-auto flex-1 min-h-0"
       ref={chatBodyRef}>
       {isInitialLoading ? (
         <div className="flex justify-center items-center h-full py-6">
           <div className="w-6 h-6 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
         </div>
+      ) : loadedFor === selectedChatUser?._id && !messages?.length ? (
+        <EmptyState
+          compact
+          className="h-full"
+          icon={FaRegCommentDots}
+          title="No messages yet"
+          message={`Say hi to ${selectedChatUser?.name ?? "them"} to start the conversation.`}
+        />
       ) : (
         messages?.length > 0 &&
         messages.map((message) => {

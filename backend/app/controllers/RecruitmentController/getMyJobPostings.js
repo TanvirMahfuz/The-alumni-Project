@@ -1,3 +1,4 @@
+import { sendRecruitmentError } from "./errors.js";
 import { getJobsByAuthor } from "../../services/recruitmentServices.js";
 
 // @desc    Get jobs posted by current user
@@ -14,6 +15,6 @@ export const getMyJobPostings = async (req, res) => {
     });
   } catch (error) {
     console.error("Error getting user's job postings:", error);
-    res.status(500).json({ success: false, message: error.message });
+    return sendRecruitmentError(res, error);
   }
 };

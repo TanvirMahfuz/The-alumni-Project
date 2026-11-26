@@ -3,39 +3,34 @@ import {
   createJobPosting,
   getJobPosting,
   getJobPostings,
-  updateJobPostingController, 
-  deleteJobPostingController, 
-  reviewForJobController, 
+  updateJobPostingController,
+  deleteJobPostingController,
+  reviewForJobController,
   updateApplicationStatusController,
-  searchJobPostingsController, 
-  getMyJobPostings, 
-  expireOldJobs, 
+  searchJobPostingsController,
+  getMyJobPostings,
+  expireOldJobs,
 } from "../controllers/recruitmentController.js";
-import { isLoggedIn } from "../middlewares/auth.middleware.js";
-
+import { isLoggedIn, isAdmin } from "../middlewares/auth.middleware.js";
 
 const recruitmentRouter = Router();
 
-recruitmentRouter.post("/create", isLoggedIn, createJobPosting);
-recruitmentRouter.get("/:id", getJobPosting);
+// Static paths must be registered before "/:id" or they get captured by it
 recruitmentRouter.get("/", getJobPostings);
-recruitmentRouter.put("/:id", isLoggedIn, updateJobPostingController); 
-recruitmentRouter.delete("/:id", isLoggedIn, deleteJobPostingController);
+recruitmentRouter.get("/search", searchJobPostingsController);
+recruitmentRouter.get("/my-jobs", isLoggedIn, getMyJobPostings);
+recruitmentRouter.post("/create", isLoggedIn, createJobPosting);
 recruitmentRouter.post("/review", isLoggedIn, reviewForJobController);
+recruitmentRouter.post("/expire-old", isLoggedIn, isAdmin, expireOldJobs);
 
-recruitmentRouter.post(
-  "/:id/apply",
-  isLoggedIn,
-  reviewForJobController 
-);
-
+recruitmentRouter.get("/:id", getJobPosting);
+recruitmentRouter.put("/:id", isLoggedIn, updateJobPostingController);
+recruitmentRouter.delete("/:id", isLoggedIn, deleteJobPostingController);
+recruitmentRouter.post("/:id/apply", isLoggedIn, reviewForJobController);
 recruitmentRouter.put(
   "/:jobId/applications/:applicationId",
   isLoggedIn,
-  updateApplicationStatusController 
+  updateApplicationStatusController
 );
-recruitmentRouter.get("/search", searchJobPostingsController); 
-recruitmentRouter.get("/my-jobs", isLoggedIn, getMyJobPostings); 
-recruitmentRouter.post("/expire-old", expireOldJobs); 
 
 export default recruitmentRouter;

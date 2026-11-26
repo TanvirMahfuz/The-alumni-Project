@@ -1,4 +1,5 @@
 import cloudinary from "../config/cloudinary.js";
+import { uploadsEnabled } from "./uploads.js";
 
 /**
  * Upload a base64 image to Cloudinary
@@ -7,6 +8,7 @@ import cloudinary from "../config/cloudinary.js";
  * @returns {object|null} - Cloudinary upload response or null
  */
 const uploadFileToCloudinary = async (base64Data, id) => {
+  if (!uploadsEnabled()) return null;
   try {
     if (!base64Data) return null;
 

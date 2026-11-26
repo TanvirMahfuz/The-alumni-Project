@@ -1,12 +1,12 @@
 import { createPost, deletePost } from "../../services/postServices.js";
 import { addNewPost } from "../../services/userServices.js";
 import uploadFileToCloudinary from "../../utility/cloudinaryUploadBase64.js";
+import { uploadsEnabled, isFileData, rejectUpload } from "../../utility/uploads.js";
 
 export const createPostController = async (req, res) => {
   try {
     const { description, images } = req.body;
     const author = req.user._id;
-    console.log(req.body);
     // Validate input
     if (!description && (!images || images.length === 0)) {
       console.log("Validation failed: No description and no images provided");
@@ -15,14 +15,16 @@ export const createPostController = async (req, res) => {
       });
     }
 
+    if (!uploadsEnabled() && Array.isArray(images) && images.length > 0) {
+      return rejectUpload(res);
+    }
+
     // Prepare post data
     const postData = {
       author,
       description: description || "",
       images: [],
     };
-
-    console.log("Post data before validation:", postData);
 
     // Upload images to Cloudinary if they exist
     if (images && images.length > 0) {
@@ -76,8 +78,8 @@ export const createPostController = async (req, res) => {
     // Update user with new post reference
     const user = await addNewPost(post._id, author);
     if (!user) {
-      // Consider whether to delete the post if user update fails
-      await deletePost(post._id); // You'd need to implement this
+      // Roll back the post so it doesn't exist without an owner reference
+      await deletePost({ id: post._id }, author);
       return res.status(400).json({
         message: "Post creation rolled back due to user update failure",
       });
@@ -89,9 +91,6 @@ export const createPostController = async (req, res) => {
     });
   } catch (error) {
     console.error("Post creation error:", error);
-    res.status(500).json({
-      message: "Post creation failed",
-      error: error.message,
-    });
+    return res.status(500).json({ message: "Post creation failed" });
   }
 };

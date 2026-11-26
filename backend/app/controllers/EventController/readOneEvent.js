@@ -40,7 +40,6 @@ export const readOneEvent = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server error while fetching event",
-      error: error.message,
     });
   }
 };

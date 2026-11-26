@@ -1,36 +1,29 @@
 import User from "../models/userModel.js";
-import mongoose from "mongoose";
 
-function field_selectors() {
+// Fields a user may never set on themselves through the profile update
+const PROTECTED_FIELDS = ["_id", "__v", "createdAt", "updatedAt", "isAdmin", "posts"];
+
+const updatableFields = () => {
   const fieldNames = Object.keys(User.schema.paths)
-    .filter(
-      (key) =>
-        !["_id", "__v", "isAdmin", "updatedAt", "createdAt"].includes(key)
-    )
-    .map((key) => key.split(".")[0]);
+    .map((key) => key.split(".")[0])
+    .filter((key) => !PROTECTED_FIELDS.includes(key));
   return [...new Set(fieldNames)];
-}
+};
 
 export const validateUserUpdate = (id, body) => {
   if (!id || !body) return null;
-  console.log("Validating user update for ID:", id);
 
-  const validFields = Object.keys(User.schema.paths)
-    .filter((key) => !["_id", "__v", "createdAt", "updatedAt"].includes(key))
-    .map((key) => key.split(".")[0]);
-
-  const uniqueFields = [...new Set(validFields)];
-
+  const uniqueFields = updatableFields();
   const cleanBody = {};
 
-  // ✅ Handle contacts separately
+  // Handle contacts separately
   if (body.contacts && typeof body.contacts === "object") {
     const cleanContacts = {};
     let hasContacts = false;
 
     for (const contactKey of ["facebook", "github", "linkedin", "portfolio"]) {
       const val = body.contacts[contactKey];
-      if (val && val.trim() !== "") {
+      if (typeof val === "string" && val.trim() !== "") {
         cleanContacts[contactKey] = val.trim();
         hasContacts = true;
       }
@@ -38,35 +31,25 @@ export const validateUserUpdate = (id, body) => {
 
     if (hasContacts) {
       cleanBody.contacts = cleanContacts;
-
     }
   }
-  console.log("Clean Body:", cleanBody);
 
-  // ✅ Loop for the rest of the fields
   for (const key in body) {
     if (!uniqueFields.includes(key) || key === "contacts") continue;
 
     if (
-      [
-        "name",
-        "session",
-        "email",
-        "image",
-        "bio",
-        "password",
-        "resume",
-      ].includes(key)
+      ["name", "session", "email", "image", "bio", "password", "resume"].includes(
+        key
+      )
     ) {
       if (body[key] !== "" && body[key] !== undefined) {
         cleanBody[key] = body[key];
-        console.log(`Added ${key}:`, body[key]);
       }
       continue;
     }
 
-    if (key === "availableForWork" || key === "isAdmin") {
-      cleanBody[key] = body[key];
+    if (key === "availableForWork") {
+      cleanBody[key] = Boolean(body[key]);
       continue;
     }
 
@@ -116,14 +99,18 @@ export const validateUserUpdate = (id, body) => {
     }
   }
 
-  if (cleanBody.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanBody.email)) {
+  if (
+    cleanBody.email &&
+    (typeof cleanBody.email !== "string" ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanBody.email))
+  ) {
     throw new Error("Invalid email format");
   }
-  console.log("Final clean body:", cleanBody);
-  if (cleanBody.password && cleanBody.password.length < 6) {
+  if (
+    cleanBody.password &&
+    (typeof cleanBody.password !== "string" || cleanBody.password.length < 6)
+  ) {
     throw new Error("Password must be at least 6 characters");
   }
-  console.log("Final clean body:", cleanBody);
   return cleanBody;
 };
-

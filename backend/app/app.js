@@ -11,6 +11,10 @@ import morgan from "morgan";
 
 const app = express();
 
+// Behind one reverse proxy (Vercel/Render/nginx): use X-Forwarded-For for the
+// client IP so rate limiting is per user, not per proxy
+app.set("trust proxy", 1);
+
 // Middleware
 const allowedOrigins = [
   "http://localhost:5173",
@@ -40,9 +44,21 @@ app.use(compression());
 app.use(morgan("dev"));
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per window
+  max: 500, // general traffic (chat/feed polling needs headroom)
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 app.use(limiter);
+
+// Stricter limit on credential endpoints to slow down password guessing
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: "Too many attempts, please try again later" },
+});
+app.use(["/api/v1/auth/log-in", "/api/v1/auth/register"], authLimiter);
 
 // if (process.env.ENVIRONMENT === "development") {
 //   app.use((req, res, next) => {
@@ -61,6 +77,25 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api/v1", defaultRouter);
+
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
+
+// Global error handler: anything thrown/forwarded (CORS rejections, bad JSON,
+// oversized bodies) gets a JSON response instead of an HTML stack page
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  console.error("Unhandled error:", err);
+  if (res.headersSent) return;
+  if (err.message === "Not allowed by CORS") {
+    return res.status(403).json({ message: "Not allowed by CORS" });
+  }
+  const status = err.status || err.statusCode || 500;
+  return res.status(status).json({
+    message: status < 500 ? err.message : "Internal server error",
+  });
+});
 
 
 export default app;

@@ -2,7 +2,12 @@ import searchService from "../../services/searchServices.js";
 
 export const searchController = async (req, res) => {
   const { category, value } = req.query;
-  if (!category || !value) {
+  if (
+    !category ||
+    !value ||
+    typeof category !== "string" ||
+    typeof value !== "string"
+  ) {
     return res
       .status(400)
       .json({ error: "Both category and value are required" });
@@ -25,6 +30,7 @@ export const searchController = async (req, res) => {
       results,
     });
   } catch (error) {
+    console.error("Search failed:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

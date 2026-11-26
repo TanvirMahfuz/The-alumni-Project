@@ -1,10 +1,10 @@
+import { sendRecruitmentError } from "./errors.js";
 import { getRecruitmentById } from "../../services/recruitmentServices.js";
 
 // @desc    Get a single job posting
 // @route   GET /api/recruitment/:id
 // @access  Public
 export const getJobPosting = async (req, res) => {
-  console.log("Received request to get job posting:", req.params.id);
   try {
     const jobPosting = await getRecruitmentById(req.params.id);
 
@@ -20,6 +20,6 @@ export const getJobPosting = async (req, res) => {
     });
   } catch (error) {
     console.error("Error getting job posting:", error);
-    res.status(500).json({ success: false, message: error.message });
+    return sendRecruitmentError(res, error);
   }
 };

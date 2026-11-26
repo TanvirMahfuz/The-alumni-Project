@@ -22,4 +22,9 @@ const startServer = async () => {
   }
 };
 
+// Log instead of crashing silently on stray async errors
+process.on("unhandledRejection", (reason) => {
+  console.error("Unhandled promise rejection:", reason);
+});
+
 startServer();

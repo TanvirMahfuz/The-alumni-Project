@@ -21,7 +21,7 @@ const verifyPassword = async (password, hash) => {
  */
 const generateToken = (payload) => {
   return jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: "30d",
+    expiresIn: "7d",
   });
 };
 
@@ -37,16 +37,11 @@ const verifyToken = async (token) => {
  */
 const verifyUser = async (email, password) => {
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: String(email) });
 
-    if (!user) {
-      return { status: false, error: "User not found" };
-    }
-
-    const isPasswordValid = await verifyPassword(password, user.password);
-
-    if (!isPasswordValid) {
-      return { status: false, error: "Invalid password" };
+    // Same message for both cases so the endpoint can't be used to probe emails
+    if (!user || !(await verifyPassword(password, user.password))) {
+      return { status: false, error: "Invalid email or password" };
     }
 
     const token = generateToken({ _id: user._id });
@@ -65,7 +60,7 @@ const verifyUser = async (email, password) => {
  */
 const createNewUser = async (userData) => {
   try {
-    const existingUser = await User.findOne({ email: userData.email });
+    const existingUser = await User.findOne({ email: String(userData.email) });
 
     if (existingUser) {
       return { status: false, error: "User already exists" };

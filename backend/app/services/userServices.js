@@ -1,81 +1,53 @@
+import mongoose from "mongoose";
 import User from "../models/userModel.js";
-import bcrypt from "bcryptjs";
-import uploadFileToCloudinary from "../utility/cloudinaryUpload.js";
 
 const createUser = async (user) => {
   const newUser = new User(user);
   const returnedUser = await newUser.save();
-  if (!returnedUser) return null;
-  return returnedUser;
+  return returnedUser || null;
 };
+
 const findOneUser = async (params) => {
-  
-  const newUser = await User.findOne(params).select("-password");
-  if (!newUser) return null;
-  return newUser;
+  const user = await User.findOne(params).select("-password");
+  return user || null;
 };
+
 const findOneUserById = async (id) => {
-  const newUser = await User.findById(id).select("-password");
-  if (!newUser) return null;
-  return newUser;
+  if (!mongoose.Types.ObjectId.isValid(id)) return null;
+  const user = await User.findById(id).select("-password");
+  return user || null;
 };
+
 const findAllUser = async () => {
-  const newUser = await User.find().select("-password");
-  if (!newUser) return null;
-  return newUser;
+  const users = await User.find().select("-password");
+  return users || null;
 };
+
 const updateUser = async (id, params) => {
-  const newUser = await User.findByIdAndUpdate(
-    id,
-    params, 
-    { new: true }
-  ).select("-password");
-
-  return newUser;
-};
-const updateUserSingleField = async (params, user) => {
-  const newUser = await User.findByIdAndUpdate(id, params, {
+  return await User.findByIdAndUpdate(id, params, {
     new: true,
+    runValidators: true,
   }).select("-password");
-  if (!newUser) return null;
-  return newUser;
 };
 
-const updateUserMultipleFields = async (params, user) => {
-  const newUser = await User.findByIdAndUpdate(
-    id,
-    {
-      $push: { [i]: body[i] },
-    },
+const addNewPost = async (postId, userId) => {
+  const user = await User.findByIdAndUpdate(
+    userId,
+    { $push: { posts: postId } },
     { new: true }
   ).select("-password");
-  if (!newUser) return null;
-  return newUser;
-};
-const addNewPost = async (postId, userId) => {
-  console.log(postId, userId);
-  const newUser = await User.findByIdAndUpdate(userId, {
-    $push: { posts: postId },
-  },{new:true}).select("-password");
-  if (!newUser) return null;
-  return newUser;
-};
-const deleteUser = async (params) => {
-  const newUser = await User.findOneAndDelete(params);
-  if (!newUser) return null;
-  return newUser;
+  return user || null;
 };
 
-const getUserPostsById = async (posts) => {
-  let allPosts = [];
-  for (let i = 0; i < posts.length; i++) {
-    const post = await (posts[i]);
-    allPosts.push(post);
-  }
-  return res.status(200).json({
-    posts: "user.posts",
-  });
+const removePostFromUser = async (postId, userId) => {
+  return await User.findByIdAndUpdate(userId, { $pull: { posts: postId } });
 };
+
+const deleteUser = async (params) => {
+  const user = await User.findOneAndDelete(params);
+  return user || null;
+};
+
 export {
   createUser,
   findOneUser,
@@ -84,4 +56,5 @@ export {
   deleteUser,
   findOneUserById,
   addNewPost,
+  removePostFromUser,
 };

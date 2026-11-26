@@ -1,16 +1,35 @@
+import mongoose from "mongoose";
 import recruitment from "../models/recruitmentModel.js";
+
+// Errors with a status are mapped to that HTTP status by the controllers
+export class HttpError extends Error {
+  constructor(status, message) {
+    super(message);
+    this.status = status;
+  }
+}
+
+// Fields clients must never set directly on a job posting
+const stripProtected = ({ _id, author, applications, postedAt, __v, ...rest } = {}) =>
+  rest;
+
+const assertId = (id, label = "ID") => {
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw new HttpError(400, `Invalid ${label}`);
+  }
+};
 import User from "../models/userModel.js";
 
 export const createRecruitment = async (jobData, authorId) => {
   const jobPosting = new recruitment({
-    // Changed JobPosting to recruitment
-    ...jobData,
+    ...stripProtected(jobData),
     author: authorId,
   });
-  return await jobPosting.save(); // Changed jobPosting.save()
+  return await jobPosting.save();
 };
 
 export const getRecruitmentById = async (id) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) return null;
   return await recruitment
     .findById(id)
     .populate("author", "name email")
@@ -18,34 +37,30 @@ export const getRecruitmentById = async (id) => {
 };
 
 export const getAllJobPostings = async () => {
-  return await recruitment.find()// Changed JobPosting to recruitment
-
+  return await recruitment.find();
 };
 
 export const updateJobPosting = async (id, updateData, authorId) => {
-  const jobPosting = await recruitment.findOne({ _id: id, author: authorId }); // Changed JobPosting to recruitment
+  assertId(id, "job ID");
+  const jobPosting = await recruitment.findOne({ _id: id, author: authorId });
   if (!jobPosting) {
-    throw new Error("Job posting not found or unauthorized");
+    throw new HttpError(404, "Job posting not found or unauthorized");
   }
 
-  Object.assign(jobPosting, updateData);
+  Object.assign(jobPosting, stripProtected(updateData));
   return await jobPosting.save();
 };
 
 export const deleteJobPosting = async (id, authorId) => {
-  const jobPosting = await recruitment.findOne({ _id: id, author: authorId }); // Changed JobPosting to recruitment
-  if (!jobPosting) {
-    throw new Error("Job posting not found or unauthorized");
-  }
-
-  return await jobPosting.remove();
+  assertId(id, "job ID");
+  // Document#remove() no longer exists in Mongoose 7+
+  return await recruitment.findOneAndDelete({ _id: id, author: authorId });
 };
 
 export const applyForJob = async (jobId, applicantId, applicationData) => {
   const { resume, coverLetter } = applicationData;
 
   return await recruitment.findByIdAndUpdate(
-    // Changed JobPosting to recruitment
     jobId,
     {
       $push: {
@@ -67,15 +82,19 @@ export const updateApplicationStatus = async (
   newStatus,
   authorId
 ) => {
+  assertId(jobId, "job ID");
+  assertId(applicationId, "application ID");
   const jobPosting = await recruitment.findOne({
-    // Changed JobPosting to recruitment
     _id: jobId,
     author: authorId,
     "applications._id": applicationId,
   });
 
   if (!jobPosting) {
-    throw new Error("Job posting or application not found, or unauthorized");
+    throw new HttpError(
+      404,
+      "Job posting or application not found, or unauthorized"
+    );
   }
 
   const application = jobPosting.applications.id(applicationId);
@@ -87,7 +106,6 @@ export const updateApplicationStatus = async (
 export const searchJobPostings = async (searchTerm, filters = {}) => {
   return await recruitment
     .find({
-      // Changed JobPosting to recruitment
       $text: { $search: searchTerm },
       ...filters,
       isActive: true,
@@ -106,7 +124,6 @@ export const getJobsByAuthor = async (authorId) => {
 export const expireOldJobPostings = async () => {
   const cutoffDate = new Date();
   return await recruitment.updateMany(
-    // Changed JobPosting to recruitment
     { expiresAt: { $lt: cutoffDate }, isActive: true },
     { $set: { isActive: false } }
   );
@@ -115,8 +132,9 @@ export const addResumeToApplication = async (jobId, applicantId) => {
   try {
     // Validate inputs
     if (!jobId || !applicantId) {
-      throw new Error("Both jobId and applicantId are required");
+      throw new HttpError(400, "Both jobId and applicantId are required");
     }
+    assertId(jobId, "job ID");
 
     // Find job posting and applicant in parallel
     const [jobPosting, applicant] = await Promise.all([
@@ -126,18 +144,18 @@ export const addResumeToApplication = async (jobId, applicantId) => {
 
     // Check if both exist
     if (!jobPosting) {
-      throw new Error("Job posting not found");
+      throw new HttpError(404, "Job posting not found");
     }
     if (!applicant) {
-      throw new Error("Applicant not found");
+      throw new HttpError(404, "Applicant not found");
     }
     if (!applicant.resume) {
-      throw new Error("Applicant has no resume uploaded");
+      throw new HttpError(400, "Applicant has no resume uploaded");
     }
 
     // Check if applicant already applied
     const existingApplicationIndex = jobPosting.applications.findIndex(
-      (app) => app.applicant.toString() === applicantId.toString()
+      (app) => app.applicant?.toString() === applicantId.toString()
     );
 
     if (existingApplicationIndex !== -1) {
@@ -149,7 +167,6 @@ export const addResumeToApplication = async (jobId, applicantId) => {
         updatedAt: new Date(), // Add update timestamp
       };
 
-      console.log("Updated existing application with new resume");
     } else {
       // Add new application
       jobPosting.applications.push({
@@ -176,8 +193,8 @@ export const addResumeToApplication = async (jobId, applicantId) => {
     console.error("Error in addResumeToApplication:", error.message);
     return {
       success: false,
-      message: error.message,
-      error: error,
+      status: error.status || 500,
+      message: error.status ? error.message : "Error applying for job",
     };
   }
 };

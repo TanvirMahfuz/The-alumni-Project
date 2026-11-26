@@ -1,3 +1,4 @@
+import { sendRecruitmentError } from "./errors.js";
 import { getAllJobPostings } from "../../services/recruitmentServices.js";
 
 // @desc    Get all job postings
@@ -14,6 +15,6 @@ export const getJobPostings = async (req, res) => {
     });
   } catch (error) {
     console.error("Error getting all job postings:", error);
-    res.status(500).json({ success: false, message: error.message });
+    return sendRecruitmentError(res, error);
   }
 };

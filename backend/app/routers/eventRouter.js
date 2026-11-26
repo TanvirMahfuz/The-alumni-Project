@@ -16,7 +16,7 @@ eventRouter.get("/onBoardUsers/:eventId", isLoggedIn, onBoardUsers);
 
 
 eventRouter.post("/create",isLoggedIn, createEvent);
-eventRouter.post("/update/:id",isLoggedIn, createEvent);
+eventRouter.post("/update/:id", isLoggedIn, updateEvent);
 eventRouter.post("/onBoard", isLoggedIn, onBoard);
 
 

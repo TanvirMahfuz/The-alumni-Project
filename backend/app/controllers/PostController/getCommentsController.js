@@ -20,8 +20,9 @@ export const getCommentsController = async (req, res) => {
       message: "working",
     });
   } catch (error) {
-    return res.status(404).json({
-      message: "Post not found",
+    console.error(error.message);
+    return res.status(500).json({
+      message: "Error fetching comments",
     });
   }
 };

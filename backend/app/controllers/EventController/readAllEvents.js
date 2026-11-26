@@ -9,6 +9,8 @@ export const readAllEvents = async (req, res) => {
   try {
 
     const events = await Event.find()
+      .sort({ date: 1 })
+      .populate("organizer", "name image");
     
     return res.status(200).json({
       success: true,
@@ -20,7 +22,6 @@ export const readAllEvents = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server error while fetching events",
-      error: error.message,
     });
   }
 };

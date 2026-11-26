@@ -1,15 +1,24 @@
+import mongoose from "mongoose";
 import { createMessage } from "../../services/messageServices.js";
 import { getReceiverSocketId, io } from "../../sockets/socket.js";
 import uploadFileToCloudinary from "../../utility/cloudinaryUploadBase64.js";
+import { uploadsEnabled, isFileData, rejectUpload } from "../../utility/uploads.js";
 
 export const sendMessage = async (req, res) => {
   try {
     const senderId = req.user._id;
     let { receiverId, text, images, documents } = req.body;
 
+    if (!mongoose.Types.ObjectId.isValid(receiverId)) {
+      return res.status(400).json({ error: "Invalid receiver" });
+    }
     if (!text) text = "";
-    if (!images) images = [];
+    if (!Array.isArray(images)) images = [];
     if (!documents) documents = "";
+
+    if (!uploadsEnabled() && (images.length > 0 || documents !== "")) {
+      return rejectUpload(res);
+    }
 
     if (text === "" && images.length === 0 && documents === "") {
       return res.status(400).json({ error: "Message cannot be empty" });
@@ -33,7 +42,7 @@ export const sendMessage = async (req, res) => {
       } catch (uploadErr) {
         return res
           .status(500)
-          .json({ error: "Image upload failed", details: uploadErr.message });
+          .json({ error: "Image upload failed" });
       }
     }
 
@@ -45,14 +54,18 @@ export const sendMessage = async (req, res) => {
       documents,
     });
 
+    if (!message) {
+      return res.status(500).json({ error: "Failed to save message" });
+    }
+
     const receiverSocketId = getReceiverSocketId(receiverId);
-    if (receiverSocketId) {
-      console.log("receiver socket found: ", receiverSocketId);
+    if (receiverSocketId && io) {
       io.to(receiverSocketId).emit("newMessage", message);
     }
 
-    res.status(201).json(message);
+    return res.status(201).json(message);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Error sending message:", error);
+    return res.status(500).json({ error: "Error sending message" });
   }
 };

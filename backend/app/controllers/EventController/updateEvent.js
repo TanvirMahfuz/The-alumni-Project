@@ -1,5 +1,7 @@
+import mongoose from "mongoose";
 import Event from "../../models/eventModel.js";
 import { validateTime12hFormat } from "../../utility/validation.js";
+import { uploadsEnabled, isFileData, rejectUpload } from "../../utility/uploads.js";
 
 /**
  * Service function to update an existing event
@@ -8,8 +10,13 @@ import { validateTime12hFormat } from "../../utility/validation.js";
  */
 export const updateEvent = async (req, res) => {
   try {
-    const { eventId } = req.params;
+    const { id: eventId } = req.params;
     const updates = req.body;
+
+    // Event update has no upload step; refuse raw file data instead of storing it
+    if (isFileData(updates.image)) {
+      return rejectUpload(res);
+    }
 
     // 1. Validate event ID
     if (!mongoose.Types.ObjectId.isValid(eventId)) {
@@ -52,16 +59,8 @@ export const updateEvent = async (req, res) => {
       });
     }
 
-    // 6. Validate URL for paid events if isFree is being changed
-    if (updates.isFree === false && !updates.url) {
-      return res.status(400).json({
-        success: false,
-        message: "URL is required when changing to paid event",
-      });
-    }
-
     // 7. Prepare update object (prevent certain fields from being updated)
-    const { organizer, _id, createdAt, ...allowedUpdates } = updates;
+    const { organizer, _id, createdAt, onBoard, ...allowedUpdates } = updates;
     const updateData = {
       ...allowedUpdates,
       updatedAt: new Date(),
@@ -103,7 +102,6 @@ export const updateEvent = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Server error during event update",
-      error: error.message,
     });
   }
 };

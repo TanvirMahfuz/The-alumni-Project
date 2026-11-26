@@ -1,3 +1,4 @@
+import { sendRecruitmentError } from "./errors.js";
 import { createRecruitment } from "../../services/recruitmentServices.js";
 
 // @desc    Create a new job posting
@@ -12,6 +13,6 @@ export const createJobPosting = async (req, res) => {
     });
   } catch (error) {
     console.error("Error creating job posting:", error);
-    res.status(500).json({ success: false, message: error.message });
+    return sendRecruitmentError(res, error);
   }
 };

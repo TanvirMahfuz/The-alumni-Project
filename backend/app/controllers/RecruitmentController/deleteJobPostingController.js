@@ -1,3 +1,4 @@
+import { sendRecruitmentError } from "./errors.js";
 import { deleteJobPosting } from "../../services/recruitmentServices.js";
 
 // @desc    Delete a job posting
@@ -20,6 +21,6 @@ export const deleteJobPostingController = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting job posting:", error);
-    res.status(500).json({ success: false, message: error.message });
+    return sendRecruitmentError(res, error);
   }
 };

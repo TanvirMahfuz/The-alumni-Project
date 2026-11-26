@@ -3,13 +3,20 @@ import { verifyUser, createNewUser } from "../services/authServices.js";
 // Global helper
 const isProduction = process.env.ENVIRONMENT === "deployment";
 
+const cookieOptions = {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: isProduction ? "None" : "Lax",
+};
+
+const TOKEN_MAX_AGE = 1000 * 60 * 60 * 24 * 7; // 7 days, matches JWT expiry
+
 export const registerUser = async (req, res) => {
   try {
-    const { name, password, confirmPassword, email } = req.body;
-
-    console.log("Register attempted by:", req.body);
+    const { name, password, confirmPassword, email, session } = req.body;
 
     if (
+      !name ||
       !email ||
       !password ||
       !confirmPassword ||
@@ -18,7 +25,14 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "Bad request: Invalid input" });
     }
 
-    const response = await createNewUser(req.body);
+    if (typeof password !== "string" || password.length < 6) {
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 6 characters" });
+    }
+
+    // Only whitelisted fields reach the database (no isAdmin, posts, etc.)
+    const response = await createNewUser({ name, email, password, session });
 
     if (!response.status) {
       return res.status(400).json({ message: response.error });
@@ -26,21 +40,14 @@ export const registerUser = async (req, res) => {
 
     return res
       .status(201)
-      .cookie("token", response.token, {
-        httpOnly: true,
-        secure: isProduction,
-        sameSite: isProduction ? "None" : "Lax",
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-      })
+      .cookie("token", response.token, { ...cookieOptions, maxAge: TOKEN_MAX_AGE })
       .json({
         message: "User registered successfully",
         user: response.user,
       });
   } catch (error) {
-    return res.status(500).json({
-      message: "Error registering user",
-      error: error.message,
-    });
+    console.error("Error registering user:", error);
+    return res.status(500).json({ message: "Error registering user" });
   }
 };
 
@@ -62,52 +69,25 @@ export const login = async (req, res) => {
 
     return res
       .status(200)
-      .cookie("token", response.token, {
-        httpOnly: true,
-        secure: isProduction,
-        sameSite: isProduction ? "None" : "Lax",
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-      })
+      .cookie("token", response.token, { ...cookieOptions, maxAge: TOKEN_MAX_AGE })
       .json({
         message: "User logged in successfully",
         user: response.user,
       });
   } catch (error) {
-    return res.status(500).json({
-      message: "Error logging in",
-      error: error.message,
-    });
+    console.error("Error logging in:", error);
+    return res.status(500).json({ message: "Error logging in" });
   }
 };
 
 export const logout = (req, res) => {
-  try {
-    res.clearCookie("token", {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "None" : "Lax",
-    });
-
-    return res.status(200).json({ message: "User logged out successfully" });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Error logging out",
-      error: error.message,
-    });
-  }
+  res.clearCookie("token", cookieOptions);
+  return res.status(200).json({ message: "User logged out successfully" });
 };
 
 export const checkUser = async (req, res) => {
-  try {
-    if (!req.user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    return res.status(200).json({ user: req.user });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Error checking user",
-      error: error.message,
-    });
+  if (!req.user) {
+    return res.status(404).json({ message: "User not found" });
   }
+  return res.status(200).json({ user: req.user });
 };

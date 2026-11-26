@@ -1,5 +1,5 @@
 import { Router } from "express";
-const facultyRouter = Router();
+import { isLoggedIn, isAdmin } from "../middlewares/auth.middleware.js";
 import {
   createFaculty,
   updateFaculty,
@@ -8,9 +8,12 @@ import {
   deleteFaculty,
 } from "../controllers/facultyController.js";
 
-facultyRouter.post("/", createFaculty);
-facultyRouter.put("/:id", updateFaculty);
+const facultyRouter = Router();
+
 facultyRouter.get("/", readAllFaculties);
 facultyRouter.get("/:id", getFacultyById);
-facultyRouter.delete("/:id", deleteFaculty);
+facultyRouter.post("/", isLoggedIn, isAdmin, createFaculty);
+facultyRouter.put("/:id", isLoggedIn, isAdmin, updateFaculty);
+facultyRouter.delete("/:id", isLoggedIn, isAdmin, deleteFaculty);
+
 export default facultyRouter;

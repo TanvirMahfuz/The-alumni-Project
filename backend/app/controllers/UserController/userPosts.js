@@ -3,9 +3,7 @@ import { getMultiplePosts } from "../../services/postServices.js";
 
 export const userPosts = async (req, res) => {
   try {
-    console.log("Inside userPosts");
     const id = req.params.id;
-    console.log(id);
     const user = await userServices.findOneUserById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -18,8 +16,7 @@ export const userPosts = async (req, res) => {
       posts,
     });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ message: "Error fetching posts", error: error.message });
+    console.error(error);
+    return res.status(500).json({ message: "Error fetching posts" });
   }
 };

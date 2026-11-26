@@ -5,10 +5,10 @@ const searchService = async (category, value) => {
     const users = await findAllUser();
     const transformedUsers = users.map((user) => ({
       ...user._doc,
-      jobExperienceCompanies: user.jobExperience
+      jobExperienceCompanies: (user.jobExperience || [])
         .map((job) => job.company)
         .join(" "), // Flatten company names
-      currentCompanies: user.currentPost
+      currentCompanies: (user.currentPost || [])
       .map((job) => job.company)
       .join(" "),
     }));

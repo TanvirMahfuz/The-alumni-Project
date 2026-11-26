@@ -1,3 +1,4 @@
+import { sendRecruitmentError } from "./errors.js";
 import { addResumeToApplication } from "../../services/recruitmentServices.js";
 
 // @desc    Apply for a job
@@ -5,22 +6,21 @@ import { addResumeToApplication } from "../../services/recruitmentServices.js";
 // @access  Private/Applicant
 export const reviewForJobController = async (req, res) => {
   try {
-    const updatedRecruitment = await addResumeToApplication(
-      req.body.id,
-      req.user._id
-    );
-    if (!updatedRecruitment) {
-      return res.status(404).json({
-        success: false,
-        message: "Job posting not found or unauthorized",
-      });
+    // POST /:id/apply uses the URL param; POST /review sends { id } in the body
+    const jobId = req.params.id || req.body.id;
+    const result = await addResumeToApplication(jobId, req.user._id);
+    if (!result.success) {
+      return res
+        .status(result.status)
+        .json({ success: false, message: result.message });
     }
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
-      data: updatedRecruitment,
+      message: result.message,
+      data: result.jobPosting,
     });
   } catch (error) {
     console.error("Error applying for job:", error);
-    res.status(500).json({ success: false, message: error.message });
+    return sendRecruitmentError(res, error);
   }
 };

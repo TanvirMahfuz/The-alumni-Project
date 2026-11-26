@@ -12,7 +12,6 @@ export const onBoardUsers = async (req, res) => {
   try {
     const eventId = req.params.eventId;
     // 1. Validate event ID
-    console.log("eventId:", eventId);
     if (!mongoose.Types.ObjectId.isValid(eventId)) {
       return res.status(400).json({
         success: false,
@@ -27,30 +26,19 @@ export const onBoardUsers = async (req, res) => {
         message: "Event not found",
       });
     }
-    let onBoardUsers = [];
-    for (let i = 0; i < event.onBoard.length; i++) {
-      // 1. validate user id
-      if (!mongoose.Types.ObjectId.isValid(event.onBoard[i])) {
-        console.log("Invalid user ID format:", event.onBoard[i]);
-        continue;
-      }
-      const user = await User.findById(event.onBoard[i]).select("-password");
-      if (user) {
-        onBoardUsers.push(user);
-      }
-    }
-    console.log(onBoardUsers);
+    const onBoardUsers = await User.find({ _id: { $in: event.onBoard } }).select(
+      "-password"
+    );
     return res.status(200).json({
       success: true,
       message: "Onboarded users fetched successfully",
       data: onBoardUsers,
     }); 
   } catch (error) {
-    console.error("Event creation failed:", error.message);
+    console.error("Fetching onboarded users failed:", error.message);
     return res.status(500).json({
       success: false,
-      message: error.message,
-      error: error.name,
+      message: "Fetching onboarded users failed",
     });
     
   }

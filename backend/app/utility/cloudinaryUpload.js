@@ -1,7 +1,9 @@
 import fs from "fs";
 import cloudinary from "../config/cloudinary.js";
+import { uploadsEnabled } from "./uploads.js";
 
 const uploadFileToCloudinary = async (localFilePath, id) => {
+  if (!uploadsEnabled()) return null;
   try {
     if (!localFilePath) {
       return null;

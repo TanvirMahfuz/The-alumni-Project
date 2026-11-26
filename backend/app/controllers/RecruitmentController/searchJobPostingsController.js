@@ -1,21 +1,26 @@
+import { sendRecruitmentError } from "./errors.js";
 import { searchJobPostings } from "../../services/recruitmentServices.js";
 
 // @desc    Search job postings
 // @route   GET /api/recruitment/search
 // @access  Public
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 export const searchJobPostingsController = async (req, res) => {
   try {
-    if (!req.query.q) {
+    if (!req.query.q || typeof req.query.q !== "string") {
       return res
         .status(400)
         .json({ success: false, message: "Please provide a search term" });
     }
 
+    const { type, location } = req.query;
     const filters = {
-      ...(req.query.type && { type: req.query.type }),
-      ...(req.query.location && {
-        location: new RegExp(req.query.location, "i"),
-      }),
+      ...(typeof type === "string" && type && { type }),
+      ...(typeof location === "string" &&
+        location && {
+          location: new RegExp(escapeRegex(location.slice(0, 100)), "i"),
+        }),
     };
 
     const results = await searchJobPostings(req.query.q, filters);
@@ -27,6 +32,6 @@ export const searchJobPostingsController = async (req, res) => {
     });
   } catch (error) {
     console.error("Error searching job postings:", error);
-    res.status(500).json({ success: false, message: error.message });
+    return sendRecruitmentError(res, error);
   }
 };

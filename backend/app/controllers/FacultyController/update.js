@@ -6,7 +6,7 @@ export const updateFaculty = async (req, res) => {
     const updatedFaculty = await Faculty.findByIdAndUpdate(
       facultyId,
       req.body,
-      { new: true }
+      { new: true, runValidators: true }
     );
     if (!updatedFaculty) {
       return res.status(404).json({ message: "Faculty not found" });
@@ -17,7 +17,10 @@ export const updateFaculty = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    if (error.name === "ValidationError" || error.name === "CastError") {
+      return res.status(400).json({ message: error.message });
+    }
+    return res.status(500).json({ message: "Internal server error" });
     
   }
 }

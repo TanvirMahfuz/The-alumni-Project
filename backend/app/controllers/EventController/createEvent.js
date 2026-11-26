@@ -1,6 +1,7 @@
 import Event from "../../models/eventModel.js";
 import { validateTime12hFormat } from "../../utility/validation.js";
 import uploadFileToCloudinary from "../../utility/cloudinaryUploadBase64.js";
+import { uploadsEnabled, isFileData, rejectUpload } from "../../utility/uploads.js";
 /**
  * Service function to create a new event
  * @param {Object} eventData - Event data to be created
@@ -19,7 +20,7 @@ import uploadFileToCloudinary from "../../utility/cloudinaryUploadBase64.js";
  */
 export const createEvent = async (req,res) => {
   try {
-    const eventData = req.body;
+    const { onBoard, organizer, _id, ...eventData } = req.body;
     if(!req.user){
       return res.status(401).json({
         success: false,
@@ -36,24 +37,37 @@ export const createEvent = async (req,res) => {
 
     const missingFields = requiredFields.filter((field) => !eventData[field]);
     if (missingFields.length > 0) {
-      throw new Error(`Missing required fields: ${missingFields.join(", ")}`);
+      return res.status(400).json({
+        success: false,
+        message: `Missing required fields: ${missingFields.join(", ")}`,
+      });
     }
 
     // Validate time format
     if (!validateTime12hFormat(eventData.time)) {
-      throw new Error(
-        'Invalid time format. Please use 12-hour format (e.g., "09:30 AM")'
-      );
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid time format. Please use 12-hour format (e.g., "09:30 AM")',
+      });
     }
 
     // Validate future date
     if (new Date(eventData.date) < new Date()) {
-      throw new Error("Event date must be in the future");
+      return res.status(400).json({
+        success: false,
+        message: "Event date must be in the future",
+      });
     }
-    if (eventData.image){
+    if (!uploadsEnabled() && isFileData(eventData.image)) {
+      return rejectUpload(res);
+    }
+    if (eventData.image && !uploadsEnabled()) {
+      // Storage isn't available: keep an existing hosted URL, drop anything else
+      if (!/^https?:\/\//.test(eventData.image)) delete eventData.image;
+    } else if (eventData.image) {
       const imgUrl = await uploadFileToCloudinary(
         eventData.image,
-        req.user._id
+        `event-${req.user._id}-${Date.now()}`
       );
       if (!imgUrl) {
         throw new Error("Image upload failed");
@@ -66,7 +80,6 @@ export const createEvent = async (req,res) => {
       ...eventData,
       organizer: req.user._id,
     });
-    console.log(newEvent);
     // Save to database
     const createdEvent = await newEvent.save();
     if (!createdEvent) {
@@ -79,10 +92,12 @@ export const createEvent = async (req,res) => {
     });
   } catch (error) {
     console.error("Event creation failed:", error.message);
+    if (error.name === "ValidationError") {
+      return res.status(400).json({ success: false, message: error.message });
+    }
     return res.status(500).json({
       success: false,
-      message: error.message,
-      error: error.name,
+      message: "Event creation failed",
     });
   }
 };

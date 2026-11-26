@@ -1,3 +1,4 @@
+import { sendRecruitmentError } from "./errors.js";
 import { updateJobPosting } from "../../services/recruitmentServices.js";
 
 // @desc    Update a job posting
@@ -24,6 +25,6 @@ export const updateJobPostingController = async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating job posting:", error);
-    res.status(500).json({ success: false, message: error.message });
+    return sendRecruitmentError(res, error);
   }
 };

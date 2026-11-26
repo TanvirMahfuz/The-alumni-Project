@@ -1,0 +1,13 @@
+services:
+  alumni-db:
+    image: mongo:7.0
+    container_name: alumni-db
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - alumni-db-data:/data/db
+
+volumes:
+  alumni-db-data:
+    name: alumni-db-data

@@ -12,7 +12,12 @@ const eventSchema = new mongoose.Schema(
       type: Date,
       required: [true, "Event date is required"],
       validate: {
+        // Only enforce "future" when the date is being set, so saving an
+        // existing past event (e.g. onboarding) doesn't fail validation
         validator: function (value) {
+          if (this && typeof this.isModified === "function") {
+            if (!this.isNew && !this.isModified("date")) return true;
+          }
           return value >= new Date();
         },
         message: "Event date must be in the future",
@@ -94,6 +99,7 @@ const eventSchema = new mongoose.Schema(
 
 // Virtual for 24-hour format (useful for calculations)
 eventSchema.virtual("militaryTime").get(function () {
+  if (!this.time) return undefined;
   const [time, period] = this.time.split(" ");
   let [hours, minutes] = time.split(":");
 

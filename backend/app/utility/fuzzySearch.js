@@ -10,8 +10,6 @@ export const fuzzySearch = async (category, transformedUsers, value) => {
     distance: 100,
     ignoreLocation: true,
   };
-  
-  console.log(fuseOptions)
 
   const fuse = new Fuse(transformedUsers, fuseOptions);
 

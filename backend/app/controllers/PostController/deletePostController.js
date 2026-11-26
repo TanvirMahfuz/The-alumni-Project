@@ -1,22 +1,19 @@
 import { deletePost } from "../../services/postServices.js";
+import { removePostFromUser } from "../../services/userServices.js";
 
+// body: { id: <postId> }
 export const deletePostController = async (req, res) => {
   try {
-    const data = req.body;
-    const post = await deletePost(data);
+    const post = await deletePost(req.body, req.user._id);
     if (!post) {
-      res.status(400).json({
-        message: "Post not found",
-      });
+      return res
+        .status(404)
+        .json({ message: "Post not found or you are not its author" });
     }
-    res.status(200).json({
-      message: "Post deleted",
-      data: post,
-    });
+    await removePostFromUser(post._id, req.user._id);
+    return res.status(200).json({ message: "Post deleted", data: post });
   } catch (error) {
-    console.log(error.message);
-    res.status(500).json({
-      message: "Post not found",
-    });
+    console.error(error.message);
+    return res.status(500).json({ message: "Error deleting post" });
   }
 };

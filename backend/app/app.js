@@ -19,6 +19,7 @@ app.set("trust proxy", 1);
 const allowedOrigins = [
   "http://localhost:5173",
   "https://the-alumni-project-vrtg.vercel.app",
+  "https://the-alumni-project.vercel.app",
 ];
 
 const corsOptions = {
